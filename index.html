@@ -151,28 +151,101 @@ function procesarCodigo(code){
   }
 }
 
+let scanning = false;
+
+function procesarCodigo(code){
+  if (!code) return;
+
+  currentScanCode = String(code).trim();
+
+  const p = products[currentScanCode];
+
+  if (p) {
+    show(p);
+  } else {
+    document.getElementById("rProduct").textContent =
+      "Producto no registrado";
+
+    document.getElementById("rBrand").textContent =
+      "Código: " + currentScanCode;
+
+    document.getElementById("rContent").textContent = "";
+    document.getElementById("rPrice").textContent = "";
+
+    document.getElementById("result").classList.remove("hidden");
+
+    document.getElementById("scanStatus").textContent =
+      "Código leído, pero no está en el catálogo";
+  }
+}
+
+function detenerCamara(){
+
+  if (scanning) {
+    Quagga.stop();
+    scanning = false;
+  }
+
+  const scannerBox = document.getElementById("scanner");
+
+  scannerBox.innerHTML = "";
+  scannerBox.style.display = "none";
+
+  document.getElementById("start").textContent =
+    "📷 Escanear siguiente";
+
+  document.getElementById("scanStatus").textContent =
+    "";
+}
+
+function onBarcodeDetected(result){
+
+  if (!result || !result.codeResult) return;
+
+  const code = result.codeResult.code;
+
+  if (!code) return;
+
+  // Procesamos una sola lectura
+  procesarCodigo(code);
+
+  // Cerramos inmediatamente la cámara
+  detenerCamara();
+}
+
 function startCamera(){
 
   if (scanning) return;
 
+  const scannerBox = document.getElementById("scanner");
+
+  scannerBox.innerHTML = "";
+  scannerBox.style.display = "block";
+
   scanning = true;
 
   document.getElementById("scanStatus").textContent =
-    "Iniciando cámara...";
+    "Apunta al código de barras...";
 
   Quagga.init({
+
     inputStream: {
       name: "Live",
       type: "LiveStream",
+
       target: document.querySelector("#scanner"),
+
       constraints: {
         facingMode: "environment",
+
         width: {
           min: 640
         },
+
         height: {
           min: 480
         },
+
         aspectRatio: {
           min: 1,
           max: 2
@@ -199,6 +272,7 @@ function startCamera(){
     },
 
     locate: true
+
   }, function(error){
 
     if (error) {
@@ -207,11 +281,15 @@ function startCamera(){
 
       scanning = false;
 
+      document.getElementById("scanner").style.display = "none";
+
       document.getElementById("scanStatus").textContent =
         "No se pudo iniciar la cámara. Revisa el permiso.";
 
       return;
     }
+
+    Quagga.onDetected(onBarcodeDetected);
 
     Quagga.start();
 
@@ -221,24 +299,11 @@ function startCamera(){
     document.getElementById("scanStatus").textContent =
       "Apunta al código de barras...";
   });
-
-  Quagga.onDetected(function(result){
-
-    if (!result || !result.codeResult) return;
-
-    const code = result.codeResult.code;
-
-    if (!code) return;
-
-    procesarCodigo(code);
-
-  });
 }
 
 document
   .getElementById("start")
   .addEventListener("click", startCamera);
-
 function addProduct(){
 
   const c =
