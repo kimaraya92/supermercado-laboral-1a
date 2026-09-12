@@ -59,7 +59,7 @@ video{border-radius:12px;background:#000}
 </section>
 </main>
 
-<script src="https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
 <script>
 const defaultProducts = {
  "7802900105013": {product:"Crema Espesa de leche",brand:"Soprole",content:"200 g",price:1000},
@@ -69,89 +69,221 @@ const defaultProducts = {
  "7804600760288": {product:"Producto de prueba 5",brand:"",content:"",price:0}
 };
 let products = JSON.parse(localStorage.getItem("supermercadoProductos") || "null") || defaultProducts;
-let reader = null;
-let controls = null;
 let purchaseTotal = 0;
 let scannedCount = 0;
 let lastScannedCode = null;
 let currentScanCode = null;
+let scanning = false;
 
-function money(n){return "$"+Number(n).toLocaleString("es-CL")}
+function money(n){
+  return "$" + Number(n).toLocaleString("es-CL");
+}
+
 function show(p){
- if (lastScannedCode !== currentScanCode) {
-   purchaseTotal += Number(p.price) || 0;
-   scannedCount += 1;
-   lastScannedCode = currentScanCode;
-   document.getElementById("cartCount").textContent = "Productos escaneados: " + scannedCount;
- }
- document.getElementById("rProduct").textContent=p.product;
- document.getElementById("rBrand").textContent=p.brand || "";
- document.getElementById("rContent").textContent=p.content || "";
- document.getElementById("rPrice").textContent=money(p.price);
- document.getElementById("result").classList.remove("hidden");
-}
-function clearResult(){document.getElementById("result").classList.add("hidden"); lastScannedCode=null;}
-function showTotal(){document.getElementById("totalPrice").textContent=money(purchaseTotal);document.getElementById("totalBox").classList.remove("hidden");}
-function newPurchase(){purchaseTotal=0;scannedCount=0;lastScannedCode=null;document.getElementById("cartCount").textContent="Productos escaneados: 0";document.getElementById("totalPrice").textContent="$0";document.getElementById("totalBox").classList.add("hidden");document.getElementById("result").classList.add("hidden");}
-let currentScanCode=null;
-function onScan(code){
- currentScanCode=String(code).trim();
- const p=products[currentScanCode];
- if(p) show(p);
- else {
-   document.getElementById("rProduct").textContent="Producto no registrado";
-   document.getElementById("rBrand").textContent="Código: "+code;
-   document.getElementById("rContent").textContent="";
-   document.getElementById("rPrice").textContent="";
-   document.getElementById("result").classList.remove("hidden");
- }
-}
-async function startCamera(){
- if(reader){return;}
- const status=document.getElementById("scanStatus");
- status.textContent="Iniciando cámara…";
- try{
-   // Lector ZXing: usamos directamente la cámara trasera sin depender
-   // de métodos auxiliares que cambian entre versiones de la librería.
-   reader = new ZXingBrowser.BrowserMultiFormatReader();
+  if (lastScannedCode !== currentScanCode) {
+    purchaseTotal += Number(p.price) || 0;
+    scannedCount += 1;
+    lastScannedCode = currentScanCode;
 
-   controls = await reader.decodeFromConstraints(
-     {
-       video:{
-         facingMode:{ideal:"environment"},
-         width:{ideal:1280},
-         height:{ideal:720}
-       }
-     },
-     "scanner",
-     (result, err)=>{
-       if(!result){return;}
-       currentScanCode = result.getText().trim();
+    document.getElementById("cartCount").textContent =
+      "Productos escaneados: " + scannedCount;
+  }
 
-       const p = products[currentScanCode];
-       if(p){
-         show(p);
-       }else{
-         document.getElementById("rProduct").textContent="Producto no registrado";
-         document.getElementById("rBrand").textContent="Código: "+currentScanCode;
-         document.getElementById("rContent").textContent="";
-         document.getElementById("rPrice").textContent="";
-         document.getElementById("result").classList.remove("hidden");
-         status.textContent="✓ Código leído, pero no está en el catálogo";
-       }
-     }
-   );
+  document.getElementById("rProduct").textContent = p.product;
+  document.getElementById("rBrand").textContent = p.brand || "";
+  document.getElementById("rContent").textContent = p.content || "";
+  document.getElementById("rPrice").textContent = money(p.price);
 
-   document.getElementById("start").textContent="Cámara activa";
-   status.textContent="Apunta al código de barras…";
- }catch(e){
-   console.error("Lector:",e);
-   status.textContent="No se pudo iniciar la cámara. Revisa el permiso del sitio.";
-   reader=null;
-   controls=null;
- }
+  document.getElementById("result").classList.remove("hidden");
+  document.getElementById("scanStatus").textContent =
+    "✓ Producto reconocido";
 }
-document.getElementById("start").addEventListener("click",startCamera);
+
+function clearResult(){
+  document.getElementById("result").classList.add("hidden");
+  lastScannedCode = null;
+  document.getElementById("scanStatus").textContent = "";
+}
+
+function showTotal(){
+  document.getElementById("totalPrice").textContent = money(purchaseTotal);
+  document.getElementById("totalBox").classList.remove("hidden");
+}
+
+function newPurchase(){
+  purchaseTotal = 0;
+  scannedCount = 0;
+  lastScannedCode = null;
+  currentScanCode = null;
+
+  document.getElementById("cartCount").textContent =
+    "Productos escaneados: 0";
+
+  document.getElementById("totalPrice").textContent = "$0";
+  document.getElementById("totalBox").classList.add("hidden");
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("scanStatus").textContent = "";
+}
+
+function procesarCodigo(code){
+  if (!code) return;
+
+  currentScanCode = String(code).trim();
+
+  const p = products[currentScanCode];
+
+  if (p) {
+    show(p);
+  } else {
+    document.getElementById("rProduct").textContent =
+      "Producto no registrado";
+
+    document.getElementById("rBrand").textContent =
+      "Código: " + currentScanCode;
+
+    document.getElementById("rContent").textContent = "";
+    document.getElementById("rPrice").textContent = "";
+
+    document.getElementById("result").classList.remove("hidden");
+
+    document.getElementById("scanStatus").textContent =
+      "Código leído, pero no está en el catálogo";
+  }
+}
+
+function startCamera(){
+
+  if (scanning) return;
+
+  scanning = true;
+
+  document.getElementById("scanStatus").textContent =
+    "Iniciando cámara...";
+
+  Quagga.init({
+    inputStream: {
+      name: "Live",
+      type: "LiveStream",
+      target: document.querySelector("#scanner"),
+      constraints: {
+        facingMode: "environment",
+        width: {
+          min: 640
+        },
+        height: {
+          min: 480
+        },
+        aspectRatio: {
+          min: 1,
+          max: 2
+        }
+      }
+    },
+
+    locator: {
+      patchSize: "medium",
+      halfSample: true
+    },
+
+    numOfWorkers: 2,
+
+    decoder: {
+      readers: [
+        "ean_reader",
+        "ean_8_reader",
+        "upc_reader",
+        "upc_e_reader",
+        "code_128_reader",
+        "code_39_reader"
+      ]
+    },
+
+    locate: true
+  }, function(error){
+
+    if (error) {
+
+      console.error(error);
+
+      scanning = false;
+
+      document.getElementById("scanStatus").textContent =
+        "No se pudo iniciar la cámara. Revisa el permiso.";
+
+      return;
+    }
+
+    Quagga.start();
+
+    document.getElementById("start").textContent =
+      "Cámara activa";
+
+    document.getElementById("scanStatus").textContent =
+      "Apunta al código de barras...";
+  });
+
+  Quagga.onDetected(function(result){
+
+    if (!result || !result.codeResult) return;
+
+    const code = result.codeResult.code;
+
+    if (!code) return;
+
+    procesarCodigo(code);
+
+  });
+}
+
+document
+  .getElementById("start")
+  .addEventListener("click", startCamera);
+
+function addProduct(){
+
+  const c =
+    document.getElementById("code").value.trim();
+
+  const n =
+    document.getElementById("name").value.trim();
+
+  const b =
+    document.getElementById("brand").value.trim();
+
+  const ct =
+    document.getElementById("content").value.trim();
+
+  const pr =
+    Number(document.getElementById("price").value);
+
+  if (!c || !n || !Number.isFinite(pr)) {
+
+    document.getElementById("saveMsg").textContent =
+      "Completa código, producto y precio.";
+
+    return;
+  }
+
+  products[c] = {
+    product: n,
+    brand: b,
+    content: ct,
+    price: pr
+  };
+
+  localStorage.setItem(
+    "supermercadoProductos",
+    JSON.stringify(products)
+  );
+
+  document.getElementById("saveMsg").textContent =
+    "✓ Producto guardado.";
+
+  ["code","name","brand","content","price"]
+    .forEach(id => {
+      document.getElementById(id).value = "";
+    });
+}
 
 function addProduct(){
  const c=document.getElementById("code").value.trim();
