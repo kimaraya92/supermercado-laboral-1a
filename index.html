@@ -37,7 +37,7 @@ video{border-radius:12px;background:#000}
   <div class="small" id="rBrand"></div>
   <div class="small" id="rContent"></div>
   <div class="price" id="rPrice"></div>
-  <button onclick="clearResult()">Escanear otro</button>
+  <button class="primary" onclick="startNextScan()">📷 Escanear otro producto</button>
   <button class="primary" onclick="showTotal()">🧾 TOTAL</button>
   <button onclick="newPurchase()">🔄 NUEVA COMPRA</button>
   <div id="totalBox" class="hidden" style="margin-top:16px;text-align:center">
@@ -103,6 +103,20 @@ function clearResult(){
   document.getElementById("result").classList.add("hidden");
   lastScannedCode = null;
   document.getElementById("scanStatus").textContent = "";
+}
+
+function startNextScan(){
+  clearResult();
+
+  document.getElementById("totalBox").classList.add("hidden");
+
+  const scannerBox = document.getElementById("scanner");
+  scannerBox.style.display = "block";
+
+  document.getElementById("start").style.display = "none";
+
+  startCamera();
+}
 }
 
 function showTotal(){
@@ -189,8 +203,7 @@ function detenerCamara(){
   scannerBox.innerHTML = "";
   scannerBox.style.display = "none";
 
-  document.getElementById("start").textContent =
-    "📷 Escanear siguiente";
+ document.getElementById("start").style.display = "none";
 
   document.getElementById("scanStatus").textContent =
     "";
@@ -224,7 +237,7 @@ function startCamera(){
 
   document.getElementById("scanStatus").textContent =
     "Apunta al código de barras...";
-
+document.getElementById("start").style.display = "none";
   Quagga.init({
 
     inputStream: {
