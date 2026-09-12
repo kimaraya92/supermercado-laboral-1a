@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Supermercado Taller Laboral</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#f4f4f4;color:#222}
+header{background:#fff;padding:18px;text-align:center;border-bottom:1px solid #ddd}
+main{max-width:600px;margin:0 auto;padding:20px}
+.card{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px #0001}
+button,input{font-size:18px;padding:14px;border-radius:10px;border:1px solid #bbb;width:100%;box-sizing:border-box}
+button{cursor:pointer;background:#eee;font-weight:bold;margin-top:10px}
+.primary{background:#222;color:#fff}
+label{display:block;font-weight:bold;margin-top:12px;margin-bottom:5px}
+#scanner{width:100%;max-width:500px;display:block;margin:auto}
+.price{font-size:42px;font-weight:bold;text-align:center;margin:20px 0}
+.product{text-align:center;font-size:25px;font-weight:bold}
+.small{text-align:center;color:#666}
+video{border-radius:12px;background:#000}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header><h1>🛒 Supermercado Taller Laboral</h1></header>
+<main>
+<section class="card">
+<h2>📷 Consultar producto</h2>
+<p class="small">Escanea un código de barras para consultar su precio.</p>
+<div id="cartCount" class="small">Productos escaneados: 0</div>
+<div id="scanner"></div>
+<button id="start" class="primary">Abrir cámara</button>
+<p class="small">Consejo: acerca el código, mantenlo horizontal y evita reflejos. El código debe ocupar buena parte del recuadro.</p>
+<div id="result" class="hidden">
+  <div class="product" id="rProduct"></div>
+  <div class="small" id="rBrand"></div>
+  <div class="small" id="rContent"></div>
+  <div class="price" id="rPrice"></div>
+  <button onclick="clearResult()">Escanear otro</button>
+  <button class="primary" onclick="showTotal()">🧾 TOTAL</button>
+  <button onclick="newPurchase()">🔄 NUEVA COMPRA</button>
+  <div id="totalBox" class="hidden" style="margin-top:16px;text-align:center">
+    <div class="small">TOTAL DE LA COMPRA</div>
+    <div class="price" id="totalPrice">$0</div>
+  </div>
+</div>
+</section>
+
+<section class="card">
+<h2>➕ Ingresar producto</h2>
+<label>Código de barras</label><input id="code" inputmode="numeric" placeholder="Ej.: 7802900105013">
+<label>Producto</label><input id="name" placeholder="Ej.: Yogur">
+<label>Marca</label><input id="brand" placeholder="Ej.: Colun">
+<label>Contenido neto</label><input id="content" placeholder="Ej.: 125 g">
+<label>Precio</label><input id="price" inputmode="numeric" placeholder="Ej.: 990">
+<button class="primary" onclick="addProduct()">Guardar producto</button>
+<p id="saveMsg" class="small"></p>
+</section>
+</main>
+
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script>
+const defaultProducts = {
+ "7802900105013": {product:"Crema Espesa de leche",brand:"Soprole",content:"200 g",price:1000},
+ "7791875000013": {product:"Alfajores mixtos",brand:"Havanna",content:"6 u",price:4990},
+ "7802920759135": {product:"Leche semidescremada sabor frutilla",brand:"Colun",content:"200 ml",price:560},
+ "7802910000971": {product:"Producto de prueba 4",brand:"",content:"",price:0},
+ "7804600760288": {product:"Producto de prueba 5",brand:"",content:"",price:0}
+};
+let products = JSON.parse(localStorage.getItem("supermercadoProductos") || "null") || defaultProducts;
+let scanner = null;
+let purchaseTotal = 0;
+let scannedCount = 0;
+let lastScannedCode = null;
+
+function money(n){return "$"+Number(n).toLocaleString("es-CL")}
+function show(p){
+ if (lastScannedCode !== currentScanCode) {
+   purchaseTotal += Number(p.price) || 0;
+   scannedCount += 1;
+   lastScannedCode = currentScanCode;
+   document.getElementById("cartCount").textContent = "Productos escaneados: " + scannedCount;
+ }
+ document.getElementById("rProduct").textContent=p.product;
+ document.getElementById("rBrand").textContent=p.brand || "";
+ document.getElementById("rContent").textContent=p.content || "";
+ document.getElementById("rPrice").textContent=money(p.price);
+ document.getElementById("result").classList.remove("hidden");
+}
+function clearResult(){document.getElementById("result").classList.add("hidden"); lastScannedCode=null;}
+function showTotal(){document.getElementById("totalPrice").textContent=money(purchaseTotal);document.getElementById("totalBox").classList.remove("hidden");}
+function newPurchase(){purchaseTotal=0;scannedCount=0;lastScannedCode=null;document.getElementById("cartCount").textContent="Productos escaneados: 0";document.getElementById("totalPrice").textContent="$0";document.getElementById("totalBox").classList.add("hidden");document.getElementById("result").classList.add("hidden");}
+let currentScanCode=null;
+function onScan(code){
+ currentScanCode=String(code).trim();
+ const p=products[currentScanCode];
+ if(p) show(p);
+ else {
+   document.getElementById("rProduct").textContent="Producto no registrado";
+   document.getElementById("rBrand").textContent="Código: "+code;
+   document.getElementById("rContent").textContent="";
+   document.getElementById("rPrice").textContent="";
+   document.getElementById("result").classList.remove("hidden");
+ }
+}
+document.getElementById("start").onclick=async()=>{
+ if(scanner)return;
+ scanner=new Html5Qrcode("scanner");
+ try{
+  const formatsToSupport = [
+    Html5QrcodeSupportedFormats.EAN_13,
+    Html5QrcodeSupportedFormats.EAN_8,
+    Html5QrcodeSupportedFormats.UPC_A,
+    Html5QrcodeSupportedFormats.UPC_E,
+    Html5QrcodeSupportedFormats.CODE_128,
+    Html5QrcodeSupportedFormats.CODE_39
+  ];
+  await scanner.start(
+    {facingMode:"environment"},
+    {
+      fps: 15,
+      qrbox: {width: 320, height: 180},
+      aspectRatio: 1.7777778,
+      disableFlip: false,
+      formatsToSupport: formatsToSupport
+    },
+    onScan,
+    ()=>{}
+  );
+  document.getElementById("start").textContent="Cámara activa";
+ }catch(e){
+  document.getElementById("scanner").innerHTML="<p>No se pudo abrir la cámara. Revisa el permiso de cámara del navegador.</p>";
+  scanner=null;
+ }
+};
+function addProduct(){
+ const c=document.getElementById("code").value.trim();
+ const n=document.getElementById("name").value.trim();
+ const b=document.getElementById("brand").value.trim();
+ const ct=document.getElementById("content").value.trim();
+ const pr=Number(document.getElementById("price").value);
+ if(!c||!n||!Number.isFinite(pr)){document.getElementById("saveMsg").textContent="Completa código, producto y precio.";return}
+ products[c]={product:n,brand:b,content:ct,price:pr};
+ localStorage.setItem("supermercadoProductos",JSON.stringify(products));
+ document.getElementById("saveMsg").textContent="✓ Producto guardado.";
+ ["code","name","brand","content","price"].forEach(id=>document.getElementById(id).value="");
+}
+</script>
+</body>
+</html>
