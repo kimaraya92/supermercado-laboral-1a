@@ -202,8 +202,8 @@ function detenerCamara(){
   scannerBox.innerHTML = "";
   scannerBox.style.display = "none";
 
- document.getElementById("start").style.display = "none";
-
+ document.getElementById("start").style.display = "block";
+document.getElementById("start").textContent = "📷 Escanear siguiente";
   document.getElementById("scanStatus").textContent =
     "";
 }
