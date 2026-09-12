@@ -30,7 +30,8 @@ video{border-radius:12px;background:#000}
 <div id="cartCount" class="small">Productos escaneados: 0</div>
 <div id="scanner"></div>
 <button id="start" class="primary">Abrir cámara</button>
-<p class="small">Consejo: acerca el código, mantenlo horizontal y evita reflejos. El código debe ocupar buena parte del recuadro.</p>
+<p class="small">Usa la cámara trasera. Acerca el código y evita reflejos.</p>
+<div id="scanStatus" class="status"></div>
 <div id="result" class="hidden">
   <div class="product" id="rProduct"></div>
   <div class="small" id="rBrand"></div>
@@ -58,7 +59,7 @@ video{border-radius:12px;background:#000}
 </section>
 </main>
 
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"></script>
 <script>
 const defaultProducts = {
  "7802900105013": {product:"Crema Espesa de leche",brand:"Soprole",content:"200 g",price:1000},
@@ -68,10 +69,12 @@ const defaultProducts = {
  "7804600760288": {product:"Producto de prueba 5",brand:"",content:"",price:0}
 };
 let products = JSON.parse(localStorage.getItem("supermercadoProductos") || "null") || defaultProducts;
-let scanner = null;
+let reader = null;
+let controls = null;
 let purchaseTotal = 0;
 let scannedCount = 0;
 let lastScannedCode = null;
+let currentScanCode = null;
 
 function money(n){return "$"+Number(n).toLocaleString("es-CL")}
 function show(p){
@@ -103,36 +106,57 @@ function onScan(code){
    document.getElementById("result").classList.remove("hidden");
  }
 }
-document.getElementById("start").onclick=async()=>{
- if(scanner)return;
- scanner=new Html5Qrcode("scanner");
+async function startCamera(){
+ if(reader){return;}
+ document.getElementById("scanStatus").textContent="Iniciando cámara…";
  try{
-  const formatsToSupport = [
-    Html5QrcodeSupportedFormats.EAN_13,
-    Html5QrcodeSupportedFormats.EAN_8,
-    Html5QrcodeSupportedFormats.UPC_A,
-    Html5QrcodeSupportedFormats.UPC_E,
-    Html5QrcodeSupportedFormats.CODE_128,
-    Html5QrcodeSupportedFormats.CODE_39
-  ];
-  await scanner.start(
-    {facingMode:"environment"},
-    {
-      fps: 15,
-      qrbox: {width: 320, height: 180},
-      aspectRatio: 1.7777778,
-      disableFlip: false,
-      formatsToSupport: formatsToSupport
-    },
-    onScan,
-    ()=>{}
-  );
-  document.getElementById("start").textContent="Cámara activa";
+   reader = new ZXingBrowser.BrowserMultiFormatReader();
+   const devices = await ZXingBrowser.BrowserCodeReader.listVideoInputDevices();
+   const deviceId = devices.length ? devices[devices.length-1].deviceId : null;
+   const constraints = deviceId ? {deviceId:{exact:deviceId}} : {facingMode:{ideal:"environment"}};
+
+   const hints = new Map();
+   hints.set(ZXingBrowser.DecodeHintType.POSSIBLE_FORMATS,[
+     ZXingBrowser.BarcodeFormat.EAN_13,
+     ZXingBrowser.BarcodeFormat.EAN_8,
+     ZXingBrowser.BarcodeFormat.UPC_A,
+     ZXingBrowser.BarcodeFormat.UPC_E,
+     ZXingBrowser.BarcodeFormat.CODE_128,
+     ZXingBrowser.BarcodeFormat.CODE_39
+   ]);
+
+   controls = await reader.decodeFromConstraints(
+     {video:constraints},
+     "scanner",
+     (result, err)=>{
+       if(!result){return;}
+       currentScanCode = result.getText().trim();
+       const p = products[currentScanCode];
+
+       if(p){
+         show(p);
+       }else{
+         document.getElementById("rProduct").textContent="Producto no registrado";
+         document.getElementById("rBrand").textContent="Código: "+currentScanCode;
+         document.getElementById("rContent").textContent="";
+         document.getElementById("rPrice").textContent="";
+         document.getElementById("result").classList.remove("hidden");
+         document.getElementById("scanStatus").textContent="Código leído, pero no está en el catálogo";
+       }
+     },
+     hints
+   );
+
+   document.getElementById("start").textContent="Cámara activa";
+   document.getElementById("scanStatus").textContent="Apunta al código de barras…";
  }catch(e){
-  document.getElementById("scanner").innerHTML="<p>No se pudo abrir la cámara. Revisa el permiso de cámara del navegador.</p>";
-  scanner=null;
+   console.error(e);
+   document.getElementById("scanStatus").textContent="No se pudo iniciar el lector. Revisa el permiso de cámara.";
+   reader=null;
  }
-};
+}
+document.getElementById("start").addEventListener("click",startCamera);
+
 function addProduct(){
  const c=document.getElementById("code").value.trim();
  const n=document.getElementById("name").value.trim();
