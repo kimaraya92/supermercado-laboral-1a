@@ -108,31 +108,27 @@ function onScan(code){
 }
 async function startCamera(){
  if(reader){return;}
- document.getElementById("scanStatus").textContent="Iniciando cámara…";
+ const status=document.getElementById("scanStatus");
+ status.textContent="Iniciando cámara…";
  try{
+   // Lector ZXing: usamos directamente la cámara trasera sin depender
+   // de métodos auxiliares que cambian entre versiones de la librería.
    reader = new ZXingBrowser.BrowserMultiFormatReader();
-   const devices = await ZXingBrowser.BrowserCodeReader.listVideoInputDevices();
-   const deviceId = devices.length ? devices[devices.length-1].deviceId : null;
-   const constraints = deviceId ? {deviceId:{exact:deviceId}} : {facingMode:{ideal:"environment"}};
-
-   const hints = new Map();
-   hints.set(ZXingBrowser.DecodeHintType.POSSIBLE_FORMATS,[
-     ZXingBrowser.BarcodeFormat.EAN_13,
-     ZXingBrowser.BarcodeFormat.EAN_8,
-     ZXingBrowser.BarcodeFormat.UPC_A,
-     ZXingBrowser.BarcodeFormat.UPC_E,
-     ZXingBrowser.BarcodeFormat.CODE_128,
-     ZXingBrowser.BarcodeFormat.CODE_39
-   ]);
 
    controls = await reader.decodeFromConstraints(
-     {video:constraints},
+     {
+       video:{
+         facingMode:{ideal:"environment"},
+         width:{ideal:1280},
+         height:{ideal:720}
+       }
+     },
      "scanner",
      (result, err)=>{
        if(!result){return;}
        currentScanCode = result.getText().trim();
-       const p = products[currentScanCode];
 
+       const p = products[currentScanCode];
        if(p){
          show(p);
        }else{
@@ -141,18 +137,18 @@ async function startCamera(){
          document.getElementById("rContent").textContent="";
          document.getElementById("rPrice").textContent="";
          document.getElementById("result").classList.remove("hidden");
-         document.getElementById("scanStatus").textContent="Código leído, pero no está en el catálogo";
+         status.textContent="✓ Código leído, pero no está en el catálogo";
        }
-     },
-     hints
+     }
    );
 
    document.getElementById("start").textContent="Cámara activa";
-   document.getElementById("scanStatus").textContent="Apunta al código de barras…";
+   status.textContent="Apunta al código de barras…";
  }catch(e){
-   console.error(e);
-   document.getElementById("scanStatus").textContent="No se pudo iniciar el lector. Revisa el permiso de cámara.";
+   console.error("Lector:",e);
+   status.textContent="No se pudo iniciar la cámara. Revisa el permiso del sitio.";
    reader=null;
+   controls=null;
  }
 }
 document.getElementById("start").addEventListener("click",startCamera);
