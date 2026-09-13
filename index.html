@@ -56,6 +56,19 @@ video{border-radius:12px;background:#000}
 <button class="primary" onclick="addProduct()">Guardar producto</button>
 <p id="saveMsg" class="small"></p>
 </section>
+<section class="card">
+  <h2>📋 Catálogo</h2>
+
+  <input
+    id="buscarProducto"
+    type="text"
+    placeholder="🔎 Buscar producto..."
+    oninput="mostrarCatalogo()"
+  >
+
+  <div id="listaCatalogo" style="margin-top:15px;"></div>
+</section>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
@@ -371,6 +384,152 @@ function addProduct(){
  document.getElementById("saveMsg").textContent="✓ Producto guardado.";
  ["code","name","brand","content","price"].forEach(id=>document.getElementById(id).value="");
 }
+</script>
+<script>
+function guardarCatalogo() {
+  localStorage.setItem(
+    "supermercadoProductos",
+    JSON.stringify(products)
+  );
+}
+
+function mostrarCatalogo() {
+  const contenedor = document.getElementById("listaCatalogo");
+  const buscador = document.getElementById("buscarProducto");
+
+  if (!contenedor) return;
+
+  const texto = (buscador?.value || "").toLowerCase().trim();
+
+  const encontrados = Object.entries(products).filter(([codigo, p]) => {
+    return (
+      codigo.toLowerCase().includes(texto) ||
+      (p.product || "").toLowerCase().includes(texto) ||
+      (p.brand || "").toLowerCase().includes(texto)
+    );
+  });
+
+  if (encontrados.length === 0) {
+    contenedor.innerHTML = `
+      <div class="small" style="text-align:center;padding:15px;">
+        No se encontraron productos.
+      </div>
+    `;
+    return;
+  }
+
+  contenedor.innerHTML = encontrados.map(([codigo, p]) => `
+    <div style="
+      margin-top:12px;
+      padding:14px;
+      border:1px solid #ddd;
+      border-radius:12px;
+    ">
+
+      <div style="font-size:18px;font-weight:bold;">
+        ${p.product || "Sin nombre"}
+      </div>
+
+      <div class="small">
+        ${p.brand || "Sin marca"}
+      </div>
+
+      <div class="small">
+        ${p.content || ""}
+      </div>
+
+      <div style="margin-top:6px;font-weight:bold;">
+        $${Number(p.price || 0).toLocaleString("es-CL")}
+      </div>
+
+      <div class="small" style="margin-top:5px;">
+        Código: ${codigo}
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+
+        <button onclick="modificarProductoCatalogo('${codigo}')">
+          ✏️ Modificar
+        </button>
+
+        <button onclick="eliminarProductoCatalogo('${codigo}')">
+          🗑️ Eliminar
+        </button>
+
+      </div>
+
+    </div>
+  `).join("");
+}
+
+function modificarProductoCatalogo(codigo) {
+  const producto = products[codigo];
+
+  if (!producto) return;
+
+  const nombre = prompt(
+    "Nombre del producto:",
+    producto.product || ""
+  );
+
+  if (nombre === null) return;
+
+  const marca = prompt(
+    "Marca:",
+    producto.brand || ""
+  );
+
+  if (marca === null) return;
+
+  const contenido = prompt(
+    "Contenido neto:",
+    producto.content || ""
+  );
+
+  if (contenido === null) return;
+
+  const precio = prompt(
+    "Precio:",
+    producto.price || 0
+  );
+
+  if (precio === null) return;
+
+  products[codigo] = {
+    product: nombre,
+    brand: marca,
+    content: contenido,
+    price: Number(precio) || 0
+  };
+
+  guardarCatalogo();
+  mostrarCatalogo();
+
+  alert("✅ Producto modificado correctamente.");
+}
+
+function eliminarProductoCatalogo(codigo) {
+  const producto = products[codigo];
+
+  if (!producto) return;
+
+  const confirmar = confirm(
+    `¿Quieres eliminar "${producto.product}" del catálogo?`
+  );
+
+  if (!confirmar) return;
+
+  delete products[codigo];
+
+  guardarCatalogo();
+  mostrarCatalogo();
+
+  alert("🗑️ Producto eliminado.");
+}
+
+window.mostrarCatalogo = mostrarCatalogo;
+
+mostrarCatalogo();
 </script>
 </body>
 </html>
