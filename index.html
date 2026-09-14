@@ -3,287 +3,1275 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>Supermercado Taller Laboral</title>
+
 <style>
-body{font-family:Arial,sans-serif;margin:0;background:#f4f4f4;color:#222}
-header{background:#fff;padding:18px;text-align:center;border-bottom:1px solid #ddd}
-main{max-width:600px;margin:0 auto;padding:20px}
-.card{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px #0001}
-button,input{font-size:18px;padding:14px;border-radius:10px;border:1px solid #bbb;width:100%;box-sizing:border-box}
-button{cursor:pointer;background:#eee;font-weight:bold;margin-top:10px}
-.primary{background:#222;color:#fff}
-label{display:block;font-weight:bold;margin-top:12px;margin-bottom:5px}
-#scanner{width:100%;max-width:500px;display:block;margin:auto}
-.price{font-size:42px;font-weight:bold;text-align:center;margin:20px 0}
-.product{text-align:center;font-size:25px;font-weight:bold}
-.small{text-align:center;color:#666}
-video{border-radius:12px;background:#000}
-.hidden{display:none}
+*{
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  background:#f4f4f4;
+  color:#222;
+}
+
+header{
+  background:#fff;
+  padding:20px;
+  text-align:center;
+  border-bottom:1px solid #ddd;
+}
+
+header h1{
+  margin:0;
+  font-size:30px;
+}
+
+main{
+  max-width:1000px;
+  margin:0 auto;
+  padding:25px;
+}
+
+.card{
+  background:#fff;
+  border-radius:18px;
+  padding:22px;
+  margin-bottom:18px;
+  box-shadow:0 2px 10px #0001;
+}
+
+.hidden{
+  display:none !important;
+}
+
+button,
+input,
+select{
+  font-size:18px;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #bbb;
+  width:100%;
+  box-sizing:border-box;
+}
+
+button{
+  cursor:pointer;
+  background:#eee;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+button.primary{
+  background:#222;
+  color:#fff;
+}
+
+button.large{
+  font-size:23px;
+  padding:22px;
+}
+
+button.back{
+  background:#fff;
+  width:auto;
+  padding:10px 18px;
+}
+
+.menu{
+  max-width:650px;
+  margin:40px auto;
+  text-align:center;
+}
+
+.menu button{
+  margin-top:20px;
+}
+
+.menu-icon{
+  font-size:70px;
+  margin-bottom:10px;
+}
+
+.screen-title{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.screen-title h2{
+  margin:5px 0;
+  font-size:30px;
+}
+
+.small{
+  color:#666;
+  text-align:center;
+}
+
+.form-group{
+  margin-top:15px;
+}
+
+.form-group label{
+  display:block;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+.worker-box{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:10px;
+}
+
+.worker-card{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:#fff;
+  border-radius:14px;
+  padding:10px 14px;
+  box-shadow:0 2px 8px #0001;
+  min-width:220px;
+}
+
+.worker-photo{
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  background:#eee;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  overflow:hidden;
+  flex-shrink:0;
+}
+
+.worker-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.worker-info{
+  text-align:left;
+}
+
+.worker-name{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.worker-role{
+  font-size:15px;
+  color:#666;
+  margin-top:3px;
+}
+
+.sale-actions{
+  display:flex;
+  gap:20px;
+  margin:35px auto 25px;
+  max-width:800px;
+}
+
+.sale-actions button{
+  margin-top:0;
+  flex:1;
+  min-height:105px;
+  font-size:21px;
+}
+
+.camera-box{
+  max-width:700px;
+  margin:0 auto;
+}
+
+#scanner{
+  width:100%;
+  display:none;
+  overflow:hidden;
+  border-radius:14px;
+  background:#000;
+  margin-bottom:15px;
+}
+
+#scanner video{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.status{
+  text-align:center;
+  margin:12px 0;
+  font-weight:bold;
+}
+
+.product-result{
+  max-width:700px;
+  margin:25px auto;
+  padding:22px;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 2px 8px #0001;
+  text-align:center;
+}
+
+.product{
+  font-size:28px;
+  font-weight:bold;
+}
+
+.price{
+  font-size:44px;
+  font-weight:bold;
+  text-align:center;
+  margin:20px 0;
+}
+
+.result-actions{
+  display:flex;
+  gap:12px;
+  max-width:700px;
+  margin:15px auto;
+}
+
+.result-actions button{
+  flex:1;
+  margin-top:0;
+}
+
+.total-box{
+  text-align:center;
+  background:#f1f1f1;
+  padding:20px;
+  border-radius:14px;
+  margin-top:20px;
+}
+
+.total-label{
+  font-size:18px;
+  color:#666;
+}
+
+.purchase-count{
+  text-align:center;
+  font-size:18px;
+  margin:15px 0;
+  color:#555;
+}
+
+.manual-code{
+  max-width:700px;
+  margin:20px auto;
+}
+
+.catalog-search{
+  margin-bottom:20px;
+}
+
+.item{
+  border:1px solid #ddd;
+  border-radius:14px;
+  padding:15px;
+  margin-top:12px;
+}
+
+.item-title{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.item-meta{
+  color:#666;
+  font-size:15px;
+  margin-top:5px;
+}
+
+.item-price{
+  font-size:19px;
+  font-weight:bold;
+  margin-top:8px;
+}
+
+.row{
+  display:flex;
+  gap:10px;
+}
+
+.row button{
+  flex:1;
+}
+
+.notice{
+  padding:15px;
+  background:#f7f7f7;
+  border-radius:12px;
+  margin-top:12px;
+  text-align:center;
+}
+
+@media(max-width:700px){
+
+  main{
+    padding:15px;
+  }
+
+  header h1{
+    font-size:24px;
+  }
+
+  .sale-actions{
+    flex-direction:column;
+  }
+
+  .worker-card{
+    min-width:190px;
+  }
+
+  .result-actions,
+  .row{
+    flex-direction:column;
+  }
+
+  .price{
+    font-size:38px;
+  }
+}
 </style>
 </head>
+
 <body>
-<header><h1>🛒 Supermercado Taller Laboral</h1></header>
+
+<header>
+  <h1>🛒 Supermercado Taller Laboral</h1>
+</header>
+
 <main>
-<section class="card">
-<h2>📷 Consultar producto</h2>
-<p class="small">Escanea un código de barras para consultar su precio.</p>
-<div id="cartCount" class="small">Productos escaneados: 0</div>
-<div id="scanner"></div>
-<button id="start" class="primary">Abrir cámara</button>
-<p class="small">Usa la cámara trasera. Acerca el código y evita reflejos.</p>
-<div id="scanStatus" class="status"></div>
-<div id="result" class="hidden">
-  <div class="product" id="rProduct"></div>
-  <div class="small" id="rBrand"></div>
-  <div class="small" id="rContent"></div>
-  <div class="price" id="rPrice"></div>
-   <button class="primary" onclick="showTotal()">🧾 TOTAL</button>
-  <button onclick="newPurchase()">🔄 NUEVA COMPRA</button>
-  <div id="totalBox" class="hidden" style="margin-top:16px;text-align:center">
-    <div class="small">TOTAL DE LA COMPRA</div>
-    <div class="price" id="totalPrice">$0</div>
+
+<!-- ========================= -->
+<!-- PANTALLA INICIAL -->
+<!-- ========================= -->
+
+<section id="homeScreen">
+
+  <div class="menu">
+
+    <div class="menu-icon">🛒</div>
+
+    <h2>Supermercado Laboral</h2>
+
+    <p class="small">
+      Selecciona la función que deseas realizar.
+    </p>
+
+    <button
+      class="primary large"
+      onclick="abrirVenta()"
+    >
+      🛍️ INICIAR VENTA
+    </button>
+
+    <button
+      class="large"
+      onclick="abrirInventario()"
+    >
+      📦 INVENTARIO
+    </button>
+
   </div>
-</div>
+
 </section>
 
-<section class="card">
-<h2>➕ Ingresar producto</h2>
-<label>Código de barras</label><input id="code" inputmode="numeric" placeholder="Ej.: 7802900105013">
-<label>Producto</label><input id="name" placeholder="Ej.: Yogur">
-<label>Marca</label><input id="brand" placeholder="Ej.: Colun">
-<label>Contenido neto</label><input id="content" placeholder="Ej.: 125 g">
-<label>Precio</label><input id="price" inputmode="numeric" placeholder="Ej.: 990">
-<button class="primary" onclick="addProduct()">Guardar producto</button>
-<p id="saveMsg" class="small"></p>
-</section>
-<section class="card">
-  <h2>📋 Catálogo</h2>
 
-  <input
-    id="buscarProducto"
-    type="text"
-    placeholder="🔎 Buscar producto..."
-    oninput="mostrarCatalogo()"
+<!-- ========================= -->
+<!-- PANTALLA DE INGRESO VENTA -->
+<!-- ========================= -->
+
+<section id="workerScreen" class="hidden">
+
+  <button
+    class="back"
+    onclick="volverInicio()"
+  >
+    ← Volver
+  </button>
+
+  <div class="card">
+
+    <div class="screen-title">
+      <h2>🛍️ Iniciar venta</h2>
+      <p class="small">
+        Ingresa los datos de quien realizará la venta.
+      </p>
+    </div>
+
+    <div class="form-group">
+      <label>Nombre del trabajador</label>
+      <input
+        id="workerName"
+        placeholder="Escribe tu nombre"
+        oninput="actualizarTrabajador()"
+      >
+    </div>
+
+    <div class="form-group">
+      <label>Cargo / rol</label>
+
+      <select id="workerRole">
+        <option value="Vendedor/a">🛒 Vendedor/a</option>
+        <option value="Cajero/a">💰 Cajero/a</option>
+        <option value="Supervisor/a">👀 Supervisor/a</option>
+        <option value="Encargado/a de inventario">📦 Encargado/a de inventario</option>
+      </select>
+    </div>
+
+    <div
+      class="worker-card"
+      style="margin:25px auto;max-width:320px;"
+    >
+
+      <div class="worker-photo" id="previewWorkerPhoto">
+        👤
+      </div>
+
+      <div class="worker-info">
+
+        <div
+          class="worker-name"
+          id="previewWorkerName"
+        >
+          Nombre
+        </div>
+
+        <div
+          class="worker-role"
+          id="previewWorkerRole"
+        >
+          Vendedor/a
+        </div>
+
+      </div>
+
+    </div>
+
+    <button
+      class="primary large"
+      onclick="comenzarVenta()"
+    >
+      🛍️ COMENZAR VENTA
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ========================= -->
+<!-- PANTALLA DE VENTA -->
+<!-- ========================= -->
+
+<section id="saleScreen" class="hidden">
+
+  <div
+    style="
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:15px;
+    "
   >
 
-  <div id="listaCatalogo" style="margin-top:15px;"></div>
+    <button
+      class="back"
+      onclick="salirVenta()"
+    >
+      ← Salir
+    </button>
+
+    <div class="worker-box">
+
+      <div class="worker-card">
+
+        <div
+          class="worker-photo"
+          id="saleWorkerPhoto"
+        >
+          👤
+        </div>
+
+        <div class="worker-info">
+
+          <div
+            class="worker-name"
+            id="saleWorkerName"
+          >
+            Nombre
+          </div>
+
+          <div
+            class="worker-role"
+            id="saleWorkerRole"
+          >
+            Cargo
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="screen-title">
+    <h2>🛒 SUPERmercado</h2>
+  </div>
+
+
+  <div class="sale-actions">
+
+    <button
+      class="primary"
+      id="cameraButton"
+      onclick="startNextScan()"
+    >
+      📷 ESCANEAR CÓDIGO
+    </button>
+
+    <button
+      onclick="focusManualCode()"
+    >
+      🔎 ESCRIBIR CÓDIGO
+    </button>
+
+  </div>
+
+
+  <div class="manual-code">
+
+    <input
+      id="manualCodeInput"
+      inputmode="numeric"
+      placeholder="Escribe o escanea el código y presiona Enter"
+      onkeydown="manualCodeKey(event)"
+    >
+
+  </div>
+
+
+  <div class="purchase-count">
+    Productos escaneados: <span id="cartCount">0</span>
+  </div>
+
+
+  <div class="camera-box">
+
+    <div id="scanner"></div>
+
+    <div
+      id="scanStatus"
+      class="status"
+    ></div>
+
+  </div>
+
+
+  <div
+    id="result"
+    class="product-result hidden"
+  >
+
+    <div
+      class="product"
+      id="rProduct"
+    ></div>
+
+    <div
+      class="small"
+      id="rBrand"
+    ></div>
+
+    <div
+      class="small"
+      id="rContent"
+    ></div>
+
+    <div
+      class="price"
+      id="rPrice"
+    ></div>
+
+  </div>
+
+
+  <div
+    id="totalBox"
+    class="total-box hidden"
+  >
+
+    <div class="total-label">
+      TOTAL DE LA COMPRA
+    </div>
+
+    <div
+      class="price"
+      id="totalPrice"
+    >
+      $0
+    </div>
+
+  </div>
+
+
+  <div class="result-actions">
+
+    <button
+      onclick="showTotal()"
+    >
+      🧾 TOTAL
+    </button>
+
+    <button
+      onclick="newPurchase()"
+    >
+      🔄 NUEVA COMPRA
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ========================= -->
+<!-- PANTALLA INVENTARIO -->
+<!-- ========================= -->
+
+<section id="inventoryScreen" class="hidden">
+
+  <button
+    class="back"
+    onclick="volverInicio()"
+  >
+    ← Volver
+  </button>
+
+  <div class="screen-title">
+    <h2>📦 Inventario</h2>
+    <p class="small">
+      Administración de productos del supermercado.
+    </p>
+  </div>
+
+
+  <div class="card">
+
+    <input
+      id="catalogSearch"
+      class="catalog-search"
+      placeholder="🔎 Buscar producto, marca o código..."
+      oninput="renderCatalog()"
+    >
+
+    <div id="catalogList"></div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>➕ Agregar producto</h2>
+
+    <div class="form-group">
+
+      <label>Código de barras</label>
+
+      <input
+        id="code"
+        inputmode="numeric"
+        placeholder="Ej.: 7802900105013"
+      >
+
+    </div>
+
+
+    <button
+      onclick="scanCodeForForm()"
+    >
+      📷 Escanear código existente
+    </button>
+
+
+    <div class="form-group">
+
+      <label>Producto</label>
+
+      <input
+        id="name"
+        placeholder="Ej.: Yogur"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Marca</label>
+
+      <input
+        id="brand"
+        placeholder="Ej.: Colun"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Contenido neto</label>
+
+      <input
+        id="content"
+        placeholder="Ej.: 125 g"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Precio</label>
+
+      <input
+        id="price"
+        inputmode="numeric"
+        placeholder="Ej.: 990"
+      >
+
+    </div>
+
+
+    <button
+      class="primary"
+      onclick="addProduct()"
+    >
+      💾 GUARDAR PRODUCTO
+    </button>
+
+
+    <p
+      id="saveMsg"
+      class="small"
+    ></p>
+
+  </div>
+
 </section>
 
 </main>
 
+
 <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+
+
 <script>
+
+/* =========================================
+   PRODUCTOS
+========================================= */
+
 const defaultProducts = {
- "7802900105013": {product:"Crema Espesa de leche",brand:"Soprole",content:"200 g",price:1000},
- "7791875000013": {product:"Alfajores mixtos",brand:"Havanna",content:"6 u",price:4990},
- "7802920759135": {product:"Leche semidescremada sabor frutilla",brand:"Colun",content:"200 ml",price:560},
- "7802910000971": {product:"Producto de prueba 4",brand:"",content:"",price:0},
- "7804600760288": {product:"Producto de prueba 5",brand:"",content:"",price:0}
+
+  "7802900105013":{
+    product:"Crema Espesa de leche",
+    brand:"Soprole",
+    content:"200 g",
+    price:1000
+  },
+
+  "7791875000013":{
+    product:"Alfajores mixtos",
+    brand:"Havanna",
+    content:"6 u",
+    price:4990
+  },
+
+  "7802920759135":{
+    product:"Leche semidescremada sabor frutilla",
+    brand:"Colun",
+    content:"200 ml",
+    price:560
+  },
+
+  "7802910000971":{
+    product:"Producto de prueba 4",
+    brand:"",
+    content:"",
+    price:0
+  },
+
+  "7804600760288":{
+    product:"Producto de prueba 5",
+    brand:"",
+    content:"",
+    price:0
+  }
+
 };
-let products = JSON.parse(localStorage.getItem("supermercadoProductos") || "null") || defaultProducts;
+
+
+let products =
+  JSON.parse(
+    localStorage.getItem("supermercadoProductos") || "null"
+  ) || defaultProducts;
+
+
+/* =========================================
+   ESTADO DE LA VENTA
+========================================= */
+
 let purchaseTotal = 0;
 let scannedCount = 0;
 let lastScannedCode = null;
 let currentScanCode = null;
+
 let scanning = false;
+let formScanMode = false;
+
+
+/* =========================================
+   ESTADO DEL TRABAJADOR
+========================================= */
+
+let currentWorker = {
+  name:"",
+  role:"Vendedor/a"
+};
+
+
+/*
+  Más adelante aquí podremos tener algo como:
+
+  const trabajadores = {
+    "Camila": "camila.jpg",
+    "Juan": "juan.jpg"
+  };
+
+  y la fotografía aparecerá automáticamente.
+*/
+
+
+/* =========================================
+   UTILIDADES
+========================================= */
 
 function money(n){
-  return "$" + Number(n).toLocaleString("es-CL");
+
+  return "$" +
+    Number(n).toLocaleString("es-CL");
+
 }
 
-function show(p){
-  if (lastScannedCode !== currentScanCode) {
-    purchaseTotal += Number(p.price) || 0;
-    scannedCount += 1;
-    lastScannedCode = currentScanCode;
 
-    document.getElementById("cartCount").textContent =
-      "Productos escaneados: " + scannedCount;
+function saveProducts(){
+
+  localStorage.setItem(
+    "supermercadoProductos",
+    JSON.stringify(products)
+  );
+
+}
+
+
+function hideAllScreens(){
+
+  document
+    .getElementById("homeScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("workerScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("saleScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("inventoryScreen")
+    .classList.add("hidden");
+
+}
+
+
+/* =========================================
+   NAVEGACIÓN
+========================================= */
+
+function abrirVenta(){
+
+  hideAllScreens();
+
+  document
+    .getElementById("workerScreen")
+    .classList.remove("hidden");
+
+}
+
+
+function abrirInventario(){
+
+  hideAllScreens();
+
+  document
+    .getElementById("inventoryScreen")
+    .classList.remove("hidden");
+
+  renderCatalog();
+
+}
+
+
+function volverInicio(){
+
+  stopCamera();
+
+  hideAllScreens();
+
+  document
+    .getElementById("homeScreen")
+    .classList.remove("hidden");
+
+}
+
+
+function salirVenta(){
+
+  stopCamera();
+
+  newPurchase();
+
+  volverInicio();
+
+}
+
+
+/* =========================================
+   TRABAJADOR
+========================================= */
+
+function actualizarTrabajador(){
+
+  const name =
+    document
+      .getElementById("workerName")
+      .value
+      .trim();
+
+  const role =
+    document
+      .getElementById("workerRole")
+      .value;
+
+  document
+    .getElementById("previewWorkerName")
+    .textContent =
+      name || "Nombre";
+
+  document
+    .getElementById("previewWorkerRole")
+    .textContent =
+      role;
+
+}
+
+
+document
+  .getElementById("workerRole")
+  .addEventListener(
+    "change",
+    actualizarTrabajador
+  );
+
+
+function comenzarVenta(){
+
+  const name =
+    document
+      .getElementById("workerName")
+      .value
+      .trim();
+
+  const role =
+    document
+      .getElementById("workerRole")
+      .value;
+
+  if(!name){
+
+    alert("Escribe el nombre del trabajador.");
+
+    return;
+
   }
 
-  document.getElementById("rProduct").textContent = p.product;
-  document.getElementById("rBrand").textContent = p.brand || "";
-  document.getElementById("rContent").textContent = p.content || "";
-  document.getElementById("rPrice").textContent = money(p.price);
+  currentWorker = {
+    name:name,
+    role:role
+  };
 
-  document.getElementById("result").classList.remove("hidden");
-  document.getElementById("scanStatus").textContent =
-    "✓ Producto reconocido";
+
+  document
+    .getElementById("saleWorkerName")
+    .textContent =
+      name;
+
+  document
+    .getElementById("saleWorkerRole")
+    .textContent =
+      role;
+
+
+  hideAllScreens();
+
+  document
+    .getElementById("saleScreen")
+    .classList.remove("hidden");
+
 }
 
-function clearResult(){
-  document.getElementById("result").classList.add("hidden");
-  lastScannedCode = null;
-  document.getElementById("scanStatus").textContent = "";
+
+document
+  .getElementById("workerName")
+  .addEventListener(
+    "input",
+    actualizarTrabajador
+  );
+
+
+/* =========================================
+   VENTA
+========================================= */
+
+function showProduct(p){
+
+  if(
+    lastScannedCode !== currentScanCode
+  ){
+
+    purchaseTotal +=
+      Number(p.price) || 0;
+
+    scannedCount += 1;
+
+    lastScannedCode =
+      currentScanCode;
+
+    document
+      .getElementById("cartCount")
+      .textContent =
+        scannedCount;
+
+  }
+
+
+  document
+    .getElementById("rProduct")
+    .textContent =
+      p.product;
+
+  document
+    .getElementById("rBrand")
+    .textContent =
+      p.brand || "";
+
+  document
+    .getElementById("rContent")
+    .textContent =
+      p.content || "";
+
+  document
+    .getElementById("rPrice")
+    .textContent =
+      money(p.price);
+
+  document
+    .getElementById("result")
+    .classList
+    .remove("hidden");
+
 }
+
+
+function processCode(code){
+
+  if(!code){
+    return;
+  }
+
+  currentScanCode =
+    String(code).trim();
+
+  const p =
+    products[currentScanCode];
+
+
+  if(p){
+
+    showProduct(p);
+
+  }else{
+
+    document
+      .getElementById("rProduct")
+      .textContent =
+        "Producto no registrado";
+
+    document
+      .getElementById("rBrand")
+      .textContent =
+        "Código: " + currentScanCode;
+
+    document
+      .getElementById("rContent")
+      .textContent =
+        "";
+
+    document
+      .getElementById("rPrice")
+      .textContent =
+        "";
+
+    document
+      .getElementById("result")
+      .classList
+      .remove("hidden");
+
+  }
+
+}
+
+
+/* =========================================
+   INGRESO MANUAL / LECTOR USB
+========================================= */
+
+function focusManualCode(){
+
+  document
+    .getElementById("manualCodeInput")
+    .focus();
+
+}
+
+
+function manualCodeKey(event){
+
+  if(event.key === "Enter"){
+
+    const input =
+      document
+        .getElementById("manualCodeInput");
+
+    const code =
+      input.value.trim();
+
+    if(code){
+
+      processCode(code);
+
+      input.value = "";
+
+    }
+
+  }
+
+}
+
+
+/* =========================================
+   CÁMARA
+========================================= */
 
 function startNextScan(){
-  clearResult();
 
-  document.getElementById("totalBox").classList.add("hidden");
+  formScanMode = false;
 
-  const scannerBox = document.getElementById("scanner");
-  scannerBox.style.display = "block";
-
-  document.getElementById("start").style.display = "none";
+  document
+    .getElementById("result")
+    .classList
+    .add("hidden");
 
   startCamera();
+
 }
 
-function showTotal(){
-  document.getElementById("totalPrice").textContent = money(purchaseTotal);
-  document.getElementById("totalBox").classList.remove("hidden");
-}
-
-function newPurchase(){
-  purchaseTotal = 0;
-  scannedCount = 0;
-  lastScannedCode = null;
-  currentScanCode = null;
-
-  document.getElementById("cartCount").textContent =
-    "Productos escaneados: 0";
-
-  document.getElementById("totalPrice").textContent = "$0";
-  document.getElementById("totalBox").classList.add("hidden");
-  document.getElementById("result").classList.add("hidden");
-  document.getElementById("scanStatus").textContent = "";
-}
-
-function procesarCodigo(code){
-  if (!code) return;
-
-  currentScanCode = String(code).trim();
-
-  const p = products[currentScanCode];
-
-  if (p) {
-    show(p);
-  } else {
-    document.getElementById("rProduct").textContent =
-      "Producto no registrado";
-
-    document.getElementById("rBrand").textContent =
-      "Código: " + currentScanCode;
-
-    document.getElementById("rContent").textContent = "";
-    document.getElementById("rPrice").textContent = "";
-
-    document.getElementById("result").classList.remove("hidden");
-
-    document.getElementById("scanStatus").textContent =
-      "Código leído, pero no está en el catálogo";
-  }
-}
-
-  function procesarCodigo(code){
-  if (!code) return;
-
-  currentScanCode = String(code).trim();
-
-  const p = products[currentScanCode];
-
-  if (p) {
-    show(p);
-  } else {
-    document.getElementById("rProduct").textContent =
-      "Producto no registrado";
-
-    document.getElementById("rBrand").textContent =
-      "Código: " + currentScanCode;
-
-    document.getElementById("rContent").textContent = "";
-    document.getElementById("rPrice").textContent = "";
-
-    document.getElementById("result").classList.remove("hidden");
-
-    document.getElementById("scanStatus").textContent =
-      "Código leído, pero no está en el catálogo";
-  }
-}
-
-function detenerCamara(){
-
-  if (scanning) {
-    Quagga.stop();
-    scanning = false;
-  }
-
-  const scannerBox = document.getElementById("scanner");
-
-  scannerBox.innerHTML = "";
-  scannerBox.style.display = "none";
-
- document.getElementById("start").style.display = "block";
-document.getElementById("start").textContent = "📷 Escanear siguiente";
-  document.getElementById("scanStatus").textContent =
-    "";
-}
-
-function onBarcodeDetected(result){
-
-  if (!result || !result.codeResult) return;
-
-  const code = result.codeResult.code;
-
-  if (!code) return;
-
-  // Procesamos una sola lectura
-  procesarCodigo(code);
-
-  // Cerramos inmediatamente la cámara
-  detenerCamara();
-}
 
 function startCamera(){
 
-  if (scanning) return;
+  if(scanning){
+    return;
+  }
 
-  const scannerBox = document.getElementById("scanner");
+  const scanner =
+    document.getElementById("scanner");
 
-  scannerBox.innerHTML = "";
-  scannerBox.style.display = "block";
+  scanner.style.display =
+    "block";
+
+  scanner.innerHTML =
+    "";
+
+  document
+    .getElementById("scanStatus")
+    .textContent =
+      formScanMode
+        ? "Escanea el código del nuevo producto..."
+        : "Apunta al código de barras...";
 
   scanning = true;
 
-  document.getElementById("scanStatus").textContent =
-    "Apunta al código de barras...";
-document.getElementById("start").style.display = "none";
+
   Quagga.init({
 
-    inputStream: {
-      name: "Live",
-      type: "LiveStream",
+    inputStream:{
+      name:"Live",
+      type:"LiveStream",
+      target:
+        document.querySelector("#scanner"),
 
-      target: document.querySelector("#scanner"),
-
-      constraints: {
-        facingMode: "environment",
-
-        width: {
-          min: 640
+      constraints:{
+        facingMode:"environment",
+        width:{
+          min:640
         },
-
-        height: {
-          min: 480
+        height:{
+          min:480
         },
-
-        aspectRatio: {
-          min: 1,
-          max: 2
+        aspectRatio:{
+          min:1,
+          max:2
         }
       }
+
     },
 
-    locator: {
-      patchSize: "medium",
-      halfSample: true
+    locator:{
+      patchSize:"medium",
+      halfSample:true
     },
 
-    numOfWorkers: 2,
+    numOfWorkers:2,
 
-    decoder: {
-      readers: [
+    decoder:{
+      readers:[
         "ean_reader",
         "ean_8_reader",
         "upc_reader",
@@ -293,243 +1281,564 @@ document.getElementById("start").style.display = "none";
       ]
     },
 
-    locate: true
+    locate:true
 
-  }, function(error){
+  },function(error){
 
-    if (error) {
+    if(error){
 
       console.error(error);
 
       scanning = false;
 
-      document.getElementById("scanner").style.display = "none";
+      scanner.style.display =
+        "none";
 
-      document.getElementById("scanStatus").textContent =
-        "No se pudo iniciar la cámara. Revisa el permiso.";
+      document
+        .getElementById("scanStatus")
+        .textContent =
+          "No se pudo iniciar la cámara. Revisa el permiso.";
 
       return;
+
     }
 
-    Quagga.onDetected(onBarcodeDetected);
+
+    Quagga.offDetected(onDetected);
+
+    Quagga.onDetected(onDetected);
 
     Quagga.start();
 
-    document.getElementById("start").textContent =
-      "Cámara activa";
-
-    document.getElementById("scanStatus").textContent =
-      "Apunta al código de barras...";
   });
+
 }
 
-document
-  .getElementById("start")
-  .addEventListener("click", startCamera);
-function addProduct(){
 
-  const c =
-    document.getElementById("code").value.trim();
+function onDetected(result){
 
-  const n =
-    document.getElementById("name").value.trim();
+  if(
+    result &&
+    result.codeResult &&
+    result.codeResult.code
+  ){
 
-  const b =
-    document.getElementById("brand").value.trim();
-
-  const ct =
-    document.getElementById("content").value.trim();
-
-  const pr =
-    Number(document.getElementById("price").value);
-
-  if (!c || !n || !Number.isFinite(pr)) {
-
-    document.getElementById("saveMsg").textContent =
-      "Completa código, producto y precio.";
-
-    return;
-  }
-
-  products[c] = {
-    product: n,
-    brand: b,
-    content: ct,
-    price: pr
-  };
-
-  localStorage.setItem(
-    "supermercadoProductos",
-    JSON.stringify(products)
-  );
-
-  document.getElementById("saveMsg").textContent =
-    "✓ Producto guardado.";
-
-  ["code","name","brand","content","price"]
-    .forEach(id => {
-      document.getElementById(id).value = "";
-    });
-}
-
-function addProduct(){
- const c=document.getElementById("code").value.trim();
- const n=document.getElementById("name").value.trim();
- const b=document.getElementById("brand").value.trim();
- const ct=document.getElementById("content").value.trim();
- const pr=Number(document.getElementById("price").value);
- if(!c||!n||!Number.isFinite(pr)){document.getElementById("saveMsg").textContent="Completa código, producto y precio.";return}
- products[c]={product:n,brand:b,content:ct,price:pr};
- localStorage.setItem("supermercadoProductos",JSON.stringify(products));
- document.getElementById("saveMsg").textContent="✓ Producto guardado.";
- ["code","name","brand","content","price"].forEach(id=>document.getElementById(id).value="");
-}
-</script>
-<script>
-function guardarCatalogo() {
-  localStorage.setItem(
-    "supermercadoProductos",
-    JSON.stringify(products)
-  );
-}
-
-function mostrarCatalogo() {
-  const contenedor = document.getElementById("listaCatalogo");
-  const buscador = document.getElementById("buscarProducto");
-
-  if (!contenedor) return;
-
-  const texto = (buscador?.value || "").toLowerCase().trim();
-
-  const encontrados = Object.entries(products).filter(([codigo, p]) => {
-    return (
-      codigo.toLowerCase().includes(texto) ||
-      (p.product || "").toLowerCase().includes(texto) ||
-      (p.brand || "").toLowerCase().includes(texto)
+    processDetectedCode(
+      result.codeResult.code
     );
-  });
 
-  if (encontrados.length === 0) {
-    contenedor.innerHTML = `
-      <div class="small" style="text-align:center;padding:15px;">
-        No se encontraron productos.
-      </div>
-    `;
+  }
+
+}
+
+
+function processDetectedCode(code){
+
+  if(!code){
     return;
   }
 
-  contenedor.innerHTML = encontrados.map(([codigo, p]) => `
-    <div style="
-      margin-top:12px;
-      padding:14px;
-      border:1px solid #ddd;
-      border-radius:12px;
-    ">
+  currentScanCode =
+    String(code).trim();
 
-      <div style="font-size:18px;font-weight:bold;">
-        ${p.product || "Sin nombre"}
-      </div>
 
-      <div class="small">
-        ${p.brand || "Sin marca"}
-      </div>
+  if(formScanMode){
 
-      <div class="small">
-        ${p.content || ""}
-      </div>
+    document
+      .getElementById("code")
+      .value =
+        currentScanCode;
 
-      <div style="margin-top:6px;font-weight:bold;">
-        $${Number(p.price || 0).toLocaleString("es-CL")}
-      </div>
+    formScanMode = false;
 
-      <div class="small" style="margin-top:5px;">
-        Código: ${codigo}
-      </div>
+    stopCamera();
 
-      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+    document
+      .getElementById("saveMsg")
+      .textContent =
+        "✓ Código capturado.";
 
-        <button onclick="modificarProductoCatalogo('${codigo}')">
-          ✏️ Modificar
-        </button>
+    return;
 
-        <button onclick="eliminarProductoCatalogo('${codigo}')">
-          🗑️ Eliminar
-        </button>
+  }
 
-      </div>
 
-    </div>
-  `).join("");
+  processCode(currentScanCode);
+
+  stopCamera();
+
 }
 
-function modificarProductoCatalogo(codigo) {
-  const producto = products[codigo];
 
-  if (!producto) return;
+function stopCamera(){
 
-  const nombre = prompt(
-    "Nombre del producto:",
-    producto.product || ""
-  );
+  if(scanning){
 
-  if (nombre === null) return;
+    try{
+      Quagga.offDetected(onDetected);
+    }catch(e){}
 
-  const marca = prompt(
-    "Marca:",
-    producto.brand || ""
-  );
+    try{
+      Quagga.stop();
+    }catch(e){}
 
-  if (marca === null) return;
+    scanning = false;
 
-  const contenido = prompt(
-    "Contenido neto:",
-    producto.content || ""
-  );
+  }
 
-  if (contenido === null) return;
 
-  const precio = prompt(
-    "Precio:",
-    producto.price || 0
-  );
+  const scanner =
+    document.getElementById("scanner");
 
-  if (precio === null) return;
+  scanner.innerHTML =
+    "";
 
-  products[codigo] = {
-    product: nombre,
-    brand: marca,
-    content: contenido,
-    price: Number(precio) || 0
+  scanner.style.display =
+    "none";
+
+}
+
+
+function scanCodeForForm(){
+
+  formScanMode = true;
+
+  document
+    .getElementById("result")
+    .classList
+    .add("hidden");
+
+  startCamera();
+
+}
+
+
+/* =========================================
+   TOTAL Y NUEVA COMPRA
+========================================= */
+
+function showTotal(){
+
+  document
+    .getElementById("totalPrice")
+    .textContent =
+      money(purchaseTotal);
+
+  document
+    .getElementById("totalBox")
+    .classList
+    .remove("hidden");
+
+}
+
+
+function newPurchase(){
+
+  stopCamera();
+
+  purchaseTotal = 0;
+  scannedCount = 0;
+  lastScannedCode = null;
+  currentScanCode = null;
+
+
+  document
+    .getElementById("cartCount")
+    .textContent =
+      "0";
+
+
+  document
+    .getElementById("result")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById("totalBox")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById("totalPrice")
+    .textContent =
+      "$0";
+
+
+  document
+    .getElementById("manualCodeInput")
+    .value =
+      "";
+
+}
+
+
+/* =========================================
+   INVENTARIO
+========================================= */
+
+function addProduct(){
+
+  const code =
+    document
+      .getElementById("code")
+      .value
+      .trim();
+
+  const name =
+    document
+      .getElementById("name")
+      .value
+      .trim();
+
+  const brand =
+    document
+      .getElementById("brand")
+      .value
+      .trim();
+
+  const content =
+    document
+      .getElementById("content")
+      .value
+      .trim();
+
+  const price =
+    Number(
+      document
+        .getElementById("price")
+        .value
+    );
+
+
+  if(
+    !code ||
+    !name ||
+    !Number.isFinite(price)
+  ){
+
+    document
+      .getElementById("saveMsg")
+      .textContent =
+        "Completa código, producto y precio.";
+
+    return;
+
+  }
+
+
+  products[code] = {
+
+    product:name,
+    brand:brand,
+    content:content,
+    price:price
+
   };
 
-  guardarCatalogo();
-  mostrarCatalogo();
 
-  alert("✅ Producto modificado correctamente.");
+  saveProducts();
+
+
+  document
+    .getElementById("saveMsg")
+    .textContent =
+      "✓ Producto guardado.";
+
+
+  [
+    "code",
+    "name",
+    "brand",
+    "content",
+    "price"
+  ].forEach(function(id){
+
+    document
+      .getElementById(id)
+      .value = "";
+
+  });
+
+
+  renderCatalog();
+
 }
 
-function eliminarProductoCatalogo(codigo) {
-  const producto = products[codigo];
 
-  if (!producto) return;
+function renderCatalog(){
 
-  const confirmar = confirm(
-    `¿Quieres eliminar "${producto.product}" del catálogo?`
-  );
+  const search =
+    document
+      .getElementById("catalogSearch")
+      .value
+      .trim()
+      .toLowerCase();
 
-  if (!confirmar) return;
+  const list =
+    document
+      .getElementById("catalogList");
 
-  delete products[codigo];
 
-  guardarCatalogo();
-  mostrarCatalogo();
+  const entries =
+    Object
+      .entries(products)
+      .filter(function(entry){
 
-  alert("🗑️ Producto eliminado.");
+        const code =
+          entry[0];
+
+        const p =
+          entry[1];
+
+        return(
+          !search ||
+
+          code
+            .toLowerCase()
+            .includes(search) ||
+
+          (p.product || "")
+            .toLowerCase()
+            .includes(search) ||
+
+          (p.brand || "")
+            .toLowerCase()
+            .includes(search)
+        );
+
+      })
+      .sort(function(a,b){
+
+        return(
+          (a[1].product || "")
+            .localeCompare(
+              b[1].product || "",
+              "es"
+            )
+        );
+
+      });
+
+
+  if(!entries.length){
+
+    list.innerHTML =
+      '<div class="notice">No se encontraron productos.</div>';
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    entries
+      .map(function(entry){
+
+        const code =
+          entry[0];
+
+        const p =
+          entry[1];
+
+        return `
+
+          <div class="item">
+
+            <div class="item-title">
+              ${escapeHtml(p.product)}
+            </div>
+
+            <div class="item-meta">
+              ${escapeHtml(p.brand || "")}
+              ${p.content ? " · " + escapeHtml(p.content) : ""}
+            </div>
+
+            <div class="item-meta">
+              Código: ${escapeHtml(code)}
+            </div>
+
+            <div class="item-price">
+              ${money(p.price)}
+            </div>
+
+            <div class="row">
+
+              <button
+                onclick="editProduct('${escapeJs(code)}')"
+              >
+                ✏️ Modificar
+              </button>
+
+              <button
+                onclick="deleteProduct('${escapeJs(code)}')"
+              >
+                🗑️ Eliminar
+              </button>
+
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+
 }
 
-window.mostrarCatalogo = mostrarCatalogo;
 
-mostrarCatalogo();
+function editProduct(code){
+
+  const p =
+    products[code];
+
+  if(!p){
+    return;
+  }
+
+
+  const name =
+    prompt(
+      "Nombre del producto:",
+      p.product || ""
+    );
+
+  if(name === null){
+    return;
+  }
+
+
+  const brand =
+    prompt(
+      "Marca:",
+      p.brand || ""
+    );
+
+  if(brand === null){
+    return;
+  }
+
+
+  const content =
+    prompt(
+      "Contenido neto:",
+      p.content || ""
+    );
+
+  if(content === null){
+    return;
+  }
+
+
+  const price =
+    prompt(
+      "Precio:",
+      p.price || 0
+    );
+
+  if(price === null){
+    return;
+  }
+
+
+  const numericPrice =
+    Number(price);
+
+
+  if(!Number.isFinite(numericPrice)){
+
+    alert(
+      "El precio debe ser un número."
+    );
+
+    return;
+
+  }
+
+
+  products[code] = {
+
+    product:name.trim(),
+    brand:brand.trim(),
+    content:content.trim(),
+    price:numericPrice
+
+  };
+
+
+  saveProducts();
+
+  renderCatalog();
+
+}
+
+
+function deleteProduct(code){
+
+  const p =
+    products[code];
+
+  if(!p){
+    return;
+  }
+
+
+  const confirmed =
+    confirm(
+      '¿Eliminar "' +
+      p.product +
+      '" del catálogo?'
+    );
+
+
+  if(!confirmed){
+    return;
+  }
+
+
+  delete products[code];
+
+  saveProducts();
+
+  renderCatalog();
+
+}
+
+
+/* =========================================
+   SEGURIDAD DE TEXTO
+========================================= */
+
+function escapeHtml(text){
+
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeJs(text){
+
+  return String(text)
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
+
+}
+
+
+/* =========================================
+   INICIO
+========================================= */
+
+renderCatalog();
+
 </script>
+
 </body>
 </html>
