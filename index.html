@@ -388,7 +388,114 @@ button.back{
   margin:12px 0 4px;
 }
 
+.receipt{
+  max-width:520px;
+  margin:25px auto;
+  padding:25px;
+  background:#fff;
+  border:1px dashed #999;
+  border-radius:4px;
+  font-family:Arial,sans-serif;
+  color:#222;
+}
 
+.receipt-header{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.receipt-header h2{
+  margin:0;
+  font-size:24px;
+}
+
+.receipt-header p{
+  margin:4px 0;
+  font-size:14px;
+}
+
+.receipt-line{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:7px 0;
+  border-bottom:1px dotted #bbb;
+}
+
+.receipt-product{
+  flex:1;
+}
+
+.receipt-price{
+  white-space:nowrap;
+  font-weight:bold;
+}
+
+.receipt-total{
+  display:flex;
+  justify-content:space-between;
+  margin-top:18px;
+  padding-top:12px;
+  border-top:2px solid #222;
+  font-size:24px;
+  font-weight:bold;
+}
+
+.receipt-worker{
+  margin-top:20px;
+  padding-top:12px;
+  border-top:1px dotted #999;
+  text-align:center;
+  font-size:14px;
+}
+
+.receipt-actions{
+  max-width:520px;
+  margin:15px auto;
+  display:flex;
+  gap:10px;
+}
+
+.receipt-actions button{
+  flex:1;
+}
+
+
+/* Formato para impresión */
+
+@media print{
+
+  body{
+    background:#fff;
+  }
+
+  body > header,
+  body > main{
+    display:none !important;
+  }
+
+  #scannerModal{
+    display:none !important;
+  }
+
+  #receiptPrintArea{
+    display:block !important;
+  }
+
+  .receipt{
+    width:80mm;
+    max-width:80mm;
+    margin:0;
+    padding:8mm 5mm;
+    border:none;
+    box-shadow:none;
+  }
+
+  .receipt-actions{
+    display:none !important;
+  }
+
+}
 @media(max-width:700px){
 
   main{
@@ -716,23 +823,64 @@ button.back{
   </div>
 
 
-  <div
-    id="totalBox"
-    class="total-box hidden"
-  >
+ <div
+  id="receiptPrintArea"
+  class="hidden"
+>
 
-    <div class="total-label">
-      TOTAL DE LA COMPRA
+  <div class="receipt">
+
+    <div class="receipt-header">
+
+      <h2>🛒 SUPERMERCADO</h2>
+
+      <p>Taller Laboral 1A</p>
+
+      <p id="receiptDate"></p>
+
     </div>
 
-    <div
-      class="price"
-      id="totalPrice"
-    >
-      $0
+    <div id="receiptItems"></div>
+
+    <div class="receipt-total">
+
+      <span>TOTAL</span>
+
+      <span id="receiptTotal">
+        $0
+      </span>
+
+    </div>
+
+    <div class="receipt-worker">
+
+      <div>
+        Trabajador:
+        <strong id="receiptWorkerName"></strong>
+      </div>
+
+      <div>
+        Cargo:
+        <strong id="receiptWorkerRole"></strong>
+      </div>
+
     </div>
 
   </div>
+
+  <div class="receipt-actions">
+
+    <button onclick="imprimirBoleta()">
+      🖨️ IMPRIMIR BOLETA
+    </button>
+
+    <button onclick="finalizarVenta()">
+      ✅ FINALIZAR VENTA
+    </button>
+
+  </div>
+
+</div>
 
 
   <div class="result-actions">
@@ -986,6 +1134,7 @@ let products =
 
 let purchaseTotal = 0;
 let scannedCount = 0;
+let purchaseItems = [];
 
 let scanning = false;
 let formScanMode = false;
@@ -1334,6 +1483,10 @@ function showProduct(p){
 
   scannedCount += 1;
 
+  purchaseItems.push({
+    product:p.product || "",
+    price:Number(p.price) || 0
+  });
 
   document
     .getElementById("cartCount")
@@ -1687,14 +1840,79 @@ function closeScanner(){
 
 function showTotal(){
 
+  if(purchaseItems.length === 0){
+
+    alert(
+      "Todavía no hay productos en la compra."
+    );
+
+    return;
+
+  }
+
+
+  const receipt =
+    document.getElementById(
+      "receiptItems"
+    );
+
+
+  receipt.innerHTML =
+    purchaseItems
+      .map(function(item){
+
+        return `
+          <div class="receipt-line">
+
+            <div class="receipt-product">
+              ${escapeHtml(item.product)}
+            </div>
+
+            <div class="receipt-price">
+              ${money(item.price)}
+            </div>
+
+          </div>
+        `;
+
+      })
+      .join("");
+
+
   document
-    .getElementById("totalPrice")
+    .getElementById("receiptTotal")
     .textContent =
       money(purchaseTotal);
 
 
   document
-    .getElementById("totalBox")
+    .getElementById("receiptWorkerName")
+    .textContent =
+      currentWorker.name;
+
+
+  document
+    .getElementById("receiptWorkerRole")
+    .textContent =
+      currentWorker.role;
+
+
+  document
+    .getElementById("receiptDate")
+    .textContent =
+      new Date().toLocaleString(
+        "es-CL"
+      );
+
+
+  document
+    .getElementById("result")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById("receiptPrintArea")
     .classList
     .remove("hidden");
 
@@ -1705,10 +1923,11 @@ function newPurchase(){
 
   closeScanner();
 
-
   purchaseTotal = 0;
 
   scannedCount = 0;
+
+  purchaseItems = [];
 
   currentScanCode = null;
 
@@ -1726,15 +1945,39 @@ function newPurchase(){
 
 
   document
-    .getElementById("totalBox")
+    .getElementById("receiptPrintArea")
     .classList
     .add("hidden");
 
 
   document
-    .getElementById("totalPrice")
+    .getElementById("receiptItems")
+    .innerHTML =
+      "";
+
+
+  document
+    .getElementById("receiptTotal")
     .textContent =
       "$0";
+
+
+  document
+    .getElementById("receiptWorkerName")
+    .textContent =
+      "";
+
+
+  document
+    .getElementById("receiptWorkerRole")
+    .textContent =
+      "";
+
+
+  document
+    .getElementById("receiptDate")
+    .textContent =
+      "";
 
 
   document
