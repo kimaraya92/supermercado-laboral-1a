@@ -1201,7 +1201,29 @@ function processCode(code){
    INGRESO MANUAL / LECTOR USB
 ========================================= */
 
-function focusManualCode(){
+function mostrarEntradaManual(){
+
+  const box =
+    document.getElementById("manualCodeBox");
+
+  const input =
+    document.getElementById("manualCodeInput");
+
+  if(box.classList.contains("hidden")){
+
+    box.classList.remove("hidden");
+
+    input.focus();
+
+  }else{
+
+    box.classList.add("hidden");
+
+    input.value = "";
+
+  }
+
+}
 
   document
     .getElementById("manualCodeInput")
