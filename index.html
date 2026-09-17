@@ -193,12 +193,36 @@ button.back{
 }
 
 #scanner{
-  width:100%;
+  width:min(680px, 100%);
+  height:260px;
   display:none;
   overflow:hidden;
-  border-radius:14px;
+  border-radius:16px;
   background:#000;
-  margin-bottom:15px;
+  margin:20px auto;
+  position:relative;
+}
+
+#scanner video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* Marco de guía para el código */
+#scanner::after{
+  content:"";
+  position:absolute;
+  left:10%;
+  right:10%;
+  top:32%;
+  bottom:32%;
+  border:4px solid #fff;
+  border-radius:10px;
+  box-shadow:0 0 0 9999px rgba(0,0,0,0.25);
+  pointer-events:none;
+}
 }
 
 #scanner video{
@@ -544,25 +568,39 @@ button.back{
       onclick="startNextScan()"
     >
       📷 ESCANEAR CÓDIGO
-    </button>
+   <div class="sale-actions">
 
-    <button
-      onclick="focusManualCode()"
-    >
-      🔎 ESCRIBIR CÓDIGO
-    </button>
+  <button
+    class="primary"
+    id="cameraButton"
+    onclick="startNextScan()"
+  >
+    📷 ESCANEAR CÓDIGO
+  </button>
 
-  </div>
+  <button
+    id="manualButton"
+    onclick="mostrarEntradaManual()"
+  >
+    🔎 ESCRIBIR CÓDIGO
+  </button>
+
+</div>
 
 
-  <div class="manual-code">
+<div
+  id="manualCodeBox"
+  class="manual-code hidden"
+>
 
-    <input
-      id="manualCodeInput"
-      inputmode="numeric"
-      placeholder="Escribe o escanea el código y presiona Enter"
-      onkeydown="manualCodeKey(event)"
-    >
+  <input
+    id="manualCodeInput"
+    inputmode="numeric"
+    placeholder="Escribe o escanea el código"
+    onkeydown="manualCodeKey(event)"
+  >
+
+</div>
 
   </div>
 
