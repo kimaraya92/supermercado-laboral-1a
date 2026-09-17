@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>Supermercado Taller Laboral</title>
 
 <style>
@@ -36,16 +35,16 @@ main{
   padding:25px;
 }
 
+.hidden{
+  display:none !important;
+}
+
 .card{
   background:#fff;
   border-radius:18px;
   padding:22px;
   margin-bottom:18px;
   box-shadow:0 2px 10px #0001;
-}
-
-.hidden{
-  display:none !important;
 }
 
 button,
@@ -122,12 +121,6 @@ button.back{
   margin-bottom:6px;
 }
 
-.worker-box{
-  display:flex;
-  justify-content:flex-end;
-  margin-bottom:10px;
-}
-
 .worker-card{
   display:flex;
   align-items:center;
@@ -137,6 +130,11 @@ button.back{
   padding:10px 14px;
   box-shadow:0 2px 8px #0001;
   min-width:220px;
+}
+
+.worker-box{
+  display:flex;
+  justify-content:flex-end;
 }
 
 .worker-photo{
@@ -173,10 +171,17 @@ button.back{
   margin-top:3px;
 }
 
+.sale-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:15px;
+}
+
 .sale-actions{
   display:flex;
   gap:20px;
-  margin:35px auto 25px;
+  margin:35px auto 20px;
   max-width:800px;
 }
 
@@ -187,59 +192,21 @@ button.back{
   font-size:21px;
 }
 
-.camera-box{
+.manual-code{
   max-width:700px;
-  margin:0 auto;
+  margin:0 auto 20px;
 }
 
-#scanner{
-  width:min(680px, 100%);
-  height:260px;
-  display:none;
-  overflow:hidden;
-  border-radius:16px;
-  background:#000;
-  margin:20px auto;
-  position:relative;
-}
-
-#scanner video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-/* Marco de guía para el código */
-#scanner::after{
-  content:"";
-  position:absolute;
-  left:10%;
-  right:10%;
-  top:32%;
-  bottom:32%;
-  border:4px solid #fff;
-  border-radius:10px;
-  box-shadow:0 0 0 9999px rgba(0,0,0,0.25);
-  pointer-events:none;
-}
-}
-
-#scanner video{
-  width:100%;
-  height:auto;
-  display:block;
-}
-
-.status{
+.purchase-count{
   text-align:center;
-  margin:12px 0;
-  font-weight:bold;
+  font-size:18px;
+  margin:15px 0;
+  color:#555;
 }
 
 .product-result{
   max-width:700px;
-  margin:25px auto;
+  margin:20px auto;
   padding:22px;
   border-radius:16px;
   background:#fff;
@@ -282,18 +249,6 @@ button.back{
 .total-label{
   font-size:18px;
   color:#666;
-}
-
-.purchase-count{
-  text-align:center;
-  font-size:18px;
-  margin:15px 0;
-  color:#555;
-}
-
-.manual-code{
-  max-width:700px;
-  margin:20px auto;
 }
 
 .catalog-search{
@@ -341,6 +296,99 @@ button.back{
   text-align:center;
 }
 
+.status{
+  text-align:center;
+  margin:12px 0;
+  font-weight:bold;
+}
+
+
+/* ==============================
+   VENTANA DE CÁMARA
+============================== */
+
+#scannerModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.58);
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.scanner-panel{
+  width:min(820px,96vw);
+  background:#fff;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 8px 30px #0004;
+}
+
+.scanner-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.scanner-head h3{
+  margin:0;
+  font-size:22px;
+}
+
+.scanner-close{
+  width:auto;
+  margin:0;
+  padding:9px 14px;
+}
+
+#scanner{
+  width:100%;
+  height:min(320px,55vh);
+  overflow:hidden;
+  border-radius:16px;
+  background:#000;
+  position:relative;
+  margin-top:15px;
+}
+
+#scanner video{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  display:block;
+}
+
+#scanner canvas{
+  position:absolute !important;
+  left:0;
+  top:0;
+  width:100% !important;
+  height:100% !important;
+}
+
+#scanner::after{
+  content:"";
+  position:absolute;
+  left:9%;
+  right:9%;
+  top:28%;
+  bottom:28%;
+  border:4px solid #fff;
+  border-radius:10px;
+  box-shadow:0 0 0 9999px rgba(0,0,0,.25);
+  pointer-events:none;
+}
+
+.scan-hint{
+  text-align:center;
+  color:#555;
+  margin:12px 0 4px;
+}
+
+
 @media(max-width:700px){
 
   main{
@@ -367,6 +415,19 @@ button.back{
   .price{
     font-size:38px;
   }
+
+  .sale-top{
+    flex-direction:column-reverse;
+    align-items:stretch;
+  }
+
+  .worker-box{
+    justify-content:flex-end;
+  }
+
+  #scanner{
+    height:260px;
+  }
 }
 </style>
 </head>
@@ -379,9 +440,10 @@ button.back{
 
 <main>
 
-<!-- ========================= -->
-<!-- PANTALLA INICIAL -->
-<!-- ========================= -->
+
+<!-- ==============================
+     INICIO
+============================== -->
 
 <section id="homeScreen">
 
@@ -414,9 +476,9 @@ button.back{
 </section>
 
 
-<!-- ========================= -->
-<!-- PANTALLA DE INGRESO VENTA -->
-<!-- ========================= -->
+<!-- ==============================
+     INGRESO A VENTA
+============================== -->
 
 <section id="workerScreen" class="hidden">
 
@@ -430,38 +492,61 @@ button.back{
   <div class="card">
 
     <div class="screen-title">
+
       <h2>🛍️ Iniciar venta</h2>
+
       <p class="small">
-        Ingresa los datos de quien realizará la venta.
+        Ingresa quién realizará la venta y el rol de esta jornada.
       </p>
+
     </div>
 
+
     <div class="form-group">
+
       <label>Nombre del trabajador</label>
+
       <input
         id="workerName"
         placeholder="Escribe tu nombre"
-        oninput="actualizarTrabajador()"
       >
+
     </div>
 
+
     <div class="form-group">
+
       <label>Cargo / rol</label>
 
       <select id="workerRole">
-        <option value="Vendedor/a">🛒 Vendedor/a</option>
-        <option value="Cajero/a">💰 Cajero/a</option>
-        <option value="Supervisor/a">👀 Supervisor/a</option>
-        <option value="Encargado/a de inventario">📦 Encargado/a de inventario</option>
+
+        <option value="Vendedor/a">
+          🛒 Vendedor/a
+        </option>
+
+        <option value="Cajero/a">
+          💰 Cajero/a
+        </option>
+
+        <option value="Supervisor/a">
+          👀 Supervisor/a
+        </option>
+
+        <option value="Encargado/a de inventario">
+          📦 Encargado/a de inventario
+        </option>
+
       </select>
+
     </div>
+
 
     <div
       class="worker-card"
-      style="margin:25px auto;max-width:320px;"
+      style="margin:25px auto;max-width:320px"
     >
 
-      <div class="worker-photo" id="previewWorkerPhoto">
+      <div class="worker-photo">
         👤
       </div>
 
@@ -485,6 +570,7 @@ button.back{
 
     </div>
 
+
     <button
       class="primary large"
       onclick="comenzarVenta()"
@@ -497,20 +583,14 @@ button.back{
 </section>
 
 
-<!-- ========================= -->
-<!-- PANTALLA DE VENTA -->
-<!-- ========================= -->
+<!-- ==============================
+     VENTA
+============================== -->
 
 <section id="saleScreen" class="hidden">
 
-  <div
-    style="
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:15px;
-    "
-  >
+
+  <div class="sale-top">
 
     <button
       class="back"
@@ -519,14 +599,12 @@ button.back{
       ← Salir
     </button>
 
+
     <div class="worker-box">
 
       <div class="worker-card">
 
-        <div
-          class="worker-photo"
-          id="saleWorkerPhoto"
-        >
+        <div class="worker-photo">
           👤
         </div>
 
@@ -556,58 +634,58 @@ button.back{
 
 
   <div class="screen-title">
-    <h2>🛒 SUPERmercado</h2>
+
+    <h2>🛒 SUPERMERCADO</h2>
+
   </div>
 
 
- <div class="sale-actions">
+  <div class="sale-actions">
 
-  <button
-    class="primary"
-    id="cameraButton"
-    onclick="startNextScan()"
-  >
-    📷 ESCANEAR CÓDIGO
-  </button>
+    <button
+      class="primary"
+      onclick="abrirCamaraVenta()"
+    >
+      📷 ESCANEAR CÓDIGO
+    </button>
 
-  <button
-    id="manualButton"
-    onclick="mostrarEntradaManual()"
-  >
-    🔎 ESCRIBIR CÓDIGO
-  </button>
+    <button
+      onclick="mostrarEntradaManual()"
+    >
+      🔎 ESCRIBIR CÓDIGO
+    </button>
 
-</div>
+  </div>
 
 
-<div
-  id="manualCodeBox"
-  class="manual-code hidden"
->
-
-  <input
-    id="manualCodeInput"
-    inputmode="numeric"
-    placeholder="Escribe o escanea el código"
-    onkeydown="manualCodeKey(event)"
+  <div
+    id="manualCodeBox"
+    class="manual-code hidden"
   >
 
-</div>
+    <input
+      id="manualCodeInput"
+      inputmode="numeric"
+      autocomplete="off"
+      placeholder="Escribe o escanea el código"
+      onkeydown="manualCodeKey(event)"
+    >
+
+  </div>
+
+
   <div class="purchase-count">
-    Productos escaneados: <span id="cartCount">0</span>
-  </div>
 
-
-  <div class="camera-box">
-
-    <div id="scanner"></div>
-
-    <div
-      id="scanStatus"
-      class="status"
-    ></div>
+    Productos ingresados:
+    <span id="cartCount">0</span>
 
   </div>
+
+
+  <div
+    id="saleStatus"
+    class="status"
+  ></div>
 
 
   <div
@@ -659,15 +737,11 @@ button.back{
 
   <div class="result-actions">
 
-    <button
-      onclick="showTotal()"
-    >
+    <button onclick="showTotal()">
       🧾 TOTAL
     </button>
 
-    <button
-      onclick="newPurchase()"
-    >
+    <button onclick="newPurchase()">
       🔄 NUEVA COMPRA
     </button>
 
@@ -676,9 +750,9 @@ button.back{
 </section>
 
 
-<!-- ========================= -->
-<!-- PANTALLA INVENTARIO -->
-<!-- ========================= -->
+<!-- ==============================
+     INVENTARIO
+============================== -->
 
 <section id="inventoryScreen" class="hidden">
 
@@ -689,11 +763,15 @@ button.back{
     ← Volver
   </button>
 
+
   <div class="screen-title">
+
     <h2>📦 Inventario</h2>
+
     <p class="small">
       Administración de productos del supermercado.
     </p>
+
   </div>
 
 
@@ -715,6 +793,7 @@ button.back{
 
     <h2>➕ Agregar producto</h2>
 
+
     <div class="form-group">
 
       <label>Código de barras</label>
@@ -722,15 +801,14 @@ button.back{
       <input
         id="code"
         inputmode="numeric"
+        autocomplete="off"
         placeholder="Ej.: 7802900105013"
       >
 
     </div>
 
 
-    <button
-      onclick="scanCodeForForm()"
-    >
+    <button onclick="scanCodeForForm()">
       📷 Escanear código existente
     </button>
 
@@ -804,8 +882,49 @@ button.back{
 </main>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+<!-- ==============================
+     VENTANA COMPARTIDA DE CÁMARA
+============================== -->
 
+<div
+  id="scannerModal"
+  class="hidden"
+>
+
+  <div class="scanner-panel">
+
+    <div class="scanner-head">
+
+      <h3 id="scannerTitle">
+        📷 Escanear código
+      </h3>
+
+      <button
+        class="scanner-close"
+        onclick="closeScanner()"
+      >
+        ✖️ Cerrar
+      </button>
+
+    </div>
+
+
+    <div id="scanner"></div>
+
+
+    <p
+      id="scanStatus"
+      class="scan-hint"
+    >
+      Coloca el código dentro del recuadro.
+    </p>
+
+  </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
 
 <script>
 
@@ -855,43 +974,28 @@ const defaultProducts = {
 
 let products =
   JSON.parse(
-    localStorage.getItem("supermercadoProductos") || "null"
+    localStorage.getItem(
+      "supermercadoProductos"
+    ) || "null"
   ) || defaultProducts;
 
 
 /* =========================================
-   ESTADO DE LA VENTA
+   ESTADO
 ========================================= */
 
 let purchaseTotal = 0;
 let scannedCount = 0;
-let lastScannedCode = null;
-let currentScanCode = null;
 
 let scanning = false;
 let formScanMode = false;
 
-
-/* =========================================
-   ESTADO DEL TRABAJADOR
-========================================= */
+let currentScanCode = null;
 
 let currentWorker = {
   name:"",
   role:"Vendedor/a"
 };
-
-
-/*
-  Más adelante aquí podremos tener algo como:
-
-  const trabajadores = {
-    "Camila": "camila.jpg",
-    "Juan": "juan.jpg"
-  };
-
-  y la fotografía aparecerá automáticamente.
-*/
 
 
 /* =========================================
@@ -901,7 +1005,8 @@ let currentWorker = {
 function money(n){
 
   return "$" +
-    Number(n).toLocaleString("es-CL");
+    Number(n || 0)
+      .toLocaleString("es-CL");
 
 }
 
@@ -918,21 +1023,19 @@ function saveProducts(){
 
 function hideAllScreens(){
 
-  document
-    .getElementById("homeScreen")
-    .classList.add("hidden");
+  [
+    "homeScreen",
+    "workerScreen",
+    "saleScreen",
+    "inventoryScreen"
+  ].forEach(function(id){
 
-  document
-    .getElementById("workerScreen")
-    .classList.add("hidden");
+    document
+      .getElementById(id)
+      .classList
+      .add("hidden");
 
-  document
-    .getElementById("saleScreen")
-    .classList.add("hidden");
-
-  document
-    .getElementById("inventoryScreen")
-    .classList.add("hidden");
+  });
 
 }
 
@@ -947,7 +1050,8 @@ function abrirVenta(){
 
   document
     .getElementById("workerScreen")
-    .classList.remove("hidden");
+    .classList
+    .remove("hidden");
 
 }
 
@@ -958,7 +1062,8 @@ function abrirInventario(){
 
   document
     .getElementById("inventoryScreen")
-    .classList.remove("hidden");
+    .classList
+    .remove("hidden");
 
   renderCatalog();
 
@@ -967,24 +1072,14 @@ function abrirInventario(){
 
 function volverInicio(){
 
-  stopCamera();
+  closeScanner();
 
   hideAllScreens();
 
   document
     .getElementById("homeScreen")
-    .classList.remove("hidden");
-
-}
-
-
-function salirVenta(){
-
-  stopCamera();
-
-  newPurchase();
-
-  volverInicio();
+    .classList
+    .remove("hidden");
 
 }
 
@@ -1006,10 +1101,12 @@ function actualizarTrabajador(){
       .getElementById("workerRole")
       .value;
 
+
   document
     .getElementById("previewWorkerName")
     .textContent =
       name || "Nombre";
+
 
   document
     .getElementById("previewWorkerRole")
@@ -1017,6 +1114,14 @@ function actualizarTrabajador(){
       role;
 
 }
+
+
+document
+  .getElementById("workerName")
+  .addEventListener(
+    "input",
+    actualizarTrabajador
+  );
 
 
 document
@@ -1040,13 +1145,17 @@ function comenzarVenta(){
       .getElementById("workerRole")
       .value;
 
+
   if(!name){
 
-    alert("Escribe el nombre del trabajador.");
+    alert(
+      "Escribe el nombre del trabajador."
+    );
 
     return;
 
   }
+
 
   currentWorker = {
     name:name,
@@ -1059,99 +1168,123 @@ function comenzarVenta(){
     .textContent =
       name;
 
+
   document
     .getElementById("saleWorkerRole")
     .textContent =
       role;
 
 
+  newPurchase();
+
   hideAllScreens();
 
   document
     .getElementById("saleScreen")
-    .classList.remove("hidden");
-
-}
-
-
-document
-  .getElementById("workerName")
-  .addEventListener(
-    "input",
-    actualizarTrabajador
-  );
-
-
-/* =========================================
-   VENTA
-========================================= */
-
-function showProduct(p){
-
-  if(
-    lastScannedCode !== currentScanCode
-  ){
-
-    purchaseTotal +=
-      Number(p.price) || 0;
-
-    scannedCount += 1;
-
-    lastScannedCode =
-      currentScanCode;
-
-    document
-      .getElementById("cartCount")
-      .textContent =
-        scannedCount;
-
-  }
-
-
-  document
-    .getElementById("rProduct")
-    .textContent =
-      p.product;
-
-  document
-    .getElementById("rBrand")
-    .textContent =
-      p.brand || "";
-
-  document
-    .getElementById("rContent")
-    .textContent =
-      p.content || "";
-
-  document
-    .getElementById("rPrice")
-    .textContent =
-      money(p.price);
-
-  document
-    .getElementById("result")
     .classList
     .remove("hidden");
 
 }
 
 
-function processCode(code){
+/* =========================================
+   ENTRADA MANUAL
+========================================= */
+
+function mostrarEntradaManual(){
+
+  const box =
+    document.getElementById(
+      "manualCodeBox"
+    );
+
+  const input =
+    document.getElementById(
+      "manualCodeInput"
+    );
+
+
+  const opening =
+    box.classList.toggle("hidden") === false;
+
+
+  if(opening){
+
+    input.focus();
+
+  }else{
+
+    input.value = "";
+
+  }
+
+}
+
+
+function manualCodeKey(event){
+
+  if(event.key !== "Enter"){
+    return;
+  }
+
+
+  event.preventDefault();
+
+
+  const input =
+    document.getElementById(
+      "manualCodeInput"
+    );
+
+  const code =
+    input.value.trim();
+
 
   if(!code){
     return;
   }
 
-  currentScanCode =
+
+  processCode(code);
+
+  input.value = "";
+
+  input.focus();
+
+}
+
+
+/* =========================================
+   PROCESAR CÓDIGO
+========================================= */
+
+function processCode(code){
+
+  const normalized =
     String(code).trim();
 
-  const p =
-    products[currentScanCode];
+
+  if(!normalized){
+    return;
+  }
 
 
-  if(p){
+  currentScanCode =
+    normalized;
 
-    showProduct(p);
+
+  const product =
+    products[normalized];
+
+
+  if(product){
+
+    showProduct(product);
+
+    document
+      .getElementById("saleStatus")
+      .textContent =
+        "✓ Producto reconocido.";
 
   }else{
 
@@ -1163,7 +1296,7 @@ function processCode(code){
     document
       .getElementById("rBrand")
       .textContent =
-        "Código: " + currentScanCode;
+        "Código: " + normalized;
 
     document
       .getElementById("rContent")
@@ -1180,57 +1313,68 @@ function processCode(code){
       .classList
       .remove("hidden");
 
+    document
+      .getElementById("saleStatus")
+      .textContent =
+        "Código leído, pero no está en el catálogo.";
+
   }
 
 }
 
 
 /* =========================================
-   INGRESO MANUAL / LECTOR USB
+   MOSTRAR PRODUCTO
 ========================================= */
 
-function mostrarEntradaManual(){
+function showProduct(p){
 
-  const box =
-    document.getElementById("manualCodeBox");
+  purchaseTotal +=
+    Number(p.price) || 0;
 
-  const input =
-    document.getElementById("manualCodeInput");
+  scannedCount += 1;
 
-  if(box.classList.contains("hidden")){
 
-    box.classList.remove("hidden");
+  document
+    .getElementById("cartCount")
+    .textContent =
+      scannedCount;
 
-    input.focus();
 
-  }else{
+  document
+    .getElementById("rProduct")
+    .textContent =
+      p.product || "";
 
-    box.classList.add("hidden");
 
-    input.value = "";
+  document
+    .getElementById("rBrand")
+    .textContent =
+      p.brand || "";
 
-  }
 
-function manualCodeKey(event){
+  document
+    .getElementById("rContent")
+    .textContent =
+      p.content || "";
 
-  if(event.key === "Enter"){
 
-    const input =
-      document
-        .getElementById("manualCodeInput");
+  document
+    .getElementById("rPrice")
+    .textContent =
+      money(p.price);
 
-    const code =
-      input.value.trim();
 
-    if(code){
+  document
+    .getElementById("result")
+    .classList
+    .remove("hidden");
 
-      processCode(code);
 
-      input.value = "";
-
-    }
-
-  }
+  document
+    .getElementById("totalBox")
+    .classList
+    .add("hidden");
 
 }
 
@@ -1239,41 +1383,60 @@ function manualCodeKey(event){
    CÁMARA
 ========================================= */
 
-function startNextScan(){
+function abrirCamaraVenta(){
 
   formScanMode = false;
 
-  document
-    .getElementById("result")
-    .classList
-    .add("hidden");
-
-  startCamera();
+  openScanner(
+    "📷 Escanear código",
+    "Coloca el código dentro del recuadro."
+  );
 
 }
 
 
-function startCamera(){
+function scanCodeForForm(){
+
+  formScanMode = true;
+
+  openScanner(
+    "📷 Capturar código del producto",
+    "Coloca el código dentro del recuadro."
+  );
+
+}
+
+
+function openScanner(title,hint){
 
   if(scanning){
     return;
   }
 
-  const scanner =
-    document.getElementById("scanner");
 
-  scanner.style.display =
-    "block";
+  document
+    .getElementById("scannerTitle")
+    .textContent =
+      title;
 
-  scanner.innerHTML =
-    "";
 
   document
     .getElementById("scanStatus")
     .textContent =
-      formScanMode
-        ? "Escanea el código del nuevo producto..."
-        : "Apunta al código de barras...";
+      hint;
+
+
+  document
+    .getElementById("scannerModal")
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById("scanner")
+    .innerHTML =
+      "";
+
 
   scanning = true;
 
@@ -1281,44 +1444,69 @@ function startCamera(){
   Quagga.init({
 
     inputStream:{
+
       name:"Live",
+
       type:"LiveStream",
+
       target:
-        document.querySelector("#scanner"),
+        document.querySelector(
+          "#scanner"
+        ),
 
       constraints:{
+
         facingMode:"environment",
+
         width:{
-          min:640
+          ideal:1280
         },
+
         height:{
-          min:480
+          ideal:720
         },
+
         aspectRatio:{
-          min:1,
-          max:2
+          ideal:16/9
         }
+
       }
 
     },
 
+
     locator:{
+
       patchSize:"medium",
+
       halfSample:true
+
     },
+
 
     numOfWorkers:2,
 
+
     decoder:{
+
       readers:[
+
         "ean_reader",
+
         "ean_8_reader",
+
         "upc_reader",
+
         "upc_e_reader",
+
         "code_128_reader",
+
         "code_39_reader"
+
       ]
+
     },
+
 
     locate:true
 
@@ -1328,24 +1516,48 @@ function startCamera(){
 
       console.error(error);
 
+
       scanning = false;
 
-      scanner.style.display =
-        "none";
+
+      document
+        .getElementById("scannerModal")
+        .classList
+        .add("hidden");
+
 
       document
         .getElementById("scanStatus")
         .textContent =
           "No se pudo iniciar la cámara. Revisa el permiso.";
 
+
+      if(formScanMode){
+
+        document
+          .getElementById("saveMsg")
+          .textContent =
+            "No se pudo iniciar la cámara.";
+
+      }
+
+
+      formScanMode = false;
+
       return;
 
     }
 
 
-    Quagga.offDetected(onDetected);
+    Quagga.offDetected(
+      onDetected
+    );
 
-    Quagga.onDetected(onDetected);
+
+    Quagga.onDetected(
+      onDetected
+    );
+
 
     Quagga.start();
 
@@ -1356,15 +1568,15 @@ function startCamera(){
 
 function onDetected(result){
 
-  if(
+  const code =
     result &&
     result.codeResult &&
-    result.codeResult.code
-  ){
+    result.codeResult.code;
 
-    processDetectedCode(
-      result.codeResult.code
-    );
+
+  if(code){
+
+    processDetectedCode(code);
 
   }
 
@@ -1373,12 +1585,13 @@ function onDetected(result){
 
 function processDetectedCode(code){
 
-  if(!code){
+  const normalized =
+    String(code).trim();
+
+
+  if(!normalized){
     return;
   }
-
-  currentScanCode =
-    String(code).trim();
 
 
   if(formScanMode){
@@ -1386,74 +1599,90 @@ function processDetectedCode(code){
     document
       .getElementById("code")
       .value =
-        currentScanCode;
+        normalized;
+
 
     formScanMode = false;
 
-    stopCamera();
+
+    closeScanner();
+
 
     document
       .getElementById("saveMsg")
       .textContent =
         "✓ Código capturado.";
 
+
     return;
 
   }
 
 
-  processCode(currentScanCode);
+  closeScanner();
 
-  stopCamera();
+  processCode(normalized);
 
 }
 
 
-function stopCamera(){
+function closeScanner(){
 
   if(scanning){
 
     try{
-      Quagga.offDetected(onDetected);
+
+      Quagga.offDetected(
+        onDetected
+      );
+
     }catch(e){}
 
+
     try{
+
       Quagga.stop();
+
     }catch(e){}
+
 
     scanning = false;
 
   }
 
 
-  const scanner =
-    document.getElementById("scanner");
-
-  scanner.innerHTML =
-    "";
-
-  scanner.style.display =
-    "none";
-
-}
+  const box =
+    document.getElementById(
+      "scanner"
+    );
 
 
-function scanCodeForForm(){
+  if(box){
 
-  formScanMode = true;
+    box.innerHTML = "";
 
-  document
-    .getElementById("result")
-    .classList
-    .add("hidden");
+  }
 
-  startCamera();
+
+  const modal =
+    document.getElementById(
+      "scannerModal"
+    );
+
+
+  if(modal){
+
+    modal.classList.add(
+      "hidden"
+    );
+
+  }
 
 }
 
 
 /* =========================================
-   TOTAL Y NUEVA COMPRA
+   TOTAL / NUEVA COMPRA
 ========================================= */
 
 function showTotal(){
@@ -1462,6 +1691,7 @@ function showTotal(){
     .getElementById("totalPrice")
     .textContent =
       money(purchaseTotal);
+
 
   document
     .getElementById("totalBox")
@@ -1473,11 +1703,13 @@ function showTotal(){
 
 function newPurchase(){
 
-  stopCamera();
+  closeScanner();
+
 
   purchaseTotal = 0;
+
   scannedCount = 0;
-  lastScannedCode = null;
+
   currentScanCode = null;
 
 
@@ -1506,9 +1738,30 @@ function newPurchase(){
 
 
   document
+    .getElementById("saleStatus")
+    .textContent =
+      "";
+
+
+  document
+    .getElementById("manualCodeBox")
+    .classList
+    .add("hidden");
+
+
+  document
     .getElementById("manualCodeInput")
     .value =
       "";
+
+}
+
+
+function salirVenta(){
+
+  newPurchase();
+
+  volverInicio();
 
 }
 
@@ -1570,8 +1823,11 @@ function addProduct(){
   products[code] = {
 
     product:name,
+
     brand:brand,
+
     content:content,
+
     price:price
 
   };
@@ -1610,19 +1866,26 @@ function renderCatalog(){
 
   const search =
     document
-      .getElementById("catalogSearch")
+      .getElementById(
+        "catalogSearch"
+      )
       .value
       .trim()
       .toLowerCase();
 
+
   const list =
     document
-      .getElementById("catalogList");
+      .getElementById(
+        "catalogList"
+      );
 
 
   const entries =
     Object
       .entries(products)
+
+
       .filter(function(entry){
 
         const code =
@@ -1631,7 +1894,9 @@ function renderCatalog(){
         const p =
           entry[1];
 
+
         return(
+
           !search ||
 
           code
@@ -1645,17 +1910,22 @@ function renderCatalog(){
           (p.brand || "")
             .toLowerCase()
             .includes(search)
+
         );
 
       })
+
+
       .sort(function(a,b){
 
         return(
+
           (a[1].product || "")
             .localeCompare(
               b[1].product || "",
               "es"
             )
+
         );
 
       });
@@ -1672,8 +1942,9 @@ function renderCatalog(){
 
 
   list.innerHTML =
-    entries
-      .map(function(entry){
+
+    entries.map(
+      function(entry){
 
         const code =
           entry[0];
@@ -1681,26 +1952,52 @@ function renderCatalog(){
         const p =
           entry[1];
 
+
         return `
 
           <div class="item">
 
             <div class="item-title">
-              ${escapeHtml(p.product)}
+
+              ${escapeHtml(
+                p.product
+              )}
+
             </div>
 
-            <div class="item-meta">
-              ${escapeHtml(p.brand || "")}
-              ${p.content ? " · " + escapeHtml(p.content) : ""}
-            </div>
 
             <div class="item-meta">
-              Código: ${escapeHtml(code)}
+
+              ${escapeHtml(
+                p.brand || ""
+              )}
+
+              ${
+                p.content
+                  ? " · " +
+                    escapeHtml(
+                      p.content
+                    )
+                  : ""
+              }
+
             </div>
+
+
+            <div class="item-meta">
+
+              Código:
+              ${escapeHtml(code)}
+
+            </div>
+
 
             <div class="item-price">
+
               ${money(p.price)}
+
             </div>
+
 
             <div class="row">
 
@@ -1709,6 +2006,7 @@ function renderCatalog(){
               >
                 ✏️ Modificar
               </button>
+
 
               <button
                 onclick="deleteProduct('${escapeJs(code)}')"
@@ -1722,8 +2020,8 @@ function renderCatalog(){
 
         `;
 
-      })
-      .join("");
+      }
+    ).join("");
 
 }
 
@@ -1732,6 +2030,7 @@ function editProduct(code){
 
   const p =
     products[code];
+
 
   if(!p){
     return;
@@ -1744,6 +2043,7 @@ function editProduct(code){
       p.product || ""
     );
 
+
   if(name === null){
     return;
   }
@@ -1754,6 +2054,7 @@ function editProduct(code){
       "Marca:",
       p.brand || ""
     );
+
 
   if(brand === null){
     return;
@@ -1766,6 +2067,7 @@ function editProduct(code){
       p.content || ""
     );
 
+
   if(content === null){
     return;
   }
@@ -1776,6 +2078,7 @@ function editProduct(code){
       "Precio:",
       p.price || 0
     );
+
 
   if(price === null){
     return;
@@ -1800,8 +2103,11 @@ function editProduct(code){
   products[code] = {
 
     product:name.trim(),
+
     brand:brand.trim(),
+
     content:content.trim(),
+
     price:numericPrice
 
   };
@@ -1818,6 +2124,7 @@ function deleteProduct(code){
 
   const p =
     products[code];
+
 
   if(!p){
     return;
@@ -1853,10 +2160,15 @@ function deleteProduct(code){
 function escapeHtml(text){
 
   return String(text)
+
     .replace(/&/g,"&amp;")
+
     .replace(/</g,"&lt;")
+
     .replace(/>/g,"&gt;")
+
     .replace(/"/g,"&quot;")
+
     .replace(/'/g,"&#039;");
 
 }
@@ -1865,7 +2177,9 @@ function escapeHtml(text){
 function escapeJs(text){
 
   return String(text)
+
     .replace(/\\/g,"\\\\")
+
     .replace(/'/g,"\\'");
 
 }
