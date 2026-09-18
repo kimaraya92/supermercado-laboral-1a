@@ -3317,47 +3317,53 @@ function escapeJs(text){
 ========================================= */
 
 
-database
-  .ref("productos")
-  .on("value", function(snapshot){
+auth.onAuthStateChanged(function(user){
 
-    const datos =
-      snapshot.val();
+  if(!user){
 
+    console.error(
+      "No hay un usuario autenticado."
+    );
 
-    if(
-      datos &&
-      typeof datos === "object"
-    ){
+    return;
 
-      products =
-        datos;
-
-    }else{
-
-      const productosLocales =
-        JSON.parse(
-          localStorage.getItem(
-            "supermercadoProductos"
-          ) || "null"
-        );
+  }
 
 
-      products =
-        productosLocales ||
-        defaultProducts;
+  database
+    .ref("productos")
+    .on("value", function(snapshot){
+
+      const datos =
+        snapshot.val();
 
 
-      database
-        .ref("productos")
-        .set(products);
+      if(
+        datos &&
+        typeof datos === "object"
+      ){
 
-    }
+        products =
+          datos;
+
+      }else{
+
+        products =
+          defaultProducts;
 
 
-    renderCatalog();
+        database
+          .ref("productos")
+          .set(products);
 
-  });
+      }
+
+
+      renderCatalog();
+
+    });
+
+});
 
 
 </script>
