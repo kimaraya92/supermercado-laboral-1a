@@ -941,6 +941,104 @@ button.back{
 
 </div>
 
+  <div
+  id="creadorCodigo"
+  class="card hidden"
+>
+
+  <h2>🏷️ Crear código de barras</h2>
+
+  <p class="small">
+    Usa esta opción para productos que no tienen código de fábrica.
+  </p>
+
+
+  <div class="form-group">
+
+    <label>Nombre del producto</label>
+
+    <input
+      id="codigoProductoNombre"
+      placeholder="Ej.: Manzanas"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>Código que quieres crear</label>
+
+    <input
+      id="codigoNuevo"
+      inputmode="numeric"
+      placeholder="Ej.: 2000000001"
+    >
+
+  </div>
+
+
+  <button
+    class="primary"
+    onclick="generarCodigoBarras()"
+  >
+    🏷️ GENERAR CÓDIGO
+  </button>
+
+
+  <div
+    id="codigoGenerado"
+    class="hidden"
+    style="
+      margin-top:20px;
+      text-align:center;
+    "
+  >
+
+    <div
+      id="nombreCodigoMostrado"
+      style="
+        font-size:22px;
+        font-weight:bold;
+        margin-bottom:10px;
+      "
+    ></div>
+
+
+    <svg
+      id="barcode"
+      style="
+        max-width:100%;
+        height:auto;
+      "
+    ></svg>
+
+
+    <div
+      id="numeroCodigoMostrado"
+      style="
+        font-size:20px;
+        margin-top:8px;
+      "
+    ></div>
+
+
+    <button
+      onclick="guardarCodigoComoImagen()"
+    >
+      💾 GUARDAR COMO IMAGEN
+    </button>
+
+
+    <button
+      onclick="ocultarCreadorCodigo()"
+    >
+      ✖️ CERRAR
+    </button>
+
+  </div>
+
+</div>
 
 <div
   id="formularioProducto"
