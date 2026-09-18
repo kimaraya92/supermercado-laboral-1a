@@ -2857,7 +2857,97 @@ function usarCodigoEnProducto(){
     .focus();
 
 }
-function mostrarFormularioProducto(){
+function verCodigoBarras(code){
+
+  const producto =
+    products[code];
+
+
+  if(!producto){
+
+    alert(
+      "No se encontró ese producto."
+    );
+
+    return;
+
+  }
+
+
+  document
+    .getElementById("codigoProductoNombre")
+    .value =
+      producto.product || "Producto";
+
+
+  document
+    .getElementById("codigoNuevo")
+    .value =
+      code;
+
+
+  try{
+
+    JsBarcode(
+      "#barcode",
+      code,
+      {
+
+        format:"CODE128",
+
+        displayValue:true,
+
+        fontSize:18,
+
+        margin:10,
+
+        width:2,
+
+        height:80
+
+      }
+
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+
+    alert(
+      "No se pudo mostrar el código de barras."
+    );
+
+    return;
+
+  }
+
+
+  document
+    .getElementById("nombreCodigoMostrado")
+    .textContent =
+      producto.product || "Producto";
+
+
+  document
+    .getElementById("numeroCodigoMostrado")
+    .textContent =
+      code;
+
+
+  document
+    .getElementById("codigoGenerado")
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById("creadorCodigo")
+    .classList
+    .remove("hidden");
+
+}
+  function mostrarFormularioProducto(){
 
   document
     .getElementById(
