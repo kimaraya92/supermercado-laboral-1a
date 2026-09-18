@@ -2807,7 +2807,56 @@ function guardarCodigoComoImagen(){
    FORMULARIO PRODUCTO
 ========================================= */
 
+function usarCodigoEnProducto(){
 
+  const codigo =
+    document
+      .getElementById("codigoNuevo")
+      .value
+      .trim();
+
+
+  const nombre =
+    document
+      .getElementById("codigoProductoNombre")
+      .value
+      .trim();
+
+
+  if(!codigo){
+
+    alert(
+      "Primero debes generar un código."
+    );
+
+    return;
+
+  }
+
+
+  document
+    .getElementById("code")
+    .value =
+      codigo;
+
+
+  document
+    .getElementById("name")
+    .value =
+      nombre;
+
+
+  ocultarCreadorCodigo();
+
+
+  mostrarFormularioProducto();
+
+
+  document
+    .getElementById("brand")
+    .focus();
+
+}
 function mostrarFormularioProducto(){
 
   document
