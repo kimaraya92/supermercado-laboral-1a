@@ -3137,20 +3137,27 @@ function renderCatalog(){
 
               <div class="row">
 
-                <button
-                  onclick="editProduct('${escapeJs(code)}')"
-                >
-                  ✏️ Modificar
-                </button>
+  <button
+    onclick="editProduct('${escapeJs(code)}')"
+  >
+    ✏️ Modificar
+  </button>
 
 
-                <button
-                  onclick="deleteProduct('${escapeJs(code)}')"
-                >
-                  🗑️ Eliminar
-                </button>
+  <button
+    onclick="deleteProduct('${escapeJs(code)}')"
+  >
+    🗑️ Eliminar
+  </button>
 
-              </div>
+
+  <button
+    onclick="verCodigoBarras('${escapeJs(code)}')"
+  >
+    🏷️ VER CÓDIGO
+  </button>
+
+</div>
 
             </div>
 
