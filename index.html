@@ -1598,10 +1598,9 @@ function money(n){
 
 function saveProducts(){
 
-  localStorage.setItem(
-    "supermercadoProductos",
-    JSON.stringify(products)
-  );
+  database
+    .ref("productos")
+    .set(products);
 
 }
 
