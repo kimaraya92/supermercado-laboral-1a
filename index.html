@@ -3292,7 +3292,47 @@ function escapeJs(text){
 ========================================= */
 
 
-renderCatalog();
+database
+  .ref("productos")
+  .on("value", function(snapshot){
+
+    const datos =
+      snapshot.val();
+
+
+    if(
+      datos &&
+      typeof datos === "object"
+    ){
+
+      products =
+        datos;
+
+    }else{
+
+      const productosLocales =
+        JSON.parse(
+          localStorage.getItem(
+            "supermercadoProductos"
+          ) || "null"
+        );
+
+
+      products =
+        productosLocales ||
+        defaultProducts;
+
+
+      database
+        .ref("productos")
+        .set(products);
+
+    }
+
+
+    renderCatalog();
+
+  });
 
 
 </script>
