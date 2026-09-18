@@ -923,111 +923,129 @@ button.back{
   </div>
 
 
-  <div class="card">
+ <div class="card">
+
+  <button
+    class="primary large"
+    onclick="mostrarFormularioProducto()"
+  >
+    ➕ AGREGAR PRODUCTO
+  </button>
+
+</div>
+
+
+<div
+  id="formularioProducto"
+  class="card hidden"
+>
+
+  <h2>➕ Agregar producto</h2>
+
+
+  <div class="form-group">
+
+    <label>Código de barras</label>
 
     <input
-      id="catalogSearch"
-      class="catalog-search"
-      placeholder="🔎 Buscar producto, marca o código..."
-      oninput="renderCatalog()"
+      id="code"
+      inputmode="numeric"
+      autocomplete="off"
+      placeholder="Ej.: 7802900105013"
     >
-
-    <div id="catalogList"></div>
 
   </div>
 
 
-  <div class="card">
-
-    <h2>➕ Agregar producto</h2>
-
-
-    <div class="form-group">
-
-      <label>Código de barras</label>
-
-      <input
-        id="code"
-        inputmode="numeric"
-        autocomplete="off"
-        placeholder="Ej.: 7802900105013"
-      >
-
-    </div>
+  <button onclick="scanCodeForForm()">
+    📷 Escanear código existente
+  </button>
 
 
-    <button onclick="scanCodeForForm()">
-      📷 Escanear código existente
-    </button>
+  <div class="form-group">
 
+    <label>Producto</label>
 
-    <div class="form-group">
-
-      <label>Producto</label>
-
-      <input
-        id="name"
-        placeholder="Ej.: Yogur"
-      >
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label>Marca</label>
-
-      <input
-        id="brand"
-        placeholder="Ej.: Colun"
-      >
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label>Contenido neto</label>
-
-      <input
-        id="content"
-        placeholder="Ej.: 125 g"
-      >
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label>Precio</label>
-
-      <input
-        id="price"
-        inputmode="numeric"
-        placeholder="Ej.: 990"
-      >
-
-    </div>
-
-
-    <button
-      class="primary"
-      onclick="addProduct()"
+    <input
+      id="name"
+      placeholder="Ej.: Yogur"
     >
-      💾 GUARDAR PRODUCTO
-    </button>
-
-
-    <p
-      id="saveMsg"
-      class="small"
-    ></p>
 
   </div>
 
-</section>
 
-</main>
+  <div class="form-group">
+
+    <label>Marca</label>
+
+    <input
+      id="brand"
+      placeholder="Ej.: Colun"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>Contenido neto</label>
+
+    <input
+      id="content"
+      placeholder="Ej.: 125 g"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>Precio</label>
+
+    <input
+      id="price"
+      inputmode="numeric"
+      placeholder="Ej.: 990"
+    >
+
+  </div>
+
+
+  <button
+    class="primary"
+    onclick="addProduct()"
+  >
+    💾 GUARDAR PRODUCTO
+  </button>
+
+
+  <button
+    onclick="ocultarFormularioProducto()"
+  >
+    ✖️ CERRAR
+  </button>
+
+
+  <p
+    id="saveMsg"
+    class="small"
+  ></p>
+
+</div>
+
+
+<div class="card">
+
+  <input
+    id="catalogSearch"
+    class="catalog-search"
+    placeholder="🔎 Buscar producto, marca o código..."
+    oninput="renderCatalog()"
+  >
+
+  <div id="catalogList"></div>
+
+</div>
 
 
 <!-- ==============================
@@ -2025,7 +2043,24 @@ function salirVenta(){
 /* =========================================
    INVENTARIO
 ========================================= */
+function mostrarFormularioProducto(){
 
+  document
+    .getElementById("formularioProducto")
+    .classList
+    .remove("hidden");
+
+}
+
+
+function ocultarFormularioProducto(){
+
+  document
+    .getElementById("formularioProducto")
+    .classList
+    .add("hidden");
+
+}
 function addProduct(){
 
   const code =
