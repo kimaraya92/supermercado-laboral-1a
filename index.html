@@ -1196,7 +1196,9 @@ button.back{
 
 
 <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
-
+  
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>  
+  
 <script>
 
 /* =========================================
@@ -2148,7 +2150,181 @@ function salirVenta(){
 /* =========================================
    INVENTARIO
 ========================================= */
-function mostrarFormularioProducto(){
+function abrirCreadorCodigo(){
+
+  document
+    .getElementById("creadorCodigo")
+    .classList
+    .remove("hidden");
+
+}
+
+
+function ocultarCreadorCodigo(){
+
+  document
+    .getElementById("creadorCodigo")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("codigoGenerado")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("codigoProductoNombre")
+    .value = "";
+
+  document
+    .getElementById("codigoNuevo")
+    .value = "";
+
+}
+
+
+function generarCodigoBarras(){
+
+  const nombre =
+    document
+      .getElementById("codigoProductoNombre")
+      .value
+      .trim();
+
+  const codigo =
+    document
+      .getElementById("codigoNuevo")
+      .value
+      .trim();
+
+
+  if(!nombre){
+
+    alert("Escribe el nombre del producto.");
+
+    return;
+
+  }
+
+
+  if(!/^[0-9]+$/.test(codigo)){
+
+    alert("El código debe contener solamente números.");
+
+    return;
+
+  }
+
+
+  if(codigo.length < 8){
+
+    alert("Usa un código de al menos 8 números.");
+
+    return;
+
+  }
+
+
+  try{
+
+    JsBarcode(
+      "#barcode",
+      codigo,
+      {
+        format:"CODE128",
+        displayValue:true,
+        fontSize:18,
+        margin:10,
+        width:2,
+        height:80
+      }
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    alert("No se pudo generar el código de barras.");
+
+    return;
+
+  }
+
+
+  document
+    .getElementById("nombreCodigoMostrado")
+    .textContent =
+      nombre;
+
+
+  document
+    .getElementById("numeroCodigoMostrado")
+    .textContent =
+      codigo;
+
+
+  document
+    .getElementById("codigoGenerado")
+    .classList
+    .remove("hidden");
+
+}
+
+
+function guardarCodigoComoImagen(){
+
+  const svg =
+    document.getElementById("barcode");
+
+  const nombre =
+    document
+      .getElementById("codigoProductoNombre")
+      .value
+      .trim() || "codigo-barras";
+
+
+  const serializer =
+    new XMLSerializer();
+
+  const source =
+    serializer.serializeToString(svg);
+
+
+  const svgBlob =
+    new Blob(
+      [source],
+      {
+        type:"image/svg+xml;charset=utf-8"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(svgBlob);
+
+
+  const link =
+    document.createElement("a");
+
+
+  link.href = url;
+
+  link.download =
+    nombre
+      .replace(/[^a-z0-9áéíóúñü_-]/gi,"_")
+    + ".svg";
+
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+
+}
+  function mostrarFormularioProducto(){
 
   document
     .getElementById("formularioProducto")
