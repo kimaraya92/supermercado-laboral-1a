@@ -1923,7 +1923,109 @@ function manualCodeKey(event){
 
 }
 
+/* =========================================
+   LECTOR USB AUTOMÁTICO
+========================================= */
 
+let barcodeBuffer = "";
+
+let barcodeTimer = null;
+
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    const saleScreen =
+      document.getElementById(
+        "saleScreen"
+      );
+
+
+    if(
+      !saleScreen ||
+      saleScreen.classList.contains("hidden")
+    ){
+
+      return;
+
+    }
+
+
+    const active =
+      document.activeElement;
+
+
+    if(
+      active &&
+      (
+        active.tagName === "INPUT" ||
+        active.tagName === "TEXTAREA" ||
+        active.tagName === "SELECT"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    if(event.key === "Enter"){
+
+      const code =
+        barcodeBuffer.trim();
+
+
+      barcodeBuffer = "";
+
+
+      clearTimeout(
+        barcodeTimer
+      );
+
+
+      if(code.length >= 6){
+
+        processCode(code);
+
+        event.preventDefault();
+
+      }
+
+
+      return;
+
+    }
+
+
+    if(
+      event.key.length === 1 &&
+      /[0-9]/.test(event.key)
+    ){
+
+      barcodeBuffer +=
+        event.key;
+
+
+      clearTimeout(
+        barcodeTimer
+      );
+
+
+      barcodeTimer =
+        setTimeout(
+          function(){
+
+            barcodeBuffer = "";
+
+          },
+          100
+        );
+
+    }
+
+  }
+);
 
 /* =========================================
    PROCESAR CÓDIGO
