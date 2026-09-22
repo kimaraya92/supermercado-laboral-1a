@@ -2031,7 +2031,117 @@ document.addEventListener(
    PROCESAR CÓDIGO
 ========================================= */
 
+/* =========================================
+   LECTOR USB AUTOMÁTICO - INVENTARIO
+========================================= */
 
+let inventoryBarcodeBuffer = "";
+
+let inventoryBarcodeTimer = null;
+
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    const inventoryScreen =
+      document.getElementById(
+        "inventoryScreen"
+      );
+
+
+    if(
+      !inventoryScreen ||
+      inventoryScreen.classList.contains("hidden")
+    ){
+
+      return;
+
+    }
+
+
+    const active =
+      document.activeElement;
+
+
+    if(
+      active &&
+      (
+        active.tagName === "TEXTAREA" ||
+        active.tagName === "SELECT"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    if(event.key === "Enter"){
+
+      const code =
+        inventoryBarcodeBuffer.trim();
+
+
+      inventoryBarcodeBuffer = "";
+
+
+      clearTimeout(
+        inventoryBarcodeTimer
+      );
+
+
+      if(code.length >= 6){
+
+        document
+          .getElementById("code")
+          .value =
+            code;
+
+
+        document
+          .getElementById("code")
+          .focus();
+
+
+        event.preventDefault();
+
+      }
+
+
+      return;
+
+    }
+
+
+    if(
+      event.key.length === 1 &&
+      /[0-9]/.test(event.key)
+    ){
+
+      inventoryBarcodeBuffer +=
+        event.key;
+
+
+      clearTimeout(
+        inventoryBarcodeTimer
+      );
+
+
+      inventoryBarcodeTimer =
+        setTimeout(
+          function(){
+
+            inventoryBarcodeBuffer = "";
+
+          },
+          100
+        );
+
+    }
+
+  }
+);
 function processCode(code){
 
   const normalized =
