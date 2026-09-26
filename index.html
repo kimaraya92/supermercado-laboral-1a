@@ -1882,7 +1882,72 @@ function leerRol(texto){
   window.speechSynthesis.speak(mensaje);
 
 }
-function seleccionarRol(rol){
+function leerFunciones(){
+
+  const rol =
+    window.rolSeleccionado;
+
+  const funciones = {
+
+    "Cajero/a":[
+      "Registrar productos",
+      "Calcular el total",
+      "Recibir el dinero",
+      "Calcular el vuelto",
+      "Entregar la boleta",
+      "Atender al cliente"
+    ],
+
+    "Encargado/a de inventario":[
+      "Revisar productos disponibles",
+      "Agregar productos al inventario",
+      "Revisar códigos de barras",
+      "Actualizar información",
+      "Mantener el inventario actualizado"
+    ],
+
+    "Supervisor de sala":[
+      "Supervisar el trabajo del equipo",
+      "Verificar que el precio corresponda al producto",
+      "Revisar que los productos estén correctamente registrados",
+      "Comprobar que la sala esté ordenada",
+      "Revisar las tareas",
+      "Ayudar al equipo"
+    ],
+
+    "Reponedor/a":[
+      "Buscar productos",
+      "Reponer productos que faltan",
+      "Revisar que cada producto tenga su precio",
+      "Ordenar productos",
+      "Avisar cuando falte un producto"
+    ],
+
+    "Cliente":[
+      "Leer atentamente el problema o situación",
+      "Identificar qué productos necesita comprar",
+      "Preparar la lista de compras",
+      "Revisar los precios",
+      "Buscar los productos",
+      "Calcular cuánto debe pagar",
+      "Revisar el vuelto",
+      "Comprobar la boleta"
+    ]
+
+  };
+
+  const lista =
+    funciones[rol] || [];
+
+  const texto =
+    "Tus funciones son: " +
+    lista.join(". ") +
+    ".";
+
+  leerRol(texto);
+}
+
+  function seleccionarRol(rol){
 
   hideAllScreens();
 
