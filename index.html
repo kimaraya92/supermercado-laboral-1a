@@ -1754,10 +1754,20 @@ function hideAllScreens(){
 
   [
     "homeScreen",
+    "roleScreen",
     "workerScreen",
     "saleScreen",
     "inventoryScreen"
   ].forEach(function(id){
+
+    document
+      .getElementById(id)
+      .classList
+      .add("hidden");
+
+  });
+
+}
 
     document
       .getElementById(id)
