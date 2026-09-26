@@ -1775,7 +1775,25 @@ function hideAllScreens(){
 /* =========================================
    NAVEGACIÓN
 ========================================= */
+function leerRol(texto){
 
+  if(!("speechSynthesis" in window)){
+    alert("Este dispositivo no permite lectura en voz alta.");
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const mensaje =
+    new SpeechSynthesisUtterance(texto);
+
+  mensaje.lang = "es-CL";
+  mensaje.rate = 0.85;
+  mensaje.pitch = 1;
+
+  window.speechSynthesis.speak(mensaje);
+
+}
 function seleccionarRol(rol){
 
   hideAllScreens();
