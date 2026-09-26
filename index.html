@@ -1776,6 +1776,154 @@ function hideAllScreens(){
    NAVEGACIÓN
 ========================================= */
 
+function seleccionarRol(rol){
+
+  hideAllScreens();
+
+  const iconos = {
+    "Cajero/a":"💰",
+    "Encargado/a de inventario":"📦",
+    "Supervisor de sala":"👀",
+    "Reponedor/a":"📋",
+    "Cliente":"🛍️"
+  };
+
+
+  const funciones = {
+
+    "Cajero/a":[
+      "Registrar productos",
+      "Calcular el total",
+      "Recibir el dinero",
+      "Calcular el vuelto",
+      "Entregar la boleta",
+      "Atender al cliente"
+    ],
+
+    "Encargado/a de inventario":[
+      "Revisar productos disponibles",
+      "Agregar productos al inventario",
+      "Revisar códigos de barras",
+      "Actualizar información",
+      "Mantener el inventario actualizado"
+    ],
+
+    "Supervisor de sala":[
+      "Supervisar el trabajo del equipo",
+      "Verificar que el precio corresponda al producto",
+      "Revisar que los productos estén correctamente registrados",
+      "Comprobar que la sala esté ordenada",
+      "Revisar las tareas",
+      "Ayudar al equipo"
+    ],
+
+    "Reponedor/a":[
+      "Buscar productos",
+      "Reponer productos que faltan",
+      "Revisar que cada producto tenga su precio",
+      "Ordenar los productos",
+      "Avisar cuando falte un producto"
+    ],
+
+    "Cliente":[
+      "Leer atentamente el problema o situación",
+      "Identificar qué productos necesita comprar",
+      "Preparar la lista de compras",
+      "Revisar los precios",
+      "Buscar los productos",
+      "Calcular cuánto debe pagar",
+      "Revisar el vuelto",
+      "Comprobar la boleta"
+    ]
+
+  };
+
+
+  document
+    .getElementById("roleIcon")
+    .textContent =
+      iconos[rol] || "👤";
+
+
+  document
+    .getElementById("roleTitle")
+    .textContent =
+      rol;
+
+
+  document
+    .getElementById("roleFunctions")
+    .innerHTML = `
+
+      <h3>
+        Mis funciones
+      </h3>
+
+      <ul>
+
+        ${
+          funciones[rol]
+            .map(function(funcion){
+
+              return `
+                <li style="margin-bottom:10px">
+                  ${funcion}
+                </li>
+              `;
+
+            })
+            .join("")
+        }
+
+      </ul>
+
+    `;
+
+
+  window.rolSeleccionado =
+    rol;
+
+
+  document
+    .getElementById("roleScreen")
+    .classList
+    .remove("hidden");
+
+}
+
+
+
+function continuarRol(){
+
+  const rol =
+    window.rolSeleccionado;
+
+
+  if(rol === "Cajero/a"){
+
+    abrirVenta();
+
+    return;
+
+  }
+
+
+  if(rol === "Encargado/a de inventario"){
+
+    abrirInventario();
+
+    return;
+
+  }
+
+
+  alert(
+    "Esta función será habilitada en el siguiente paso."
+  );
+
+}
+
+
 
 function abrirVenta(){
 
