@@ -734,48 +734,104 @@ button.back{
     </p>
 
 
-    <button
-  class="primary large"
-  onclick="seleccionarRol('Cajero/a')"
->
-  💰 CAJERO(A) 🔊
-</button>
+<div class="role-choice">
+
+  <button
+    class="primary large"
+    onclick="seleccionarRol('Cajero/a')"
+  >
+    💰 CAJERO(A)
+  </button>
+
+  <button
+    class="voice-button"
+    onclick="event.stopPropagation(); leerRol('Cajero o cajera')"
+    aria-label="Escuchar Cajero o cajera"
+  >
+    🔊
+  </button>
+
+</div>
 
 
-    <button
-      class="large"
-      onclick="seleccionarRol('Encargado/a de inventario')"
-    >
-      📦 ENCARGADO(A) DE INVENTARIO 🔊
-    </button>
+<div class="role-choice">
+
+  <button
+    class="large"
+    onclick="seleccionarRol('Encargado/a de inventario')"
+  >
+    📦 ENCARGADO(A) DE INVENTARIO
+  </button>
+
+  <button
+    class="voice-button"
+    onclick="event.stopPropagation(); leerRol('Encargado o encargada de inventario')"
+    aria-label="Escuchar Encargado o encargada de inventario"
+  >
+    🔊
+  </button>
+
+</div>
 
 
-    <button
-      class="large"
-      onclick="seleccionarRol('Supervisor de sala')"
-    >
-      👀 SUPERVISOR DE SALA 🔊
-    </button>
+<div class="role-choice">
+
+  <button
+    class="large"
+    onclick="seleccionarRol('Supervisor de sala')"
+  >
+    👀 SUPERVISOR DE SALA
+  </button>
+
+  <button
+    class="voice-button"
+    onclick="event.stopPropagation(); leerRol('Supervisor de sala')"
+    aria-label="Escuchar Supervisor de sala"
+  >
+    🔊
+  </button>
+
+</div>
 
 
-    <button
-      class="large"
-      onclick="seleccionarRol('Reponedor/a')"
-    >
-      📋 REPONEDOR(A) 🔊
-    </button>
+<div class="role-choice">
+
+  <button
+    class="large"
+    onclick="seleccionarRol('Reponedor/a')"
+  >
+    📋 REPONEDOR(A)
+  </button>
+
+  <button
+    class="voice-button"
+    onclick="event.stopPropagation(); leerRol('Reponedor o reponedora')"
+    aria-label="Escuchar Reponedor o reponedora"
+  >
+    🔊
+  </button>
+
+</div>
 
 
-    <button
-      class="large"
-      onclick="seleccionarRol('Cliente')"
-    >
-      🛍️ CLIENTE 🔊
-    </button>
+<div class="role-choice">
 
-  </div>
+  <button
+    class="large"
+    onclick="seleccionarRol('Cliente')"
+  >
+    🛍️ CLIENTE
+  </button>
 
-</section>
+  <button
+    class="voice-button"
+    onclick="event.stopPropagation(); leerRol('Cliente')"
+    aria-label="Escuchar Cliente"
+  >
+    🔊
+  </button>
+
+</div>
 <!-- ==============================
      RECORDATORIO DEL ROL
 ============================== -->
