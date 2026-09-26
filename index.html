@@ -713,6 +713,10 @@ button.back{
      INICIO
 ============================== -->
 
+<!-- ==============================
+     INICIO / ROLES
+============================== -->
+
 <section id="homeScreen">
 
   <div class="menu">
@@ -726,29 +730,52 @@ button.back{
     </h2>
 
     <p class="small">
-      Selecciona la función que deseas realizar.
+      Selecciona el rol que realizarás hoy.
     </p>
 
 
     <button
       class="primary large"
-      onclick="abrirVenta()"
+      onclick="seleccionarRol('Cajero/a')"
     >
-      🛍️ INICIAR VENTA
+      💰 CAJERO(A)
     </button>
 
 
     <button
       class="large"
-      onclick="abrirInventario()"
+      onclick="seleccionarRol('Encargado/a de inventario')"
     >
-      📦 INVENTARIO
+      📦 ENCARGADO(A) DE INVENTARIO
+    </button>
+
+
+    <button
+      class="large"
+      onclick="seleccionarRol('Supervisor de sala')"
+    >
+      👀 SUPERVISOR DE SALA
+    </button>
+
+
+    <button
+      class="large"
+      onclick="seleccionarRol('Reponedor/a')"
+    >
+      📋 REPONEDOR(A)
+    </button>
+
+
+    <button
+      class="large"
+      onclick="seleccionarRol('Cliente')"
+    >
+      🛍️ CLIENTE
     </button>
 
   </div>
 
 </section>
-
 
 
 <!-- ==============================
