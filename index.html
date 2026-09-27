@@ -4328,7 +4328,20 @@ function renderShoppingList(){
     >
 
   </div>
+<div class="item-price">
 
+  Subtotal:
+  ${
+    item.price !== "" && item.price >= 0
+      ? "$" +
+        (
+          Number(item.quantity) *
+          Number(item.price)
+        ).toLocaleString("es-CL")
+      : "$0"
+  }
+
+</div>
 </div>
 
 
