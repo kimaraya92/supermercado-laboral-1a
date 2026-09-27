@@ -4175,9 +4175,17 @@ function seleccionarProductoLista(code){
       ${escapeHtml(p.content || "Sin contenido")}
     </div>
 
-    <div class="notice">
+        <div class="notice">
       Producto seleccionado.
     </div>
+
+    <button
+      class="primary"
+      type="button"
+      onclick="agregarProductoLista('${escapeJs(code)}')"
+    >
+      ➕ AGREGAR A MI LISTA
+    </button>
 
   `;
 
