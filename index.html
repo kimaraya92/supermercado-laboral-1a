@@ -4013,7 +4013,160 @@ function renderCatalog(){
 
 }
 
+/* =========================================
+   LISTA DE COMPRAS - BÚSQUEDA
+========================================= */
 
+function buscarProductoLista(){
+
+  const texto =
+    document
+      .getElementById("shoppingProductSearch")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const opciones =
+    document.getElementById(
+      "shoppingProductOptions"
+    );
+
+  if(!texto){
+
+    opciones.style.display = "none";
+    opciones.innerHTML = "";
+
+    return;
+  }
+
+
+  const resultados =
+    Object
+      .entries(products)
+      .filter(function(entry){
+
+        const p = entry[1];
+
+        return(
+          (p.product || "")
+            .toLowerCase()
+            .includes(texto)
+        );
+
+      });
+
+
+  if(!resultados.length){
+
+    opciones.style.display = "block";
+
+    opciones.innerHTML =
+      '<div class="notice">No se encontraron productos.</div>';
+
+    return;
+  }
+
+
+  opciones.style.display = "block";
+
+
+  opciones.innerHTML =
+    resultados
+      .map(function(entry){
+
+        const code = entry[0];
+        const p = entry[1];
+
+        return `
+          <button
+            type="button"
+            onclick="seleccionarProductoLista('${escapeJs(code)}')"
+            style="text-align:left;margin-top:8px"
+          >
+
+            <strong>
+              ${escapeHtml(p.product || "")}
+            </strong>
+
+            <br>
+
+            <span class="small">
+              ${escapeHtml(p.brand || "")}
+              ${
+                p.content
+                  ? " · " + escapeHtml(p.content)
+                  : ""
+              }
+            </span>
+
+          </button>
+        `;
+
+      })
+      .join("");
+
+}
+
+
+function seleccionarProductoLista(code){
+
+  const p =
+    products[code];
+
+  if(!p){
+    return;
+  }
+
+
+  document
+    .getElementById(
+      "shoppingProductSearch"
+    )
+    .value =
+      p.product || "";
+
+
+  document
+    .getElementById(
+      "shoppingProductOptions"
+    )
+    .style.display =
+      "none";
+
+
+  const preview =
+    document.getElementById(
+      "shoppingProductPreview"
+    );
+
+
+  preview.style.display =
+    "block";
+
+
+  preview.innerHTML = `
+
+    <div class="item-title">
+      ${escapeHtml(p.product || "")}
+    </div>
+
+    <div class="item-meta">
+      Marca:
+      ${escapeHtml(p.brand || "Sin marca")}
+    </div>
+
+    <div class="item-meta">
+      Contenido:
+      ${escapeHtml(p.content || "Sin contenido")}
+    </div>
+
+    <div class="notice">
+      Producto seleccionado.
+    </div>
+
+  `;
+
+}
 
 /* =========================================
    MODIFICAR PRODUCTO
