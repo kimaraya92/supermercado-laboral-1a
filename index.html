@@ -1590,7 +1590,103 @@ button.back{
 
 </section>
 
+<!-- ==============================
+     LISTA DE COMPRAS
+============================== -->
 
+<section
+  id="shoppingListScreen"
+  class="hidden"
+>
+
+  <button
+    class="back"
+    onclick="volverInicio()"
+  >
+    ← Volver
+  </button>
+
+
+  <div class="screen-title">
+
+    <h2>
+      🛒 Lista de Compras
+    </h2>
+
+    <p class="small">
+      Busca los productos que necesitas comprar.
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h3>
+      ➕ Agregar producto
+    </h3>
+
+
+    <div class="form-group">
+
+      <label>
+        Producto
+      </label>
+
+      <div class="row">
+
+        <input
+          id="shoppingProductSearch"
+          placeholder="Escribe el nombre del producto"
+          oninput="buscarProductoLista()"
+        >
+
+        <button
+          type="button"
+          onclick="hablarProductoLista()"
+          style="max-width:80px"
+        >
+          🎤
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div
+      id="shoppingProductOptions"
+      class="item"
+      style="display:none"
+    ></div>
+
+
+    <div
+      id="shoppingProductPreview"
+      class="item"
+      style="display:none"
+    ></div>
+
+  </div>
+
+
+  <div
+    id="shoppingListItems"
+    class="card"
+  >
+
+    <h3>
+      🛍️ Mi lista
+    </h3>
+
+    <p class="small">
+      Todavía no has agregado productos.
+    </p>
+
+  </div>
+
+
+</section>
 
 <!-- ==============================
      CÁMARA COMPARTIDA
