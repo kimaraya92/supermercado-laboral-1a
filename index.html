@@ -1729,20 +1729,22 @@ body.printing-shopping-list #receiptPrintArea{
 
 
     <input
-      id="productImageFile"
-      type="file"
-      accept="image/*"
-      style="display:none"
-    >
+  id="productImageFile"
+  type="file"
+  accept="image/*"
+  style="display:none"
+  onchange="previsualizarImagen(event)"
+>
 
 
-    <input
-      id="productImageCamera"
-      type="file"
-      accept="image/*"
-      capture="environment"
-      style="display:none"
-    >
+<input
+  id="productImageCamera"
+  type="file"
+  accept="image/*"
+  capture="environment"
+  style="display:none"
+  onchange="previsualizarImagen(event)"
+>
 
 
     <div
