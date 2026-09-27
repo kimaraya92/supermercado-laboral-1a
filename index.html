@@ -4339,7 +4339,42 @@ function renderShoppingList(){
     }
 
   `;
+/* =========================================
+   LISTA DE COMPRAS - CANTIDAD Y PRECIO
+========================================= */
 
+function cambiarCantidadLista(index, valor){
+
+  const cantidad =
+    parseInt(valor, 10);
+
+  if(!shoppingList[index]){
+    return;
+  }
+
+  shoppingList[index].quantity =
+    cantidad >= 1 ? cantidad : 1;
+
+  renderShoppingList();
+
+}
+
+
+function cambiarPrecioLista(index, valor){
+
+  const precio =
+    parseInt(valor, 10);
+
+  if(!shoppingList[index]){
+    return;
+  }
+
+  shoppingList[index].price =
+    precio >= 0 ? precio : "";
+
+  renderShoppingList();
+
+}
 }
 /* =========================================
    MODIFICAR PRODUCTO
