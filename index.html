@@ -4138,22 +4138,25 @@ function addProduct(){
   }
 
 
- products[code] = {
-
-  product:name,
-
-  brand:brand,
-
-  content:content,
-
-  price:price,
-
-  image:
+  const image =
     document
       .getElementById("productImagePreview")
-      .src || ""
+      .src || "";
 
-};
+
+  products[code] = {
+
+    product:name,
+
+    brand:brand,
+
+    content:content,
+
+    price:price,
+
+    image:image
+
+  };
 
 
   saveProducts();
@@ -4162,7 +4165,12 @@ function addProduct(){
   document
     .getElementById("saveMsg")
     .textContent =
-      "✓ Producto guardado.";
+      productoEditando
+        ? "✓ Producto modificado."
+        : "✓ Producto guardado.";
+
+
+  productoEditando = null;
 
 
   ocultarFormularioProducto();
@@ -4188,6 +4196,9 @@ function addProduct(){
         "";
 
   });
+
+
+  eliminarImagenProducto();
 
 
   renderCatalog();
