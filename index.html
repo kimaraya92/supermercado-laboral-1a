@@ -1934,13 +1934,35 @@ body.printing-shopping-list #receiptPrintArea{
     style="text-align:center"
   >
 
-    <button
-      class="primary"
-      type="button"
-      onclick="imprimirListaCompras()"
-    >
-      🖨️ IMPRIMIR LISTA
-    </button>
+  <div
+  style="
+    display:flex;
+    gap:15px;
+    justify-content:center;
+    flex-wrap:wrap;
+  "
+>
+
+  <button
+    class="primary"
+    type="button"
+    onclick="imprimirListaCompras(true)"
+    style="flex:1;min-width:250px;"
+  >
+    📷 IMPRIMIR CON FOTOS
+  </button>
+
+
+  <button
+    class="primary"
+    type="button"
+    onclick="imprimirListaCompras(false)"
+    style="flex:1;min-width:250px;"
+  >
+    📄 IMPRIMIR SIN FOTOS
+  </button>
+
+</div>
 
   </div>
 
