@@ -2828,7 +2828,18 @@ function abrirSupermercado(){
     .remove("hidden");
 
 }
+function volverPortal(){
 
+  closeScanner();
+
+  hideAllScreens();
+
+  document
+    .getElementById("portalScreen")
+    .classList
+    .remove("hidden");
+
+}
 function abrirVenta(){
 
   hideAllScreens();
