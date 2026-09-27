@@ -4891,96 +4891,74 @@ function editProduct(code){
   const p =
     products[code];
 
-
   if(!p){
     return;
   }
 
+  productoEditando = code;
 
-  const name =
-    prompt(
-      "Nombre del producto:",
-      p.product || ""
-    );
+  document
+    .getElementById("code")
+    .value = code;
 
+  document
+    .getElementById("name")
+    .value = p.product || "";
 
-  if(name === null){
-    return;
-  }
+  document
+    .getElementById("brand")
+    .value = p.brand || "";
 
+  document
+    .getElementById("content")
+    .value = p.content || "";
 
-  const brand =
-    prompt(
-      "Marca:",
-      p.brand || ""
-    );
+  document
+    .getElementById("price")
+    .value = p.price || "";
 
+  const preview =
+    document.getElementById("productImagePreview");
 
-  if(brand === null){
-    return;
-  }
+  const placeholder =
+    document.getElementById("productImagePlaceholder");
 
+  const deleteButton =
+    document.getElementById("removeProductImageButton");
 
-  const content =
-    prompt(
-      "Contenido neto:",
-      p.content || ""
-    );
+  if(p.image){
 
+    preview.src = p.image;
 
-  if(content === null){
-    return;
-  }
+    preview.style.display = "block";
 
+    placeholder.style.display = "none";
 
-  const price =
-    prompt(
-      "Precio:",
-      p.price || 0
-    );
+    deleteButton.style.display = "inline-block";
 
+  }else{
 
-  if(price === null){
-    return;
-  }
+    preview.src = "";
 
+    preview.style.display = "none";
 
-  const numericPrice =
-    Number(price);
+    placeholder.style.display = "block";
 
-
-  if(!Number.isFinite(numericPrice)){
-
-    alert(
-      "El precio debe ser un número."
-    );
-
-    return;
+    deleteButton.style.display = "none";
 
   }
 
+  document
+    .getElementById("formularioProducto")
+    .classList
+    .remove("hidden");
 
-  products[code] = {
-
-    product:
-      name.trim(),
-
-    brand:
-      brand.trim(),
-
-    content:
-      content.trim(),
-
-    price:
-      numericPrice
-
-  };
-
-
-  saveProducts();
-
-
-  renderCatalog();
+  document
+    .getElementById("formularioProducto")
+    .scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
 
 }
 
