@@ -4190,7 +4190,131 @@ function seleccionarProductoLista(code){
   `;
 
 }
+}
 
+/* =========================================
+   LISTA DE COMPRAS - AGREGAR PRODUCTO
+========================================= */
+
+let shoppingList = [];
+
+
+function agregarProductoLista(code){
+
+  const p =
+    products[code];
+
+  if(!p){
+    return;
+  }
+
+
+  shoppingList.push({
+    code: code,
+    product: p.product || "",
+    brand: p.brand || "",
+    content: p.content || "",
+    quantity: 1,
+    price: ""
+  });
+
+
+  renderShoppingList();
+
+
+  document
+    .getElementById(
+      "shoppingProductSearch"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "shoppingProductOptions"
+    )
+    .style.display = "none";
+
+
+  document
+    .getElementById(
+      "shoppingProductPreview"
+    )
+    .style.display = "none";
+
+}
+
+
+function renderShoppingList(){
+
+  const list =
+    document.getElementById(
+      "shoppingListItems"
+    );
+
+
+  if(!shoppingList.length){
+
+    list.innerHTML = `
+
+      <h3>
+        🛍️ Mi lista
+      </h3>
+
+      <p class="small">
+        Todavía no has agregado productos.
+      </p>
+
+    `;
+
+    return;
+  }
+
+
+  list.innerHTML = `
+
+    <h3>
+      🛍️ Mi lista
+    </h3>
+
+    ${
+      shoppingList
+        .map(function(item){
+
+          return `
+
+            <div class="item">
+
+              <div class="item-title">
+                ${escapeHtml(item.product)}
+              </div>
+
+              <div class="item-meta">
+                ${escapeHtml(item.brand)}
+                ${
+                  item.content
+                    ? " · " +
+                      escapeHtml(item.content)
+                    : ""
+                }
+              </div>
+
+              <div class="item-meta">
+                Cantidad:
+                ${item.quantity}
+              </div>
+
+            </div>
+
+          `;
+
+        })
+        .join("")
+    }
+
+  `;
+
+}
 /* =========================================
    MODIFICAR PRODUCTO
 ========================================= */
