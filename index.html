@@ -4918,19 +4918,88 @@ function renderShoppingList(){
 
             <div class="item">
 
-  <div class="item-title">
-    ${escapeHtml(item.product)}
+  <div
+  class="item"
+  style="
+    display:grid;
+    grid-template-columns:160px 1fr 130px 110px;
+    gap:18px;
+    align-items:center;
+    padding:15px;
+  "
+>
+
+  <!-- FOTO -->
+
+  <div
+    style="
+      width:150px;
+      height:120px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid #ddd;
+      border-radius:14px;
+      background:#fff;
+    "
+  >
+
+    ${
+      products[item.code] && products[item.code].image
+        ? `
+          <img
+            src="${escapeHtml(products[item.code].image)}"
+            alt="${escapeHtml(item.product)}"
+            style="
+              width:140px;
+              height:110px;
+              object-fit:contain;
+              border-radius:10px;
+            "
+          >
+        `
+        : `
+          <div style="font-size:50px">
+            🖼️
+          </div>
+        `
+    }
+
   </div>
 
-  <div class="item-meta">
-    Marca:
-    ${escapeHtml(item.brand || "Sin marca")}
+
+  <!-- PRODUCTO -->
+
+  <div>
+
+    <div
+      class="item-title"
+      style="
+        font-size:24px;
+        margin-bottom:8px;
+      "
+    >
+      ${escapeHtml(item.product)}
+    </div>
+
+    <div class="item-meta">
+      ${escapeHtml(item.brand || "Sin marca")}
+    </div>
+
   </div>
 
-  <div class="item-meta">
-    Contenido:
+
+  <!-- CONTENIDO -->
+
+  <div
+    class="item-meta"
+    style="font-size:16px;"
+  >
     ${escapeHtml(item.content || "Sin contenido")}
   </div>
+
+
+  <!-- CANTIDAD -->
 
   <div class="form-group">
 
