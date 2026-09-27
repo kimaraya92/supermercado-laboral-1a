@@ -4481,40 +4481,54 @@ function renderCatalog(){
         ${escapeHtml(code)}
 
       </div>
+<div
+  class="row"
+  style="
+    display:flex;
+    gap:12px;
+    margin-top:12px;
+  "
+>
+
+  <button
+    onclick="editProduct('${escapeJs(code)}')"
+    style="
+      flex:1;
+      min-height:52px;
+      white-space:nowrap;
+      font-size:17px;
+    "
+  >
+    ✏️ Modificar
+  </button>
 
 
-      <div
-        class="row"
-        style="
-          display:flex;
-          gap:8px;
-        "
-      >
-
-        <button
-          onclick="editProduct('${escapeJs(code)}')"
-          style="flex:1"
-        >
-          ✏️ Modificar
-        </button>
+  <button
+    onclick="deleteProduct('${escapeJs(code)}')"
+    style="
+      flex:1;
+      min-height:52px;
+      white-space:nowrap;
+      font-size:17px;
+    "
+  >
+    🗑️ Eliminar
+  </button>
 
 
-        <button
-          onclick="deleteProduct('${escapeJs(code)}')"
-          style="flex:1"
-        >
-          🗑️ Eliminar
-        </button>
+  <button
+    onclick="verCodigoBarras('${escapeJs(code)}')"
+    style="
+      flex:1;
+      min-height:52px;
+      white-space:nowrap;
+      font-size:17px;
+    "
+  >
+    🏷️ VER CÓDIGO
+  </button>
 
-
-        <button
-          onclick="verCodigoBarras('${escapeJs(code)}')"
-          style="flex:1"
-        >
-          🏷️ VER CÓDIGO
-        </button>
-
-      </div>
+</div>
 
     </div>
 
@@ -4525,9 +4539,10 @@ function renderCatalog(){
       class="item-price"
       style="
         font-size:48px;
-        font-weight:800;
-        text-align:center;
-        align-self:center;
+font-weight:800;
+text-align:center;
+align-self:start;
+margin-top:18px;
       "
     >
 
