@@ -1614,7 +1614,165 @@ body.printing-shopping-list #receiptPrintArea{
       >
 
     </div>
+<div
+  class="product-image-panel"
+  style="
+    display:grid;
+    grid-template-columns:1fr 1.2fr;
+    gap:25px;
+    align-items:stretch;
+    margin:25px 0;
+  "
+>
 
+  <!-- PREVISUALIZACIÓN -->
+
+  <div
+    style="
+      border:2px dashed #ccc;
+      border-radius:16px;
+      min-height:280px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      background:#fafafa;
+      text-align:center;
+    "
+  >
+
+    <div
+      id="productImagePlaceholder"
+      style="font-size:60px"
+    >
+      🖼️
+    </div>
+
+    <img
+      id="productImagePreview"
+      style="
+        display:none;
+        width:100%;
+        max-width:280px;
+        height:240px;
+        object-fit:contain;
+        border-radius:12px;
+      "
+    >
+
+    <strong
+      style="margin-top:12px"
+    >
+      Vista previa
+    </strong>
+
+    <span
+      class="small"
+    >
+      Aquí aparecerá la imagen del producto
+    </span>
+
+  </div>
+
+
+  <!-- OPCIONES -->
+
+  <div>
+
+    <h3>
+      🖼️ Imagen del producto
+    </h3>
+
+    <p class="small">
+      Elige cómo quieres agregar la imagen.
+    </p>
+
+
+    <button
+      type="button"
+      class="large"
+      onclick="buscarImagenPorCodigo()"
+      style="width:100%;margin-bottom:10px"
+    >
+      🏷️ BUSCAR POR CÓDIGO
+    </button>
+
+
+    <button
+      type="button"
+      class="large"
+      onclick="mostrarEnlaceImagen()"
+      style="width:100%;margin-bottom:10px"
+    >
+      🔗 USAR ENLACE DE IMAGEN
+    </button>
+
+
+    <button
+      type="button"
+      class="large"
+      onclick="document.getElementById('productImageFile').click()"
+      style="width:100%;margin-bottom:10px"
+    >
+      📁 SUBIR UNA FOTO
+    </button>
+
+
+    <button
+      type="button"
+      class="large"
+      onclick="document.getElementById('productImageCamera').click()"
+      style="width:100%;margin-bottom:10px"
+    >
+      📸 TOMAR UNA FOTO
+    </button>
+
+
+    <input
+      id="productImageFile"
+      type="file"
+      accept="image/*"
+      style="display:none"
+    >
+
+
+    <input
+      id="productImageCamera"
+      type="file"
+      accept="image/*"
+      capture="environment"
+      style="display:none"
+    >
+
+
+    <div
+      id="imageUrlBox"
+      style="display:none;margin-top:15px"
+    >
+
+      <label>
+        🔗 Enlace de la imagen
+      </label>
+
+      <input
+        id="productImageUrl"
+        type="url"
+        placeholder="Pega aquí el enlace de la imagen"
+      >
+
+      <button
+        type="button"
+        onclick="cargarImagenDesdeEnlace()"
+        style="margin-top:8px"
+      >
+        🖼️ CARGAR IMAGEN
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
     <button
       class="primary"
