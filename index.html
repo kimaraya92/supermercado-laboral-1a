@@ -5109,27 +5109,31 @@ function cambiarPrecioLista(index, valor){
           ${
             conFotos
               ? `
-                <th style="width:18%">
+                <th style="width:15%">
                   FOTO
                 </th>
               `
               : ""
           }
 
-          <th style="width:${conFotos ? "32%" : "45%"}">
+          <th style="width:${conFotos ? "27%" : "38%"}">
             PRODUCTO
           </th>
 
-          <th style="width:${conFotos ? "18%" : "20%"}">
+          <th style="width:${conFotos ? "16%" : "18%"}">
             MARCA
           </th>
 
-          <th style="width:${conFotos ? "17%" : "20%"}">
+          <th style="width:${conFotos ? "14%" : "15%"}">
             CONTENIDO
           </th>
 
-          <th style="width:${conFotos ? "15%" : "15%"}">
+          <th style="width:${conFotos ? "10%" : "12%"}">
             CANTIDAD
+          </th>
+
+          <th style="width:${conFotos ? "18%" : "17%"}">
+            PRECIO
           </th>
 
         </tr>
@@ -5193,6 +5197,9 @@ function cambiarPrecioLista(index, valor){
 
                 <td style="text-align:center;font-size:18px;font-weight:bold">
                   ${item.quantity}
+                </td>
+
+                <td class="shopping-price">
                 </td>
 
               </tr>
