@@ -4137,17 +4137,22 @@ function addProduct(){
   }
 
 
-  products[code] = {
+ products[code] = {
 
-    product:name,
+  product:name,
 
-    brand:brand,
+  brand:brand,
 
-    content:content,
+  content:content,
 
-    price:price
+  price:price,
 
-  };
+  image:
+    document
+      .getElementById("productImagePreview")
+      .src || ""
+
+};
 
 
   saveProducts();
