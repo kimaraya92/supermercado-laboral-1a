@@ -4387,35 +4387,6 @@ function renderShoppingList(){
 
   </div>
 
-  <div class="form-group">
-
-    <label>
-      Precio
-    </label>
-
-    <input
-      type="number"
-      min="0"
-      placeholder="Escribe el precio"
-      value="${item.price}"
-      onchange="cambiarPrecioLista(${shoppingList.indexOf(item)}, this.value)"
-    >
-
-  </div>
-<div class="item-price">
-
-  Subtotal:
-  ${
-    item.price !== "" && item.price >= 0
-      ? "$" +
-        (
-          Number(item.quantity) *
-          Number(item.price)
-        ).toLocaleString("es-CL")
-      : "$0"
-  }
-
-</div>
 </div>
 
 
