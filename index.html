@@ -2119,42 +2119,110 @@ function leerFunciones(){
       rol;
 
 
-  document
+    document
     .getElementById("roleFunctions")
     .innerHTML = `
 
-      <h3>
-        Mis funciones
-      </h3>
+      ${
+        rol === "Cliente"
 
-      <ul>
+          ? `
 
-        ${
-          funciones[rol]
-            .map(function(funcion){
+            <h3>
+              Mi compra paso a paso
+            </h3>
 
-              return `
-                <li style="margin-bottom:10px">
-                  ${funcion}
-                </li>
-              `;
+            <div
+              style="
+                font-size:20px;
+                line-height:1.5;
+              "
+            >
 
-            })
-            .join("")
-        }
+              <div style="margin:15px 0;">
+                🛒 <strong>1. Creo mi lista</strong>
+              </div>
+
+              <div style="text-align:center;">
+                ↓
+              </div>
+
+              <div style="margin:15px 0;">
+                📝 <strong>2. Busco los precios</strong>
+              </div>
+
+              <div style="text-align:center;">
+                ↓
+              </div>
+
+              <div style="margin:15px 0;">
+                🧮 <strong>3. Calculo mi compra</strong>
+              </div>
+
+              <div style="text-align:center;">
+                ↓
+              </div>
+
+              <div style="margin:15px 0;">
+                💵 <strong>4. Indico cuánto dinero tengo</strong>
+              </div>
+
+              <div style="text-align:center;">
+                ↓
+              </div>
+
+              <div style="margin:15px 0;">
+                🔄 <strong>5. Calculo el vuelto</strong>
+              </div>
+
+              <div style="text-align:center;">
+                ↓
+              </div>
+
+              <div style="margin:15px 0;">
+                🧾 <strong>6. Compruebo mi resultado</strong>
+              </div>
+
+            </div>
+
+          `
+
+          : `
+
+            <h3>
+              Mis funciones
+            </h3>
+
+            <ul>
+
+              ${
+                funciones[rol]
+                  .map(function(funcion){
+
+                    return `
+                      <li style="margin-bottom:10px">
+                        ${funcion}
+                      </li>
+                    `;
+
+                  })
+                  .join("")
+              }
 
             </ul>
 
-      <button
-        class="primary"
-        onclick="leerFunciones()"
-        style="margin-top:15px"
-      >
-        🔊 ESCUCHAR MIS FUNCIONES
-      </button>
+            <button
+              class="primary"
+              onclick="leerFunciones()"
+              style="margin-top:15px"
+            >
+              🔊 ESCUCHAR MIS FUNCIONES
+            </button>
+
+          `
+      }
 
     `;
-
 
   window.rolSeleccionado =
     rol;
