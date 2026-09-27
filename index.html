@@ -4740,36 +4740,89 @@ function seleccionarProductoLista(code){
     "block";
 
 
-  preview.innerHTML = `
+ preview.innerHTML = `
 
-    <div class="item-title">
-      ${escapeHtml(p.product || "")}
-    </div>
+  <div
+    style="
+      display:flex;
+      gap:25px;
+      align-items:center;
+    "
+  >
 
-    <div class="item-meta">
-      Marca:
-      ${escapeHtml(p.brand || "Sin marca")}
-    </div>
-
-    <div class="item-meta">
-      Contenido:
-      ${escapeHtml(p.content || "Sin contenido")}
-    </div>
-
-        <div class="notice">
-      Producto seleccionado.
-    </div>
-
-    <button
-      class="primary"
-      type="button"
-      onclick="agregarProductoLista('${escapeJs(code)}')"
+    <div
+      style="
+        width:180px;
+        height:180px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border:1px solid #ddd;
+        border-radius:16px;
+        background:#fff;
+        flex-shrink:0;
+      "
     >
-      ➕ AGREGAR A MI LISTA
-    </button>
 
-  `;
+      ${
+        p.image
+          ? `
+            <img
+              src="${escapeHtml(p.image)}"
+              alt="${escapeHtml(p.product || "Producto")}"
+              style="
+                width:165px;
+                height:165px;
+                object-fit:contain;
+                border-radius:12px;
+              "
+            >
+          `
+          : `
+            <div style="font-size:60px">
+              🖼️
+            </div>
+          `
+      }
 
+    </div>
+
+    <div>
+
+      <div
+        class="item-title"
+        style="font-size:26px;"
+      >
+        ${escapeHtml(p.product || "")}
+      </div>
+
+      <div class="item-meta">
+        Marca:
+        ${escapeHtml(p.brand || "Sin marca")}
+      </div>
+
+      <div class="item-meta">
+        Contenido:
+        ${escapeHtml(p.content || "Sin contenido")}
+      </div>
+
+      <div class="notice">
+        Producto seleccionado.
+      </div>
+
+      <button
+        class="primary"
+        type="button"
+        onclick="agregarProductoLista('${escapeJs(code)}')"
+      >
+        ➕ AGREGAR A MI LISTA
+      </button>
+
+    </div>
+
+  </div>
+
+`;
 }
 
 /* =========================================
