@@ -4284,24 +4284,52 @@ function renderShoppingList(){
 
             <div class="item">
 
-              <div class="item-title">
-                ${escapeHtml(item.product)}
-              </div>
+  <div class="item-title">
+    ${escapeHtml(item.product)}
+  </div>
 
-              <div class="item-meta">
-                ${escapeHtml(item.brand)}
-                ${
-                  item.content
-                    ? " · " +
-                      escapeHtml(item.content)
-                    : ""
-                }
-              </div>
+  <div class="item-meta">
+    Marca:
+    ${escapeHtml(item.brand || "Sin marca")}
+  </div>
 
-              <div class="item-meta">
-                Cantidad:
-                ${item.quantity}
-              </div>
+  <div class="item-meta">
+    Contenido:
+    ${escapeHtml(item.content || "Sin contenido")}
+  </div>
+
+  <div class="form-group">
+
+    <label>
+      Cantidad
+    </label>
+
+    <input
+      type="number"
+      min="1"
+      value="${item.quantity}"
+      onchange="cambiarCantidadLista(${shoppingList.indexOf(item)}, this.value)"
+    >
+
+  </div>
+
+  <div class="form-group">
+
+    <label>
+      Precio
+    </label>
+
+    <input
+      type="number"
+      min="0"
+      placeholder="Escribe el precio"
+      value="${item.price}"
+      onchange="cambiarPrecioLista(${shoppingList.indexOf(item)}, this.value)"
+    >
+
+  </div>
+
+</div>
 
             </div>
 
