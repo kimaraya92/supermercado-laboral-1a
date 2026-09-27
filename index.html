@@ -4525,6 +4525,110 @@ function cambiarPrecioLista(index, valor){
   renderShoppingList();
 
 }
+  function imprimirListaCompras(){
+
+  if(!shoppingList.length){
+    alert("Primero agrega al menos un producto a tu lista.");
+    return;
+  }
+
+  const printArea =
+    document.getElementById("shoppingListPrintArea");
+
+  printArea.innerHTML = `
+
+    <h1>
+      🛒 LISTA DE COMPRAS
+    </h1>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th style="width:32%">
+            PRODUCTO
+          </th>
+
+          <th style="width:20%">
+            MARCA
+          </th>
+
+          <th style="width:18%">
+            CONTENIDO
+          </th>
+
+          <th style="width:12%">
+            CANTIDAD
+          </th>
+
+          <th style="width:18%">
+            PRECIO
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        ${
+          shoppingList.map(function(item){
+
+            return `
+
+              <tr>
+
+                <td>
+                  ${escapeHtml(item.product)}
+                </td>
+
+                <td>
+                  ${escapeHtml(item.brand || "")}
+                </td>
+
+                <td>
+                  ${escapeHtml(item.content || "")}
+                </td>
+
+                <td style="text-align:center">
+                  ${item.quantity}
+                </td>
+
+                <td class="shopping-price">
+                </td>
+
+              </tr>
+
+            `;
+
+          }).join("")
+        }
+
+      </tbody>
+
+    </table>
+
+  `;
+
+  document.body.classList.add(
+    "printing-shopping-list"
+  );
+
+  setTimeout(function(){
+
+    window.print();
+
+    setTimeout(function(){
+
+      document.body.classList.remove(
+        "printing-shopping-list"
+      );
+
+      printArea.innerHTML = "";
+
+    },500);
+
+  },100);
+
+}
 /* =========================================
    MODIFICAR PRODUCTO
 ========================================= */
