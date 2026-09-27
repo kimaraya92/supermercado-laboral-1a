@@ -4376,106 +4376,168 @@ function renderCatalog(){
             entry[1];
 
 
-          return `
+        return `
 
-  <div class="item">
+  <div
+    class="item"
+    style="
+      display:grid;
+      grid-template-columns:270px 1fr 180px;
+      gap:20px;
+      align-items:center;
+      padding:18px;
+    "
+  >
 
-    ${
-      p.image
-        ? `
-          <div
-            style="
-              width:100%;
-              display:flex;
-              justify-content:center;
-              margin-bottom:15px;
-            "
-          >
+    <!-- IMAGEN -->
+
+    <div
+      style="
+        width:250px;
+        height:190px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border:1px solid #ddd;
+        border-radius:16px;
+        background:#fff;
+      "
+    >
+
+      ${
+        p.image
+          ? `
             <img
               src="${escapeHtml(p.image)}"
               alt="${escapeHtml(p.product || "Producto")}"
               style="
-                width:180px;
-                height:180px;
+                width:230px;
+                height:175px;
                 object-fit:contain;
-                border-radius:16px;
-                border:1px solid #ddd;
-                background:#fff;
+                border-radius:12px;
               "
             >
-          </div>
-        `
-        : ""
-    }
-
-    <div class="item-title">
-
-      ${escapeHtml(
-        p.product
-      )}
+          `
+          : `
+            <div style="font-size:60px">
+              🖼️
+            </div>
+          `
+      }
 
     </div>
 
-              <div class="item-meta">
 
-                ${escapeHtml(
-                  p.brand || ""
-                )}
+    <!-- INFORMACIÓN -->
 
-                ${
-                  p.content
-                    ? " · " +
-                      escapeHtml(
-                        p.content
-                      )
-                    : ""
-                }
+    <div>
 
-              </div>
-
-
-              <div class="item-meta">
-
-                Código:
-                ${escapeHtml(code)}
-
-              </div>
+      <div
+        class="item-title"
+        style="
+          font-size:24px;
+          margin-bottom:8px;
+        "
+      >
+        ${escapeHtml(
+          p.product
+        )}
+      </div>
 
 
-              <div class="item-price">
+      <div
+        class="item-meta"
+        style="
+          font-size:18px;
+          margin-bottom:12px;
+        "
+      >
 
-                ${money(p.price)}
+        ${escapeHtml(
+          p.brand || ""
+        )}
 
-              </div>
+        ${
+          p.content
+            ? " · " +
+              escapeHtml(
+                p.content
+              )
+            : ""
+        }
 
-
-              <div class="row">
-
-  <button
-    onclick="editProduct('${escapeJs(code)}')"
-  >
-    ✏️ Modificar
-  </button>
-
-
-  <button
-    onclick="deleteProduct('${escapeJs(code)}')"
-  >
-    🗑️ Eliminar
-  </button>
+      </div>
 
 
-  <button
-    onclick="verCodigoBarras('${escapeJs(code)}')"
-  >
-    🏷️ VER CÓDIGO
-  </button>
+      <div
+        class="item-meta"
+        style="
+          font-size:17px;
+          margin-bottom:18px;
+        "
+      >
 
-</div>
+        Código:
+        ${escapeHtml(code)}
 
-            </div>
+      </div>
 
-          `;
+
+      <div
+        class="row"
+        style="
+          display:flex;
+          gap:8px;
+        "
+      >
+
+        <button
+          onclick="editProduct('${escapeJs(code)}')"
+          style="flex:1"
+        >
+          ✏️ Modificar
+        </button>
+
+
+        <button
+          onclick="deleteProduct('${escapeJs(code)}')"
+          style="flex:1"
+        >
+          🗑️ Eliminar
+        </button>
+
+
+        <button
+          onclick="verCodigoBarras('${escapeJs(code)}')"
+          style="flex:1"
+        >
+          🏷️ VER CÓDIGO
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- PRECIO -->
+
+    <div
+      class="item-price"
+      style="
+        font-size:48px;
+        font-weight:800;
+        text-align:center;
+        align-self:center;
+      "
+    >
+
+      ${money(p.price)}
+
+    </div>
+
+  </div>
+
+`;          `;
 
         }
       )
