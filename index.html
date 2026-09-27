@@ -4378,16 +4378,43 @@ function renderCatalog(){
 
           return `
 
-            <div class="item">
+  <div class="item">
 
-              <div class="item-title">
+    ${
+      p.image
+        ? `
+          <div
+            style="
+              width:100%;
+              display:flex;
+              justify-content:center;
+              margin-bottom:15px;
+            "
+          >
+            <img
+              src="${escapeHtml(p.image)}"
+              alt="${escapeHtml(p.product || "Producto")}"
+              style="
+                width:180px;
+                height:180px;
+                object-fit:contain;
+                border-radius:16px;
+                border:1px solid #ddd;
+                background:#fff;
+              "
+            >
+          </div>
+        `
+        : ""
+    }
 
-                ${escapeHtml(
-                  p.product
-                )}
+    <div class="item-title">
 
-              </div>
+      ${escapeHtml(
+        p.product
+      )}
 
+    </div>
 
               <div class="item-meta">
 
