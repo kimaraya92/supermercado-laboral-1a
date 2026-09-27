@@ -2191,7 +2191,12 @@ function continuarRol(){
 
   }
 
+if(rol === "Cliente"){
 
+  abrirListaCompras();
+
+  return;
+}
   alert(
     "Esta función será habilitada en el siguiente paso."
   );
@@ -2211,7 +2216,16 @@ function abrirVenta(){
 
 }
 
+function abrirListaCompras(){
 
+  hideAllScreens();
+
+  document
+    .getElementById("shoppingListScreen")
+    .classList
+    .remove("hidden");
+
+}
 
 function abrirInventario(){
 
