@@ -172,7 +172,25 @@ button.back{
   gap:10px;
   font-weight:900;
 }
+.role-cajero .large::before{
+  content:"💰";
+}
 
+.role-inventario .large::before{
+  content:"📦";
+}
+
+.role-supervisor .large::before{
+  content:"👀";
+}
+
+.role-reponedor .large::before{
+  content:"📋";
+}
+
+.role-cliente .large::before{
+  content:"🛍️";
+}
 .voice-button{
   width:52px;
   min-width:52px;
@@ -1113,7 +1131,7 @@ body.printing-shopping-list #receiptPrintArea{
     class="large"
     onclick="seleccionarRol('Cajero/a')"
   >
-    💰 CAJERO(A)
+    CAJERO(A)
   </button>
 
   <button
@@ -1133,7 +1151,7 @@ body.printing-shopping-list #receiptPrintArea{
     class="large"
     onclick="seleccionarRol('Encargado/a de inventario')"
   >
-    📦 ENCARGADO(A) DE INVENTARIO
+    ENCARGADO(A) DE INVENTARIO
   </button>
 
   <button
@@ -1153,7 +1171,7 @@ body.printing-shopping-list #receiptPrintArea{
     class="large"
     onclick="seleccionarRol('Supervisor de sala')"
   >
-    👀 SUPERVISOR DE SALA
+    SUPERVISOR DE SALA
   </button>
 
   <button
@@ -1173,7 +1191,7 @@ body.printing-shopping-list #receiptPrintArea{
     class="large"
     onclick="seleccionarRol('Reponedor/a')"
   >
-    📋 REPONEDOR(A)
+    REPONEDOR(A)
   </button>
 
   <button
@@ -1193,7 +1211,7 @@ body.printing-shopping-list #receiptPrintArea{
     class="large"
     onclick="seleccionarRol('Cliente')"
   >
-    🛍️ CLIENTE
+    CLIENTE
   </button>
 
   <button
