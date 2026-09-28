@@ -998,7 +998,96 @@ body.printing-shopping-list #receiptPrintArea{
   </div>
   
 <section id="homeScreen" class="hidden">
+  <div
+    style="
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:25px;
+      align-items:center;
+      justify-items:center;
+    "
+  >
 
+    <!-- ACTIVIDADES DE LA SEMANA -->
+
+    <button
+      type="button"
+      onclick="abrirActividades()"
+      style="
+        border:none;
+        background:transparent;
+        padding:0;
+        margin:0;
+        cursor:pointer;
+        width:100%;
+      "
+    >
+      <img
+        src="actividades-de-la-semana.png"
+        alt="Actividades de la semana"
+        style="
+          width:100%;
+          height:auto;
+          display:block;
+        "
+      >
+    </button>
+
+
+    <!-- SUPERMERCADO -->
+
+    <button
+      type="button"
+      onclick="abrirSupermercado()"
+      style="
+        border:none;
+        background:transparent;
+        padding:0;
+        margin:0;
+        cursor:pointer;
+        width:100%;
+      "
+    >
+      <img
+        src="supermercado.png"
+        alt="Supermercado"
+        style="
+          width:100%;
+          height:auto;
+          display:block;
+        "
+      >
+    </button>
+
+
+    <!-- BANCA EN LÍNEA -->
+
+    <button
+      type="button"
+      onclick="abrirBanca()"
+      style="
+        border:none;
+        background:transparent;
+        padding:0;
+        margin:0;
+        cursor:pointer;
+        width:100%;
+      "
+    >
+      <img
+        src="banca-en-linea.png"
+        alt="Banca en línea"
+        style="
+          width:100%;
+          height:auto;
+          display:block;
+        "
+      >
+    </button>
+
+  </div>
+
+</section>
   <div class="menu">
 
     <div style="
