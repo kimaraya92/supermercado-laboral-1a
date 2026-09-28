@@ -1265,48 +1265,109 @@ body.printing-shopping-list #receiptPrintArea{
   id="roleScreen"
   class="hidden"
 >
-
-  <button
-    class="back"
-    onclick="volverInicio()"
+  <div
+    style="
+      position:relative;
+      width:100%;
+      max-width:1536px;
+      margin:0 auto;
+    "
   >
-    ← Volver
-  </button>
 
-
-  <div class="menu">
-
-    <div
-      id="roleIcon"
-      class="menu-icon"
+    <img
+      src="funciones-cajero.png"
+      alt="Funciones del cajero o cajera"
+      style="
+        width:100%;
+        height:auto;
+        display:block;
+      "
     >
-      👤
-    </div>
 
 
-    <h2 id="roleTitle">
-      Tu rol
-    </h2>
-
-
-    <p class="small">
-      Recuerda tus funciones antes de comenzar.
-    </p>
-
-
-    <div
-      id="roleFunctions"
-      class="card"
-      style="text-align:left"
-    ></div>
-
+    <!-- BOTÓN INVISIBLE VOLVER -->
 
     <button
-      class="primary large"
-      onclick="continuarRol()"
+      type="button"
+      onclick="volverInicio()"
+      aria-label="Volver"
+      style="
+        position:absolute;
+        top:1%;
+        left:2%;
+        width:12%;
+        height:6%;
+        opacity:0;
+        cursor:pointer;
+        border:none;
+        background:transparent;
+        margin:0;
+      "
     >
-      ▶️ CONTINUAR
     </button>
+
+
+    <!-- BOTÓN INVISIBLE ESCUCHAR -->
+
+    <button
+      type="button"
+      onclick="leerFunciones()"
+      aria-label="Escuchar mis funciones"
+      style="
+        position:absolute;
+        left:18%;
+        top:76%;
+        width:64%;
+        height:9%;
+        opacity:0;
+        cursor:pointer;
+        border:none;
+        background:transparent;
+        margin:0;
+      "
+    >
+    </button>
+
+
+    <!-- BOTÓN INVISIBLE CONTINUAR -->
+
+    <button
+      type="button"
+      onclick="continuarRol()"
+      aria-label="Continuar"
+      style="
+        position:absolute;
+        left:18%;
+        top:86%;
+        width:64%;
+        height:10%;
+        opacity:0;
+        cursor:pointer;
+        border:none;
+        background:transparent;
+        margin:0;
+      "
+    >
+    </button>
+
+
+    <!-- ELEMENTOS QUE NECESITA EL JAVASCRIPT -->
+
+    <div style="display:none;">
+
+      <div id="roleIcon">💰</div>
+
+      <h2 id="roleTitle">
+        Cajero/a
+      </h2>
+
+      <p id="roleSubtitle">
+        Recuerda tus funciones antes de comenzar.
+      </p>
+
+      <div id="roleFunctions"></div>
+
+    </div>
 
   </div>
 
