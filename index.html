@@ -7159,6 +7159,21 @@ function cambiarPrecioLista(index, valor){
   renderShoppingList();
 
 }
+  function enviarListaAlPaso3(){
+
+  if(!shoppingList.length){
+
+    alert(
+      "Primero agrega al menos un producto a tu lista."
+    );
+
+    return;
+  }
+
+
+  abrirCalculoCliente();
+
+}
   function imprimirListaCompras(conFotos){
 
   if(!shoppingList.length){
