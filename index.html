@@ -414,7 +414,94 @@ transform:translateY(-50%);
     min-height:506px;
   }
 }
-.menu-icon{
+
+  /* =========================================================
+   PANTALLA CLIENTE
+   Imagen completa + botones transparentes
+   ========================================================= */
+
+.client-map-screen{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:auto;
+  background:#fff;
+}
+
+.client-map{
+  position:relative;
+  width:100%;
+  height:100vh;
+  min-height:600px;
+  background-image:url('pantalla-cliente-supermercado.png');
+  background-size:100% 100%;
+  background-position:center center;
+  background-repeat:no-repeat;
+}
+
+.client-map-button{
+  position:absolute;
+  background:transparent;
+  border:none;
+  padding:0;
+  margin:0;
+  cursor:pointer;
+  z-index:5;
+}
+
+.client-map-button:hover{
+  background:rgba(255,255,255,.05);
+}
+
+/* VOLVER */
+.client-map-back{
+  left:1.2%;
+  top:1.5%;
+  width:10.5%;
+  height:6%;
+}
+
+/* PASO 1 - ELABORAR LISTA */
+.client-map-step1{
+  left:3.3%;
+  top:63.5%;
+  width:18%;
+  height:7.5%;
+}
+
+/* PASO 2 - REALIZAR COMPRA */
+.client-map-step2{
+  left:24%;
+  top:63.5%;
+  width:18%;
+  height:7.5%;
+}
+
+/* PASO 3 - CALCULAR TODO */
+.client-map-step3{
+  left:44.4%;
+  top:63.5%;
+  width:18%;
+  height:7.5%;
+}
+
+/* PASO 4 - PAGAR */
+.client-map-step4{
+  left:64.8%;
+  top:63.5%;
+  width:18%;
+  height:7.5%;
+}
+
+/* VOLVER AL MENÚ */
+.client-map-home{
+  left:32%;
+  top:74.5%;
+  width:36%;
+  height:9%;
+}
+  .menu-icon{
   font-size:70px;
   margin-bottom:10px;
 }
@@ -1754,7 +1841,73 @@ max-width:1110px;
   </div>
 
 </section>
+<!-- ==============================
+     PANTALLA CLIENTE
+============================== -->
 
+<section
+  id="clientHomeScreen"
+  class="hidden client-map-screen"
+>
+
+  <div class="client-map">
+
+    <!-- VOLVER -->
+    <button
+      type="button"
+      class="client-map-button client-map-back"
+      onclick="volverInicio()"
+      aria-label="Volver"
+    ></button>
+
+
+    <!-- PASO 1 -->
+    <button
+      type="button"
+      class="client-map-button client-map-step1"
+      onclick="abrirListaCompras()"
+      aria-label="Elaborar mi lista de compras"
+    ></button>
+
+
+    <!-- PASO 2 -->
+    <button
+      type="button"
+      class="client-map-button client-map-step2"
+      onclick="abrirConsejosCompra()"
+      aria-label="Realizar mi compra"
+    ></button>
+
+
+    <!-- PASO 3 -->
+    <button
+      type="button"
+      class="client-map-button client-map-step3"
+      onclick="abrirCalculoCliente()"
+      aria-label="Calcular todo"
+    ></button>
+
+
+    <!-- PASO 4 -->
+    <button
+      type="button"
+      class="client-map-button client-map-step4"
+      onclick="abrirPagoCliente()"
+      aria-label="Pagar"
+    ></button>
+
+
+    <!-- VOLVER AL MENÚ -->
+    <button
+      type="button"
+      class="client-map-button client-map-home"
+      onclick="volverPortal()"
+      aria-label="Volver al menú"
+    ></button>
+
+  </div>
+
+</section>
 <!-- ==============================
      INGRESO A VENTA
 ============================== -->
@@ -3084,6 +3237,7 @@ function hideAllScreens(){
     "portalScreen",
     "homeScreen",
     "roleScreen",
+    "clientHomeScreen",
     "workerScreen",
     "saleScreen",
     "inventoryScreen",
@@ -3377,7 +3531,13 @@ function leerFunciones(){
 
   window.rolSeleccionado =
     rol;
+  if(rol === "Cliente"){
 
+    abrirCliente();
+
+    return;
+
+  }
 
   document
     .getElementById("roleScreen")
@@ -3422,7 +3582,16 @@ if(rol === "Cliente"){
   );
 
 }
+function abrirCliente(){
 
+  hideAllScreens();
+
+  document
+    .getElementById("clientHomeScreen")
+    .classList
+    .remove("hidden");
+
+}
 function abrirSupermercado(){
 
   hideAllScreens();
