@@ -3031,6 +3031,220 @@ max-width:1110px;
 
   </div>
 </section>
+  <!-- ==============================
+     PASO 3 - CALCULAR TODO
+============================== -->
+
+<section
+  id="clientCalculateScreen"
+  class="hidden client-calculate-screen"
+>
+
+  <div class="client-calculate-container">
+
+    <button
+      class="back"
+      type="button"
+      onclick="abrirCliente()"
+    >
+      ← Volver a los pasos
+    </button>
+
+
+    <div class="card">
+
+      <h2 style="text-align:center;font-size:32px;">
+        🧮 CALCULAR TODO
+      </h2>
+
+      <p
+        class="small"
+        style="font-size:19px;"
+      >
+        Aquí recibirás tu lista de compras y calcularás cuánto debes pagar.
+      </p>
+
+    </div>
+
+
+    <!-- LISTA RECIBIDA -->
+
+    <div class="card">
+
+      <h3 style="font-size:24px;">
+        🛒 Mi lista de compras
+      </h3>
+
+      <div id="clientCalculateList"></div>
+
+    </div>
+
+
+    <!-- TOTAL -->
+
+    <div class="card">
+
+      <h3 style="font-size:24px;">
+        🧮 1. Calculo el total
+      </h3>
+
+      <p>
+        Suma todos los precios y escribe aquí el total que calculaste.
+      </p>
+
+
+      <label
+        for="clientCalculatedTotal"
+        style="display:block;font-weight:bold;margin-top:15px;"
+      >
+        ✏️ Mi total calculado
+      </label>
+
+      <input
+        type="number"
+        id="clientCalculatedTotal"
+        min="0"
+        step="1"
+        placeholder="Escribe tu total"
+        style="
+          font-size:28px;
+          text-align:center;
+          margin-top:8px;
+        "
+      >
+
+
+      <button
+        type="button"
+        onclick="comprobarTotalCliente()"
+        style="
+          background:#3498db;
+          color:white;
+          border:none;
+          font-size:21px;
+          font-weight:800;
+          margin-top:15px;
+        "
+      >
+        ✅ COMPROBAR MI TOTAL
+      </button>
+
+
+      <div
+        id="clientTotalMessage"
+        class="client-calculate-message"
+      ></div>
+
+    </div>
+
+
+    <!-- VUELTO -->
+
+    <div
+      id="clientChangeSection"
+      class="card hidden"
+    >
+
+      <h3 style="font-size:24px;">
+        💵 2. Calculo el vuelto
+      </h3>
+
+      <p>
+        Escribe cuánto dinero tienes para pagar y calcula cuánto vuelto debes recibir.
+      </p>
+
+
+      <label
+        for="clientMoneyGiven"
+        style="display:block;font-weight:bold;margin-top:15px;"
+      >
+        💵 Dinero que entregaré
+      </label>
+
+      <input
+        type="number"
+        id="clientMoneyGiven"
+        min="0"
+        step="1"
+        placeholder="Escribe el dinero"
+        style="
+          font-size:28px;
+          text-align:center;
+          margin-top:8px;
+        "
+      >
+
+
+      <label
+        for="clientCalculatedChange"
+        style="display:block;font-weight:bold;margin-top:20px;"
+      >
+        🔄 Mi vuelto calculado
+      </label>
+
+      <input
+        type="number"
+        id="clientCalculatedChange"
+        min="0"
+        step="1"
+        placeholder="Escribe el vuelto"
+        style="
+          font-size:28px;
+          text-align:center;
+          margin-top:8px;
+        "
+      >
+
+
+      <button
+        type="button"
+        onclick="comprobarVueltoCliente()"
+        style="
+          background:#27ae60;
+          color:white;
+          border:none;
+          font-size:21px;
+          font-weight:800;
+          margin-top:15px;
+        "
+      >
+        🔄 COMPROBAR MI VUELTO
+      </button>
+
+
+      <div
+        id="clientChangeMessage"
+        class="client-calculate-message"
+      ></div>
+
+    </div>
+
+
+    <div
+      class="card"
+      style="text-align:center;"
+    >
+
+      <button
+        type="button"
+        onclick="abrirCliente()"
+        style="
+          background:#34495e;
+          color:white;
+          border:none;
+          font-size:20px;
+          font-weight:800;
+          max-width:500px;
+        "
+      >
+        ← VOLVER A LOS PASOS
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
 <!-- ==============================
      ÁREA DE IMPRESIÓN
      LISTA DE COMPRAS
