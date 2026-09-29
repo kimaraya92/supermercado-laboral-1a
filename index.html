@@ -918,9 +918,15 @@ transform:translateY(-50%);
   }
 
 
-  #saleScreen > .sale-panel{
-    display:block !important;
-  }
+ #saleScreen > .sale-panel{
+  display:block !important;
+  width:57mm !important;
+  max-width:57mm !important;
+  margin:0 !important;
+  padding:0 !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+}
 
 
   #saleScreen > .sale-panel > *{
@@ -939,14 +945,15 @@ transform:translateY(-50%);
 
 
   .receipt{
-    width:57mm;
-    max-width:57mm;
-    margin:0;
-    padding:5mm 2mm;
-    border:none;
-    box-shadow:none;
-  }
-
+  width:57mm !important;
+  max-width:57mm !important;
+  margin:0 !important;
+  padding:5mm 2mm !important;
+  box-sizing:border-box !important;
+  border:none;
+  box-shadow:none;
+  overflow:hidden;
+}
 
   .receipt-actions{
     display:none !important;
