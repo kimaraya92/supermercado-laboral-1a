@@ -1532,168 +1532,100 @@ body.printing-shopping-list #receiptPrintArea{
 
  <section
   id="homeScreen"
-  class="hidden"
-  style="
-  background-image:url('supermercado-fondo.png');
-  background-size:cover;
-  background-position:center;
-  background-attachment:fixed;
-  min-height:100vh;
-  width:100%;
-    position:fixed;
-    inset:0;
-    overflow:auto;
-   "
+  class="hidden role-map-screen"
 >
 
-    <div class="menu">
+  <div class="role-map">
 
-    <div style="
-  background:#073b8f;
-  color:white;
-  border-radius:24px;
- padding:25px 60px;
-  margin-bottom:25px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:20px;
-  box-shadow:0 8px 20px rgba(0,0,0,.15);
-">
-  <div style="font-size:55px;">
-    🛒
+    <!-- CAJERO -->
+    <button
+      type="button"
+      class="role-map-button role-map-cajero"
+      onclick="seleccionarRol('Cajero/a')"
+      aria-label="Cajero o cajera"
+    ></button>
+
+    <button
+      type="button"
+      class="role-map-voice role-map-voice-cajero"
+      onclick="event.stopPropagation(); leerRol('Cajero o cajera')"
+      aria-label="Escuchar Cajero o cajera"
+    ></button>
+
+
+    <!-- ENCARGADO DE INVENTARIO -->
+    <button
+      type="button"
+      class="role-map-button role-map-inventario"
+      onclick="seleccionarRol('Encargado/a de inventario')"
+      aria-label="Encargado o encargada de inventario"
+    ></button>
+
+    <button
+      type="button"
+      class="role-map-voice role-map-voice-inventario"
+      onclick="event.stopPropagation(); leerRol('Encargado o encargada de inventario')"
+      aria-label="Escuchar Encargado o encargada de inventario"
+    ></button>
+
+
+    <!-- SUPERVISOR DE SALA -->
+    <button
+      type="button"
+      class="role-map-button role-map-supervisor"
+      onclick="seleccionarRol('Supervisor de sala')"
+      aria-label="Supervisor de sala"
+    ></button>
+
+    <button
+      type="button"
+      class="role-map-voice role-map-voice-supervisor"
+      onclick="event.stopPropagation(); leerRol('Supervisor de sala')"
+      aria-label="Escuchar Supervisor de sala"
+    ></button>
+
+
+    <!-- REPONEDOR -->
+    <button
+      type="button"
+      class="role-map-button role-map-reponedor"
+      onclick="seleccionarRol('Reponedor/a')"
+      aria-label="Reponedor o reponedora"
+    ></button>
+
+    <button
+      type="button"
+      class="role-map-voice role-map-voice-reponedor"
+      onclick="event.stopPropagation(); leerRol('Reponedor o reponedora')"
+      aria-label="Escuchar Reponedor o reponedora"
+    ></button>
+
+
+    <!-- CLIENTE -->
+    <button
+      type="button"
+      class="role-map-button role-map-cliente"
+      onclick="seleccionarRol('Cliente')"
+      aria-label="Cliente"
+    ></button>
+
+    <button
+      type="button"
+      class="role-map-voice role-map-voice-cliente"
+      onclick="event.stopPropagation(); leerRol('Cliente')"
+      aria-label="Escuchar Cliente"
+    ></button>
+
+
+    <!-- VOLVER AL MENÚ -->
+    <button
+      type="button"
+      class="role-map-home"
+      onclick="volverPortal()"
+      aria-label="Volver al menú principal"
+    ></button>
+
   </div>
-
-  <h1 style="
-    margin:0;
-    font-size:38px;
-    font-weight:900;
-    letter-spacing:1px;
-  ">
-    SUPERMERCADO LABORAL 1A
-  </h1>
-</div>
-
-   <h2 style="
-  text-align:center;
-  font-size:30px;
-  font-weight:900;
-  color:#000000;
-  margin:0 0 25px 0;
-  ">
-  ¡Elige el rol que realizarás hoy!
-</h2>
-
-<div class="roles-grid">
-  
-<div class="role-choice role-cajero">
-  <button
-    class="large"
-    onclick="seleccionarRol('Cajero/a')"
-  >
-    CAJERO(A)
-  </button>
-
-  <button
-    class="voice-button"
-    onclick="event.stopPropagation(); leerRol('Cajero o cajera')"
-    aria-label="Escuchar Cajero o cajera"
-  >
-    🔊
-  </button>
-
-</div>
-
-
-<div class="role-choice role-inventario">
-
-  <button
-    class="large"
-    onclick="seleccionarRol('Encargado/a de inventario')"
-  >
-    ENCARGADO(A) DE INVENTARIO
-  </button>
-
-  <button
-    class="voice-button"
-    onclick="event.stopPropagation(); leerRol('Encargado o encargada de inventario')"
-    aria-label="Escuchar Encargado o encargada de inventario"
-  >
-    🔊
-  </button>
-
-</div>
-
-
-<div class="role-choice role-supervisor">
-
-  <button
-    class="large"
-    onclick="seleccionarRol('Supervisor de sala')"
-  >
-    SUPERVISOR DE SALA
-  </button>
-
-  <button
-    class="voice-button"
-    onclick="event.stopPropagation(); leerRol('Supervisor de sala')"
-    aria-label="Escuchar Supervisor de sala"
-  >
-    🔊
-  </button>
-
-</div>
-
-
-<div class="role-choice role-reponedor">
-
-  <button
-    class="large"
-    onclick="seleccionarRol('Reponedor/a')"
-  >
-    REPONEDOR(A)
-  </button>
-
-  <button
-    class="voice-button"
-    onclick="event.stopPropagation(); leerRol('Reponedor o reponedora')"
-    aria-label="Escuchar Reponedor o reponedora"
-  >
-    🔊
-  </button>
-
-</div>
-
-
-<div class="role-choice role-cliente">
-
-  <button
-    class="large"
-    onclick="seleccionarRol('Cliente')"
-  >
-    CLIENTE
-  </button>
-
-  <button
-    class="voice-button"
-    onclick="event.stopPropagation(); leerRol('Cliente')"
-    aria-label="Escuchar Cliente"
-  >
-    🔊
-  </button>
-
-</div>
-<div class="role-home">
-  <button
-    type="button"
-    onclick="volverPortal()"
-    aria-label="Volver al menú principal"
-  >
-    🏠
-    <span>VOLVER AL MENÚ</span>
-  </button>
-</div>
-</div>
 
 </section>
 <!-- ==============================
