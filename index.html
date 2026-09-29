@@ -4014,6 +4014,21 @@ function abrirListaCompras(){
     .remove("hidden");
 
 }
+  function enviarListaAlPaso3(){
+
+  if(!shoppingList.length){
+
+    alert(
+      "Primero agrega al menos un producto a tu lista."
+    );
+
+    return;
+  }
+
+
+  abrirCalculoCliente();
+
+}
 /* =========================================
    PASO 3 - CALCULAR TODO
 ========================================= */
