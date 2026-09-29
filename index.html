@@ -944,16 +944,89 @@ transform:translateY(-50%);
   }
 
 
+   #saleScreen > .sale-panel > #receiptPrintArea{
+    display:block !important;
+    width:57mm !important;
+    max-width:57mm !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+  }
+
+
   .receipt{
-  width:57mm !important;
-  max-width:57mm !important;
-  margin:0 !important;
-  padding:5mm 2mm !important;
-  box-sizing:border-box !important;
-  border:none;
-  box-shadow:none;
-  overflow:hidden;
-}
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding:5mm 2mm !important;
+    box-sizing:border-box !important;
+    border:none;
+    box-shadow:none;
+    overflow:hidden !important;
+  }
+
+
+  .receipt *{
+    min-width:0 !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+
+
+  .receipt-header{
+    width:100% !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+  }
+
+
+  .receipt-header h2,
+  .receipt-header p{
+    max-width:100% !important;
+    overflow-wrap:anywhere !important;
+    word-break:break-word !important;
+  }
+
+
+  .receipt-line{
+    width:100% !important;
+    min-width:0 !important;
+    gap:5px !important;
+    box-sizing:border-box !important;
+  }
+
+
+  .receipt-product{
+    min-width:0 !important;
+    max-width:100% !important;
+    overflow-wrap:anywhere !important;
+    word-break:break-word !important;
+  }
+
+
+  .receipt-price{
+    flex-shrink:0 !important;
+    white-space:nowrap !important;
+  }
+
+
+  .receipt-total{
+    width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+  }
+
+
+  .receipt-worker{
+    width:100% !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+    overflow-wrap:anywhere !important;
+    word-break:break-word !important;
+  }
 
   .receipt-actions{
     display:none !important;
