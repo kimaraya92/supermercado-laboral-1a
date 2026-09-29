@@ -1669,6 +1669,83 @@ max-width:1110px;
 
   </div>
 
+  <!-- CUADRO DE COBRO -->
+
+  <div
+    id="paymentModal"
+    class="payment-modal hidden"
+  >
+
+    <div class="payment-box">
+
+      <h2>
+        💰 COBRO DE LA COMPRA
+      </h2>
+
+      <div class="payment-total">
+
+        <span>
+          TOTAL A PAGAR
+        </span>
+
+        <strong id="paymentTotal">
+          $0
+        </strong>
+
+      </div>
+
+
+      <label>
+        💵 DINERO RECIBIDO
+      </label>
+
+      <input
+        type="number"
+        id="moneyReceived"
+        min="0"
+        step="10"
+        placeholder="Ingresa el dinero recibido"
+      >
+
+
+      <label>
+        💰 VUELTO QUE ENTREGARÉ
+      </label>
+
+      <input
+        type="number"
+        id="changeGiven"
+        min="0"
+        step="10"
+        placeholder="Ingresa el vuelto"
+      >
+
+
+      <div
+        id="paymentMessage"
+        class="payment-message"
+      ></div>
+
+
+      <div class="payment-actions">
+
+        <button
+          onclick="checkPayment()"
+        >
+          ✅ COMPROBAR VUELTO
+        </button>
+
+        <button
+          onclick="closePaymentModal()"
+        >
+          ❌ CANCELAR
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
 
   <!-- BOLETA -->
 
@@ -3980,8 +4057,153 @@ function showTotal(){
       );
 
 
-  document
+    document
     .getElementById("result")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById("receiptPrintArea")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById("paymentTotal")
+    .textContent =
+      money(purchaseTotal);
+
+
+  document
+    .getElementById("moneyReceived")
+    .value =
+      "";
+
+
+  document
+    .getElementById("changeGiven")
+    .value =
+      "";
+
+
+  document
+    .getElementById("paymentMessage")
+    .textContent =
+      "";
+
+
+  document
+    .getElementById("paymentMessage")
+    .className =
+      "payment-message";
+
+
+  document
+    .getElementById("paymentModal")
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById("moneyReceived")
+    .focus();
+
+}
+}
+
+function checkPayment(){
+
+  const received =
+    Number(
+      document.getElementById(
+        "moneyReceived"
+      ).value
+    );
+
+
+  const change =
+    Number(
+      document.getElementById(
+        "changeGiven"
+      ).value
+    );
+
+
+  const message =
+    document.getElementById(
+      "paymentMessage"
+    );
+
+
+  if(!received){
+
+    message.textContent =
+      "Ingresa el dinero recibido.";
+
+    message.className =
+      "payment-message error";
+
+    return;
+
+  }
+
+
+  if(received < purchaseTotal){
+
+    message.textContent =
+      "El dinero recibido es menor que el total. Revisa el monto.";
+
+    message.className =
+      "payment-message error";
+
+    return;
+
+  }
+
+
+  if(
+    !Number.isFinite(change) ||
+    change < 0
+  ){
+
+    message.textContent =
+      "Ingresa el vuelto que entregarás.";
+
+    message.className =
+      "payment-message error";
+
+    return;
+
+  }
+
+
+  const correctChange =
+    received - purchaseTotal;
+
+
+  if(change !== correctChange){
+
+    message.textContent =
+      "❌ El vuelto no es correcto. Revisa tu cálculo e inténtalo nuevamente.";
+
+    message.className =
+      "payment-message error";
+
+    return;
+
+  }
+
+
+  message.textContent =
+    "✅ ¡Muy bien! El vuelto es correcto. Puedes imprimir la boleta.";
+
+  message.className =
+    "payment-message success";
+
+
+  document
+    .getElementById("paymentModal")
     .classList
     .add("hidden");
 
@@ -3992,8 +4214,6 @@ function showTotal(){
     .remove("hidden");
 
 }
-
-
 
 function newPurchase(){
 
