@@ -4013,7 +4013,411 @@ function abrirListaCompras(){
     .remove("hidden");
 
 }
+/* =========================================
+   PASO 3 - CALCULAR TODO
+========================================= */
 
+let clientCalculateTotalCorrecto = 0;
+
+
+function abrirCalculoCliente(){
+
+  if(!shoppingList.length){
+
+    alert(
+      "Primero debes elaborar tu lista de compras."
+    );
+
+    abrirListaCompras();
+
+    return;
+  }
+
+
+  hideAllScreens();
+
+
+  document
+    .getElementById("clientCalculateScreen")
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById("clientCalculatedTotal")
+    .value = "";
+
+
+  document
+    .getElementById("clientMoneyGiven")
+    .value = "";
+
+
+  document
+    .getElementById("clientCalculatedChange")
+    .value = "";
+
+
+  document
+    .getElementById("clientTotalMessage")
+    .innerHTML = "";
+
+
+  document
+    .getElementById("clientChangeMessage")
+    .innerHTML = "";
+
+
+  document
+    .getElementById("clientChangeSection")
+    .classList
+    .add("hidden");
+
+
+  renderClientCalculateList();
+
+}
+
+
+function renderClientCalculateList(){
+
+  const container =
+    document.getElementById(
+      "clientCalculateList"
+    );
+
+
+  if(!shoppingList.length){
+
+    container.innerHTML = `
+      <div class="notice">
+        No hay productos en tu lista.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML = shoppingList
+    .map(function(item, index){
+
+      const producto =
+        products[item.code] || {};
+
+
+      return `
+
+        <div class="client-calculate-list-item">
+
+          <div class="client-calculate-list-photo">
+
+            ${
+              producto.image
+                ? `
+                  <img
+                    src="${escapeHtml(producto.image)}"
+                    alt="${escapeHtml(item.product)}"
+                  >
+                `
+                : `
+                  <span style="font-size:40px">
+                    🛒
+                  </span>
+                `
+            }
+
+          </div>
+
+
+          <div>
+
+            <div class="client-calculate-product">
+              ${escapeHtml(item.product)}
+            </div>
+
+            <div class="item-meta">
+              ${escapeHtml(item.brand || "Sin marca")}
+            </div>
+
+          </div>
+
+
+          <div class="client-calculate-quantity">
+
+            CANTIDAD<br>
+
+            <span style="font-size:25px;">
+              ${item.quantity}
+            </span>
+
+          </div>
+
+
+          <div>
+
+            <label
+              style="
+                display:block;
+                font-weight:bold;
+                margin-bottom:5px;
+                text-align:center;
+              "
+            >
+              💰 Precio
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              step="1"
+              class="client-price-input"
+              data-client-price-index="${index}"
+              placeholder="$"
+            >
+
+          </div>
+
+        </div>
+
+      `;
+
+    })
+    .join("");
+
+}
+
+
+function comprobarTotalCliente(){
+
+  let total = 0;
+
+  const inputs =
+    document.querySelectorAll(
+      "[data-client-price-index]"
+    );
+
+
+  if(
+    inputs.length !==
+    shoppingList.length
+  ){
+
+    return;
+  }
+
+
+  for(let i = 0; i < inputs.length; i++){
+
+    const precio =
+      parseInt(inputs[i].value,10);
+
+
+    if(
+      isNaN(precio) ||
+      precio < 0
+    ){
+
+      mostrarMensajeTotalCliente(
+        "⚠️ Debes ingresar el precio de todos los productos.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    shoppingList[i].price =
+      precio;
+
+
+    total +=
+      precio *
+      Number(shoppingList[i].quantity || 1);
+
+  }
+
+
+  clientCalculateTotalCorrecto =
+    total;
+
+
+  const totalEscrito =
+    parseInt(
+      document
+        .getElementById("clientCalculatedTotal")
+        .value,
+      10
+    );
+
+
+  if(
+    isNaN(totalEscrito)
+  ){
+
+    mostrarMensajeTotalCliente(
+      "✏️ Primero escribe el total que calculaste.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if(
+    totalEscrito === total
+  ){
+
+    mostrarMensajeTotalCliente(
+      "🎉 ¡MUY BIEN! Tu total es correcto: " +
+      money(total),
+      "success"
+    );
+
+
+    document
+      .getElementById("clientChangeSection")
+      .classList
+      .remove("hidden");
+
+  }else{
+
+    mostrarMensajeTotalCliente(
+      "❌ Tu total no es correcto. Revisa los precios y vuelve a sumar.",
+      "error"
+    );
+
+
+    document
+      .getElementById("clientChangeSection")
+      .classList
+      .add("hidden");
+
+  }
+
+}
+
+
+function mostrarMensajeTotalCliente(
+  mensaje,
+  tipo
+){
+
+  const elemento =
+    document.getElementById(
+      "clientTotalMessage"
+    );
+
+
+  elemento.textContent =
+    mensaje;
+
+
+  elemento.className =
+    "client-calculate-message " +
+    tipo;
+
+}
+
+
+function comprobarVueltoCliente(){
+
+  const dinero =
+    parseInt(
+      document
+        .getElementById("clientMoneyGiven")
+        .value,
+      10
+    );
+
+
+  const vueltoEscrito =
+    parseInt(
+      document
+        .getElementById("clientCalculatedChange")
+        .value,
+      10
+    );
+
+
+  if(isNaN(dinero)){
+
+    mostrarMensajeVueltoCliente(
+      "✏️ Escribe primero cuánto dinero entregarás.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if(isNaN(vueltoEscrito)){
+
+    mostrarMensajeVueltoCliente(
+      "✏️ Escribe el vuelto que calculaste.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if(dinero < clientCalculateTotalCorrecto){
+
+    mostrarMensajeVueltoCliente(
+      "⚠️ El dinero entregado no alcanza para pagar la compra.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const vueltoCorrecto =
+    dinero -
+    clientCalculateTotalCorrecto;
+
+
+  if(vueltoEscrito === vueltoCorrecto){
+
+    mostrarMensajeVueltoCliente(
+      "🎉 ¡MUY BIEN! El vuelto es correcto: " +
+      money(vueltoCorrecto),
+      "success"
+    );
+
+  }else{
+
+    mostrarMensajeVueltoCliente(
+      "❌ El vuelto no es correcto. Revisa tu cálculo.",
+      "error"
+    );
+
+  }
+
+}
+
+
+function mostrarMensajeVueltoCliente(
+  mensaje,
+  tipo
+){
+
+  const elemento =
+    document.getElementById(
+      "clientChangeMessage"
+    );
+
+
+  elemento.textContent =
+    mensaje;
+
+
+  elemento.className =
+    "client-calculate-message " +
+    tipo;
+
+}
 function abrirInventario(){
 
   hideAllScreens();
