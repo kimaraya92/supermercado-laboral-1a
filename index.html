@@ -490,7 +490,170 @@ transform:translateY(-50%);
   font-weight:bold;
 }
 
+/* ==============================
+   CUADRO DE COBRO
+============================== */
 
+.payment-modal{
+
+  position:fixed;
+  inset:0;
+
+  background:rgba(0,0,0,.58);
+
+  z-index:9998;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+}
+
+
+.payment-box{
+
+  width:min(520px,calc(100vw - 40px));
+
+  background:#fff;
+
+  border-radius:24px;
+
+  padding:35px;
+
+  box-shadow:0 10px 35px rgba(0,0,0,.30);
+
+  text-align:center;
+}
+
+
+.payment-box h2{
+
+  margin-top:0;
+  margin-bottom:25px;
+
+  font-size:28px;
+}
+
+
+.payment-total{
+
+  background:#f4f4f4;
+
+  border-radius:18px;
+
+  padding:20px;
+
+  margin-bottom:25px;
+}
+
+
+.payment-total span{
+
+  display:block;
+
+  font-size:17px;
+
+  font-weight:bold;
+
+  margin-bottom:8px;
+}
+
+
+.payment-total strong{
+
+  display:block;
+
+  font-size:42px;
+}
+
+
+.payment-box label{
+
+  display:block;
+
+  text-align:left;
+
+  font-size:17px;
+
+  font-weight:bold;
+
+  margin-top:18px;
+
+  margin-bottom:7px;
+}
+
+
+.payment-box input{
+
+  width:100%;
+
+  box-sizing:border-box;
+
+  padding:16px;
+
+  border:2px solid #ddd;
+
+  border-radius:14px;
+
+  font-size:24px;
+
+  text-align:center;
+
+  outline:none;
+}
+
+
+.payment-box input:focus{
+
+  border-color:#555;
+}
+
+
+.payment-message{
+
+  min-height:30px;
+
+  margin:20px 0 10px;
+
+  font-size:18px;
+
+  font-weight:bold;
+}
+
+
+.payment-message.error{
+
+  color:#c62828;
+}
+
+
+.payment-message.success{
+
+  color:#2e7d32;
+}
+
+
+.payment-actions{
+
+  display:flex;
+
+  gap:12px;
+
+  margin-top:20px;
+}
+
+
+.payment-actions button{
+
+  flex:1;
+
+  margin-top:0;
+
+  min-height:60px;
+
+  font-size:17px;
+}
 /* ==============================
    VENTANA DE CÁMARA
 ============================== */
