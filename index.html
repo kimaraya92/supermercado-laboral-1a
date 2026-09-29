@@ -249,7 +249,171 @@ transform:translateY(-50%);
 .voice-button:active{
   transform:scale(0.95);
 }
+/* =========================================================
+   NUEVA PANTALLA INTERACTIVA DE ROLES
+   La imagen contiene todo el diseño visual.
+   Los botones son transparentes y se superponen.
+   ========================================================= */
 
+.role-map-screen{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:auto;
+  background:#fff;
+}
+
+.role-map{
+  position:relative;
+  width:100%;
+  min-height:100vh;
+  background-image:url('pantalla-roles-supermercado.png');
+  background-size:cover;
+  background-position:center center;
+  background-repeat:no-repeat;
+}
+
+/* Botones transparentes principales */
+.role-map-button{
+  position:absolute;
+  background:transparent;
+  border:none;
+  padding:0;
+  margin:0;
+  cursor:pointer;
+  z-index:5;
+}
+
+/* Efecto muy suave al pasar el mouse,
+   pero sin mostrar un botón */
+.role-map-button:hover{
+  background:rgba(255,255,255,.06);
+}
+
+/* Botones de sonido */
+.role-map-voice{
+  position:absolute;
+  background:transparent;
+  border:none;
+  padding:0;
+  margin:0;
+  cursor:pointer;
+  z-index:10;
+  border-radius:50%;
+}
+
+/* Botón volver */
+.role-map-home{
+  position:absolute;
+  background:transparent;
+  border:none;
+  padding:0;
+  margin:0;
+  cursor:pointer;
+  z-index:5;
+}
+
+/* =========================================================
+   POSICIONES SOBRE LA IMAGEN 1648 x 929
+   ========================================================= */
+
+/* CAJERO */
+.role-map-cajero{
+  left:6.5%;
+  top:35%;
+  width:29%;
+  height:16%;
+}
+
+/* SONIDO CAJERO */
+.role-map-voice-cajero{
+  left:31.5%;
+  top:38%;
+  width:4%;
+  height:7%;
+}
+
+/* INVENTARIO */
+.role-map-inventario{
+  left:66%;
+  top:35%;
+  width:28%;
+  height:16%;
+}
+
+/* SONIDO INVENTARIO */
+.role-map-voice-inventario{
+  left:90.5%;
+  top:38%;
+  width:4%;
+  height:7%;
+}
+
+/* SUPERVISOR */
+.role-map-supervisor{
+  left:36.5%;
+  top:53%;
+  width:29%;
+  height:15%;
+}
+
+/* SONIDO SUPERVISOR */
+.role-map-voice-supervisor{
+  left:60.5%;
+  top:56%;
+  width:4%;
+  height:7%;
+}
+
+/* REPONEDOR */
+.role-map-reponedor{
+  left:6.5%;
+  top:74%;
+  width:30%;
+  height:15%;
+}
+
+/* SONIDO REPONEDOR */
+.role-map-voice-reponedor{
+  left:31.5%;
+  top:77%;
+  width:4%;
+  height:7%;
+}
+
+/* CLIENTE */
+.role-map-cliente{
+  left:63.5%;
+  top:73%;
+  width:31%;
+  height:16%;
+}
+
+/* SONIDO CLIENTE */
+.role-map-voice-cliente{
+  left:90.5%;
+  top:76%;
+  width:4%;
+  height:7%;
+}
+
+/* VOLVER AL MENÚ */
+.role-map-home{
+  left:42.5%;
+  top:83%;
+  width:15%;
+  height:10%;
+}
+
+
+/* Adaptación para pantallas más pequeñas */
+@media (max-width:900px){
+  .role-map{
+    min-width:900px;
+    min-height:506px;
+  }
+}
 .menu-icon{
   font-size:70px;
   margin-bottom:10px;
