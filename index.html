@@ -5812,7 +5812,102 @@ function renderCatalog(){
    LISTA DE COMPRAS - BÚSQUEDA
 ========================================= */
 
-function buscarProductoLista(){
+/* =========================================
+   LISTA DE COMPRAS - BÚSQUEDA POR VOZ
+========================================= */
+
+function hablarProductoLista(){
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition){
+
+    alert(
+      "Tu navegador no permite la búsqueda por voz."
+    );
+
+    return;
+  }
+
+
+  const reconocimiento =
+    new SpeechRecognition();
+
+  reconocimiento.lang = "es-CL";
+
+  reconocimiento.continuous = false;
+
+  reconocimiento.interimResults = false;
+
+
+  reconocimiento.onstart = function(){
+
+    const input =
+      document.getElementById(
+        "shoppingProductSearch"
+      );
+
+    input.placeholder =
+      "🎤 Escuchando...";
+
+  };
+
+
+  reconocimiento.onresult = function(event){
+
+    const texto =
+      event.results[0][0].transcript
+        .trim();
+
+
+    const input =
+      document.getElementById(
+        "shoppingProductSearch"
+      );
+
+    input.value = texto;
+
+    buscarProductoLista();
+
+  };
+
+
+  reconocimiento.onerror = function(){
+
+    const input =
+      document.getElementById(
+        "shoppingProductSearch"
+      );
+
+    input.placeholder =
+      "Escribe el nombre del producto";
+
+    alert(
+      "No pude reconocer lo que dijiste. Inténtalo nuevamente."
+    );
+
+  };
+
+
+  reconocimiento.onend = function(){
+
+    const input =
+      document.getElementById(
+        "shoppingProductSearch"
+      );
+
+    input.placeholder =
+      "Escribe el nombre del producto";
+
+  };
+
+
+  reconocimiento.start();
+
+}
+  function buscarProductoLista(){
 
   const texto =
     document
