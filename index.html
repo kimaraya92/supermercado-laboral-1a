@@ -873,10 +873,10 @@ transform:translateY(-50%);
 
 @media print{
 
-  @page{
-    size:57mm auto;
-    margin:0;
-  }
+  @page receipt{
+  size:57mm auto;
+  margin:0;
+}
 
 
   html,
@@ -906,10 +906,11 @@ transform:translateY(-50%);
 
 
   #saleScreen{
-    display:block !important;
-    margin:0 !important;
-    padding:0 !important;
-  }
+  display:block !important;
+  margin:0 !important;
+  padding:0 !important;
+  page:receipt;
+}
 
 
   #saleScreen > *{
@@ -959,12 +960,13 @@ transform:translateY(-50%);
 
 @media print{
 
-  @page{
+  @page shopping-list{
     size:A5 landscape;
     margin:6mm;
   }
 
   body.printing-shopping-list{
+    page:shopping-list;
     background:#fff !important;
   }
 
