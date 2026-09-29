@@ -501,6 +501,21 @@ transform:translateY(-50%);
   width:26%;
   height:10%;
 }
+/* =========================================================
+   FONDO LISTA DE COMPRAS
+   ========================================================= */
+
+.shopping-list-screen{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:auto;
+  background-image:url('supermercado-fondo.png');
+  background-size:cover;
+  background-position:center center;
+  background-attachment:fixed;
+}
   .menu-icon{
   font-size:70px;
   margin-bottom:10px;
@@ -2847,7 +2862,7 @@ max-width:1110px;
 
 <section
   id="shoppingListScreen"
-  class="hidden"
+  class="hidden shopping-list-screen"
 >
 
   <button
