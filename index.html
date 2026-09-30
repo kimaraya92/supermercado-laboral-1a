@@ -3255,21 +3255,35 @@ max-width:1110px;
     <div class="client-shopping-title">
       🛒 REALIZAR MI COMPRA
     </div>
-<button
-  type="button"
-  class="client-shopping-audio"
-  onclick="escucharConsejosCompra()"
->
-  🔊 ESCUCHAR LOS CONSEJOS
-</button>
+<div class="client-audio-player">
 
-<button
-  type="button"
-  class="client-shopping-stop"
-  onclick="detenerConsejosCompra()"
->
-  ⏹️ DETENER AUDIO
-</button>
+  <div class="client-audio-progress">
+    <span class="client-audio-dot"></span>
+  </div>
+
+  <div class="client-audio-controls">
+
+    <button
+      type="button"
+      class="client-audio-play"
+      onclick="escucharConsejosCompra()"
+      aria-label="Reproducir"
+    >
+      ▶
+    </button>
+
+    <button
+      type="button"
+      class="client-audio-stop"
+      onclick="detenerConsejosCompra()"
+      aria-label="Detener"
+    >
+      ■
+    </button>
+
+  </div>
+
+</div>
     <div class="client-shopping-tip">
       <span>📝</span>
       <strong>Revisa tu lista de compras.</strong>
