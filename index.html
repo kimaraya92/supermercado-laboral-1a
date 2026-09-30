@@ -4582,6 +4582,111 @@ function irAlConsejoCompra(numero){
     reproducirConsejoActual();
   }
 }
+  let consejosPagoPausados = false;
+let consejoPagoActual = 0;
+
+const consejosPago = [
+  "Saluda al cajero y entrega tus productos.",
+  "Espera mientras el cajero registra tu compra.",
+  "Escucha atentamente el total que debes pagar.",
+  "Entrega el dinero y cuenta cuánto estás entregando.",
+  "Recibe y cuenta tu vuelto antes de guardarlo.",
+  "Revisa tu boleta y comprueba que todo esté correcto.",
+  "Agradece al cajero y despídete."
+];
+
+function actualizarPuntosConsejosPago(){
+  const puntos = document.querySelectorAll(
+    "#clientPaymentScreen .client-audio-point"
+  );
+
+  puntos.forEach(function(punto, index){
+    punto.classList.toggle(
+      "active",
+      index === consejoPagoActual
+    );
+  });
+}
+
+function reproducirConsejoPagoActual(){
+  if(!("speechSynthesis" in window)){
+    alert("Tu navegador no permite reproducir este audio.");
+    return;
+  }
+
+  speechSynthesis.cancel();
+
+  const texto = consejosPago[consejoPagoActual];
+
+  const voz = new SpeechSynthesisUtterance(texto);
+
+  voz.lang = "es-CL";
+  voz.rate = 0.85;
+  voz.pitch = 1;
+
+  voz.onend = function(){
+    if(consejoPagoActual < consejosPago.length - 1){
+      consejoPagoActual++;
+      actualizarPuntosConsejosPago();
+      reproducirConsejoPagoActual();
+    }
+  };
+
+  speechSynthesis.speak(voz);
+}
+
+function escucharConsejosPago(){
+  if(!("speechSynthesis" in window)){
+    alert("Tu navegador no permite reproducir este audio.");
+    return;
+  }
+
+  if(consejosPagoPausados){
+    consejosPagoPausados = false;
+    speechSynthesis.resume();
+    return;
+  }
+
+  if(speechSynthesis.speaking){
+    return;
+  }
+
+  actualizarPuntosConsejosPago();
+  reproducirConsejoPagoActual();
+}
+
+function pausarConsejosPago(){
+  if("speechSynthesis" in window && speechSynthesis.speaking){
+    consejosPagoPausados = true;
+    speechSynthesis.pause();
+  }
+}
+
+function detenerConsejosPago(){
+  if("speechSynthesis" in window){
+    consejosPagoPausados = false;
+    speechSynthesis.cancel();
+  }
+
+  consejoPagoActual = 0;
+  actualizarPuntosConsejosPago();
+}
+
+function irAlConsejoPago(numero){
+  if(numero < 0 || numero >= consejosPago.length){
+    return;
+  }
+
+  consejoPagoActual = numero;
+  consejosPagoPausados = false;
+
+  actualizarPuntosConsejosPago();
+
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+    reproducirConsejoPagoActual();
+  }
+}
  function enviarListaAlPaso3(){
 
   if(!shoppingList.length){
