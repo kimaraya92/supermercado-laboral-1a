@@ -671,15 +671,21 @@ transform:translateY(-50%);
 .client-shopping-close{
   position:absolute;
   top:12px;
-  right:16px;
+  right:20px;
   width:45px;
   height:45px;
+  padding:0;
   border:none;
   border-radius:50%;
   background:#eee;
-  font-size:25px;
-  font-weight:bold;
+  font-size:28px;
+  font-weight:400;
+  line-height:1;
+  font-family:Arial,sans-serif;
   cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .client-shopping-title{
@@ -3288,35 +3294,6 @@ max-width:1110px;
     <div class="client-shopping-title">
       🛒 REALIZAR MI COMPRA
     </div>
-<div class="client-audio-player">
-
-  <div class="client-audio-progress">
-    <span class="client-audio-dot"></span>
-  </div>
-
-  <div class="client-audio-controls">
-
-    <button
-      type="button"
-      class="client-audio-play"
-      onclick="escucharConsejosCompra()"
-      aria-label="Reproducir"
-    >
-      ▶
-    </button>
-
-    <button
-      type="button"
-      class="client-audio-stop"
-      onclick="detenerConsejosCompra()"
-      aria-label="Detener"
-    >
-      ■
-    </button>
-
-  </div>
-
-</div>
     <div class="client-shopping-tip">
       <span>📝</span>
       <strong>Revisa tu lista de compras.</strong>
@@ -3360,6 +3337,35 @@ max-width:1110px;
       </strong>
     </div>
 
+<div class="client-audio-player">
+
+  <div class="client-audio-progress">
+    <span class="client-audio-dot"></span>
+  </div>
+
+  <div class="client-audio-controls">
+
+    <button
+      type="button"
+      class="client-audio-play"
+      onclick="escucharConsejosCompra()"
+      aria-label="Reproducir"
+    >
+      ▶
+    </button>
+
+    <button
+      type="button"
+      class="client-audio-stop"
+      onclick="detenerConsejosCompra()"
+      aria-label="Detener"
+    >
+      ■
+    </button>
+
+  </div>
+
+</div>
 
     <button
       type="button"
