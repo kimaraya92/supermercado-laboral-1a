@@ -4352,6 +4352,55 @@ function cerrarConsejosCompra(){
 }
 
   let consejosCompraPausados = false;
+let consejoCompraActual = 0;
+
+const consejosCompra = [
+  "Primero, revisa tu lista de compras.",
+  "Segundo, busca cada producto en el supermercado.",
+  "Tercero, comprueba que sea el producto correcto.",
+  "Cuarto, revisa la cantidad que necesitas.",
+  "Quinto, coloca los productos en tu carro o canasto.",
+  "Sexto, anota el precio de cada producto en tu lista de compras.",
+  "Séptimo, cuando tengas todos los productos y precios anotados, dirígete a la caja."
+];
+
+function actualizarPuntosConsejos(){
+  const puntos = document.querySelectorAll(".client-audio-point");
+
+  puntos.forEach(function(punto, index){
+    punto.classList.toggle(
+      "active",
+      index === consejoCompraActual
+    );
+  });
+}
+
+function reproducirConsejoActual(){
+  if(!("speechSynthesis" in window)){
+    alert("Tu navegador no permite reproducir este audio.");
+    return;
+  }
+
+  speechSynthesis.cancel();
+
+  const texto = consejosCompra[consejoCompraActual];
+
+  const voz = new SpeechSynthesisUtterance(texto);
+
+  voz.lang = "es-CL";
+  voz.rate = 0.85;
+  voz.pitch = 1;
+
+  voz.onend = function(){
+    if(consejoCompraActual < consejosCompra.length - 1){
+      consejoCompraActual++;
+      actualizarPuntosConsejos();
+      reproducirConsejoActual();
+    }
+  };
+
+  speechSynthesis.speak(voz);
+}
 
 function escucharConsejosCompra(){
   if(!("speechSynthesis" in window)){
@@ -4369,23 +4418,8 @@ function escucharConsejosCompra(){
     return;
   }
 
-  const texto =
-    "Realizar mi compra. " +
-    "Primero, revisa tu lista de compras. " +
-    "Segundo, busca cada producto en el supermercado. " +
-    "Tercero, comprueba que sea el producto correcto. " +
-    "Cuarto, revisa la cantidad que necesitas. " +
-    "Quinto, coloca los productos en tu carro o canasto. " +
-    "Sexto, anota el precio de cada producto en tu lista de compras. " +
-    "Séptimo, cuando tengas todos los productos y precios anotados, dirígete a la caja.";
-
-  const voz = new SpeechSynthesisUtterance(texto);
-
-  voz.lang = "es-CL";
-  voz.rate = 0.85;
-  voz.pitch = 1;
-
-  speechSynthesis.speak(voz);
+  actualizarPuntosConsejos();
+  reproducirConsejoActual();
 }
 
 function pausarConsejosCompra(){
@@ -4399,6 +4433,25 @@ function detenerConsejosCompra(){
   if("speechSynthesis" in window){
     consejosCompraPausados = false;
     speechSynthesis.cancel();
+  }
+
+  consejoCompraActual = 0;
+  actualizarPuntosConsejos();
+}
+
+function irAlConsejoCompra(numero){
+  if(numero < 0 || numero >= consejosCompra.length){
+    return;
+  }
+
+  consejoCompraActual = numero;
+  consejosCompraPausados = false;
+
+  actualizarPuntosConsejos();
+
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+    reproducirConsejoActual();
   }
 }
   function enviarListaAlPaso3(){
