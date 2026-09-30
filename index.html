@@ -636,7 +636,79 @@ transform:translateY(-50%);
   .client-price-input{
     grid-column:1 / -1;
   }
+/* =========================================
+   VENTANA - REALIZAR MI COMPRA
+========================================= */
 
+.client-shopping-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:9999;
+}
+
+.client-shopping-modal.hidden{
+  display:none;
+}
+
+.client-shopping-box{
+  position:relative;
+  width:100%;
+  max-width:720px;
+  max-height:90vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:24px;
+  padding:35px 40px 30px;
+  box-shadow:0 10px 35px rgba(0,0,0,.30);
+}
+
+.client-shopping-close{
+  position:absolute;
+  top:12px;
+  right:16px;
+  width:45px;
+  height:45px;
+  border:none;
+  border-radius:50%;
+  background:#eee;
+  font-size:25px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.client-shopping-title{
+  text-align:center;
+  font-size:30px;
+  font-weight:900;
+  margin-bottom:25px;
+}
+
+.client-shopping-tip{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:12px 5px;
+  font-size:20px;
+  line-height:1.35;
+}
+
+.client-shopping-finish{
+  width:100%;
+  margin-top:20px;
+  padding:18px 20px;
+  border:none;
+  border-radius:16px;
+  background:#27ae60;
+  color:#fff;
+  font-size:21px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 5px 12px rgba(0,0,0,.18);
 }
   .menu-icon{
   font-size:70px;
