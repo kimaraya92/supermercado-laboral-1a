@@ -4279,16 +4279,7 @@ function cerrarConsejosCompra(){
   document.getElementById("clientShoppingModal").classList.add("hidden");
 }
 
-  function cerrarConsejosCompra(){
-  if("speechSynthesis" in window){
-    speechSynthesis.cancel();
-  }
-
-  document.getElementById("clientShoppingModal").classList.add("hidden");
-}
-
-
-let consejosCompraPausados = false;
+  let consejosCompraPausados = false;
 
 function escucharConsejosCompra(){
   if(!("speechSynthesis" in window)){
@@ -4338,10 +4329,6 @@ function detenerConsejosCompra(){
     speechSynthesis.cancel();
   }
 }
-
-function enviarListaAlPaso3(){
-  
-  
   function enviarListaAlPaso3(){
 
   if(!shoppingList.length){
