@@ -4279,13 +4279,16 @@ function cerrarConsejosCompra(){
   document.getElementById("clientShoppingModal").classList.add("hidden");
 }
 
+let consejosCompraPausados = false;
+
 function escucharConsejosCompra(){
   if(!("speechSynthesis" in window)){
     alert("Tu navegador no permite reproducir este audio.");
     return;
   }
 
-  if(speechSynthesis.paused){
+  if(consejosCompraPausados){
+    consejosCompraPausados = false;
     speechSynthesis.resume();
     return;
   }
@@ -4315,13 +4318,52 @@ function escucharConsejosCompra(){
 
 function pausarConsejosCompra(){
   if("speechSynthesis" in window && speechSynthesis.speaking){
+    consejosCompraPausados = true;
     speechSynthesis.pause();
   }
 }
 
-function detenerConsejosCompra(){
-  if("speechSynthesis" in window){
-    speechSynthesis.cancel();
+let consejosCompraPausados = false;
+
+function escucharConsejosCompra(){
+  if(!("speechSynthesis" in window)){
+    alert("Tu navegador no permite reproducir este audio.");
+    return;
+  }
+
+  if(consejosCompraPausados){
+    consejosCompraPausados = false;
+    speechSynthesis.resume();
+    return;
+  }
+
+  if(speechSynthesis.speaking){
+    return;
+  }
+
+  const texto =
+    "Realizar mi compra. " +
+    "Primero, revisa tu lista de compras. " +
+    "Segundo, busca cada producto en el supermercado. " +
+    "Tercero, comprueba que sea el producto correcto. " +
+    "Cuarto, revisa la cantidad que necesitas. " +
+    "Quinto, coloca los productos en tu carro o canasto. " +
+    "Sexto, anota el precio de cada producto en tu lista de compras. " +
+    "Séptimo, cuando tengas todos los productos y precios anotados, dirígete a la caja.";
+
+  const voz = new SpeechSynthesisUtterance(texto);
+
+  voz.lang = "es-CL";
+  voz.rate = 0.85;
+  voz.pitch = 1;
+
+  speechSynthesis.speak(voz);
+}
+
+function pausarConsejosCompra(){
+  if("speechSynthesis" in window && speechSynthesis.speaking){
+    consejosCompraPausados = true;
+    speechSynthesis.pause();
   }
 }
   function enviarListaAlPaso3(){
