@@ -4285,7 +4285,14 @@ function escucharConsejosCompra(){
     return;
   }
 
-  speechSynthesis.cancel();
+  if(speechSynthesis.paused){
+    speechSynthesis.resume();
+    return;
+  }
+
+  if(speechSynthesis.speaking){
+    return;
+  }
 
   const texto =
     "Realizar mi compra. " +
@@ -4306,11 +4313,18 @@ function escucharConsejosCompra(){
   speechSynthesis.speak(voz);
 }
 
+function pausarConsejosCompra(){
+  if("speechSynthesis" in window && speechSynthesis.speaking){
+    speechSynthesis.pause();
+  }
+}
+
 function detenerConsejosCompra(){
   if("speechSynthesis" in window){
     speechSynthesis.cancel();
   }
-}  function enviarListaAlPaso3(){
+}
+  function enviarListaAlPaso3(){
 
   if(!shoppingList.length){
 
