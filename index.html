@@ -3754,26 +3754,32 @@ max-width:1110px;
           type="button"
           class="client-audio-play"
           aria-label="Reproducir"
-        >
-          ▶
-        </button>
+       <button
+  type="button"
+  class="client-audio-play"
+  onclick="escucharConsejosPago()"
+  aria-label="Reproducir"
+>
+  ▶
+</button>
 
-        <button
-          type="button"
-          class="client-audio-pause"
-          aria-label="Pausar"
-        >
-          ⏸
-        </button>
+<button
+  type="button"
+  class="client-audio-pause"
+  onclick="pausarConsejosPago()"
+  aria-label="Pausar"
+>
+  ⏸
+</button>
 
-        <button
-          type="button"
-          class="client-audio-stop"
-          aria-label="Detener"
-        >
-          ■
-        </button>
-
+<button
+  type="button"
+  class="client-audio-stop"
+  onclick="detenerConsejosPago()"
+  aria-label="Detener"
+>
+  ■
+</button>
       </div>
 
     </div>
