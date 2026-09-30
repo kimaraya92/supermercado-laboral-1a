@@ -4696,6 +4696,63 @@ function irAlConsejoPago(numero){
     reproducirConsejoPagoActual();
   }
 }
+  function finalizarCompraCliente(){
+
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+  }
+
+  shoppingList = [];
+
+  clientCalculateTotalCorrecto = 0;
+
+  consejoPagoActual = 0;
+  consejosPagoPausados = false;
+
+  const campos = [
+    "clientCalculatedTotal",
+    "clientMoneyGiven",
+    "clientCalculatedChange"
+  ];
+
+  campos.forEach(function(id){
+    const campo = document.getElementById(id);
+
+    if(campo){
+      campo.value = "";
+    }
+  });
+
+  const mensajes = [
+    "clientTotalMessage",
+    "clientChangeMessage"
+  ];
+
+  mensajes.forEach(function(id){
+    const elemento = document.getElementById(id);
+
+    if(elemento){
+      elemento.innerHTML = "";
+    }
+  });
+
+  const changeSection =
+    document.getElementById("clientChangeSection");
+
+  if(changeSection){
+    changeSection.classList.add("hidden");
+  }
+
+  actualizarPuntosConsejosPago();
+
+  hideAllScreens();
+
+  document
+    .getElementById("portalScreen")
+    .classList
+    .remove("hidden");
+
+}
  function enviarListaAlPaso3(){
 
   if(!shoppingList.length){
