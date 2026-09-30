@@ -4408,7 +4408,14 @@ function abrirCliente(){
     .remove("hidden");
 
 }
-  function abrirPagoCliente(){
+ function abrirPagoCliente(){
+
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+  }
+
+  consejosPagoPausados = false;
+  consejoPagoActual = 0;
 
   hideAllScreens();
 
@@ -4416,6 +4423,8 @@ function abrirCliente(){
     .getElementById("clientPaymentScreen")
     .classList
     .remove("hidden");
+
+  actualizarPuntosConsejosPago();
 
 }
 function abrirSupermercado(){
