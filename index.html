@@ -4128,31 +4128,25 @@ function money(n){
   return "$" +
     Number(n || 0)
       .toLocaleString("es-CL");
-
 }
-
-
 
 function saveProducts(){
 
   database
     .ref("productos")
     .set(products);
-
 }
 
-
-
 function hideAllScreens(){
-
   [
     "portalScreen",
     "homeScreen",
     "roleScreen",
     "clientHomeScreen",
-    "workerScreen",
-    "saleScreen",
-        "inventoryScreen",
+"inventoryHomeScreen",
+"workerScreen",
+"saleScreen",
+"inventoryScreen",
     "shoppingListScreen",
     "clientCalculateScreen",
 "clientPaymentScreen"
