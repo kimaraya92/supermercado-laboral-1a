@@ -7300,14 +7300,75 @@ function addProduct(){
 
 function buscarImagenPorCodigo(){
 
-  const codigo = prompt(
-    "Escribe o ingresa el código de barras del producto:"
+  const modal =
+    document.getElementById("productImageSearchModal");
+
+  const input =
+    document.getElementById("productImageSearchCode");
+
+  const status =
+    document.getElementById("productImageSearchStatus");
+
+  input.value = "";
+
+  status.textContent =
+    "Ingresa el código o escanéalo con la cámara.";
+
+  modal.classList.remove("hidden");
+
+  setTimeout(function(){
+    input.focus();
+  },100);
+
+}
+
+
+function cerrarBusquedaImagenCodigo(){
+
+  document
+    .getElementById("productImageSearchModal")
+    .classList.add("hidden");
+
+}
+
+
+function abrirCamaraBusquedaImagen(){
+
+  imageSearchScanMode = true;
+
+  openScanner(
+    "📷 Escanear código para buscar imagen",
+    "Coloca el código de barras dentro del recuadro."
   );
 
+}
+
+
+function buscarProductoPorCodigoWeb(){
+
+  const input =
+    document.getElementById("productImageSearchCode");
+
+  const status =
+    document.getElementById("productImageSearchStatus");
+
+  const codigo =
+    String(input.value || "").trim();
+
   if(!codigo){
+
+    status.textContent =
+      "⚠️ Primero ingresa o escanea un código.";
+
     return;
+
   }
 
+  status.textContent =
+    "🔎 Código recibido: " + codigo +
+    ". La búsqueda web la conectaremos en el siguiente paso.";
+
+}
   const producto = products[String(codigo).trim()];
 
   if(!producto){
