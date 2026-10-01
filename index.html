@@ -7341,6 +7341,9 @@ function buscarProductoPorCodigoWeb(){
   const status =
     document.getElementById("productImageSearchStatus");
 
+  const result =
+    document.getElementById("productImageSearchResult");
+
   const codigo =
     String(input.value || "").trim();
 
@@ -7349,16 +7352,113 @@ function buscarProductoPorCodigoWeb(){
     status.textContent =
       "⚠️ Primero ingresa o escanea un código.";
 
+    result.style.display = "none";
+    result.innerHTML = "";
+
     return;
 
   }
 
   status.textContent =
-    "🔎 Código recibido: " + codigo +
-    ". La búsqueda web la conectaremos en el siguiente paso.";
+    "🔎 Buscando el producto...";
 
-}
-  
+  result.style.display = "none";
+  result.innerHTML = "";
+
+  const url =
+    "https://world.openfoodfacts.org/api/v2/product/" +
+    encodeURIComponent(codigo) +
+    ".json?fields=code,product_name,product_name_es,brands,image_front_url,image_front_small_url";
+
+  fetch(url)
+
+    .then(function(response){
+
+      if(!response.ok){
+        throw new Error("Error de conexión");
+      }
+
+      return response.json();
+
+    })
+
+    .then(function(data){
+
+      if(!data || data.status !== 1 || !data.product){
+
+        status.textContent =
+          "❌ No encontramos ese producto.";
+
+        return;
+
+      }
+
+      const producto = data.product;
+
+      const nombre =
+        producto.product_name_es ||
+        producto.product_name ||
+        "Producto sin nombre";
+
+      const marca =
+        producto.brands ||
+        "Marca no disponible";
+
+      const imagen =
+        producto.image_front_url ||
+        producto.image_front_small_url ||
+        "";
+
+      status.textContent =
+        "✅ Producto encontrado";
+
+      result.style.display = "block";
+
+      result.innerHTML =
+
+        "<div style='text-align:center'>" +
+
+          (imagen
+            ? "<img src='" +
+              imagen +
+              "' alt='Imagen del producto' " +
+              "style='max-width:220px;max-height:220px;" +
+              "object-fit:contain;border-radius:12px;" +
+              "margin-bottom:15px'>"
+            : "") +
+
+          "<h3 style='margin:5px 0'>" +
+            nombre +
+          "</h3>" +
+
+          "<p style='margin:5px 0 15px'>" +
+            "🏷️ " + marca +
+          "</p>" +
+
+          (imagen
+            ? "<button type='button' " +
+              "class='primary large' " +
+              "onclick=\"usarImagenEncontrada('" +
+              imagen.replace(/'/g, "\\'") +
+              "')\">" +
+              "✅ USAR ESTA IMAGEN" +
+              "</button>"
+            : "<p>⚠️ Este producto no tiene una imagen disponible.</p>") +
+
+        "</div>";
+
+    })
+
+    .catch(function(error){
+
+      console.error(error);
+
+      status.textContent =
+        "⚠️ No se pudo realizar la búsqueda.";
+
+    });
+
+}  
 function mostrarEnlaceImagen(){
 
   const enlace = prompt(
