@@ -7136,6 +7136,89 @@ function addProduct(){
 
 }
 
+function buscarImagenPorCodigo(){
+
+  const codigo = prompt(
+    "Escribe o ingresa el código de barras del producto:"
+  );
+
+  if(!codigo){
+    return;
+  }
+
+  const producto = products[String(codigo).trim()];
+
+  if(!producto){
+    alert("No encontré un producto con ese código.");
+    return;
+  }
+
+  if(!producto.image){
+    alert("Este producto no tiene una imagen guardada.");
+    return;
+  }
+
+  const preview =
+    document.getElementById("productImagePreview");
+
+  const placeholder =
+    document.getElementById("productImagePlaceholder");
+
+  const deleteButton =
+    document.getElementById("removeProductImageButton");
+
+  preview.src = producto.image;
+  preview.style.display = "block";
+
+  placeholder.style.display = "none";
+  deleteButton.style.display = "inline-block";
+
+}
+
+
+function mostrarEnlaceImagen(){
+
+  const enlace = prompt(
+    "Pega aquí el enlace de la imagen:"
+  );
+
+  if(!enlace){
+    return;
+  }
+
+  const preview =
+    document.getElementById("productImagePreview");
+
+  const placeholder =
+    document.getElementById("productImagePlaceholder");
+
+  const deleteButton =
+    document.getElementById("removeProductImageButton");
+
+  preview.onload = function(){
+
+    preview.style.display = "block";
+    placeholder.style.display = "none";
+    deleteButton.style.display = "inline-block";
+
+  };
+
+  preview.onerror = function(){
+
+    preview.style.display = "none";
+    placeholder.style.display = "block";
+    deleteButton.style.display = "none";
+
+    alert(
+      "No se pudo cargar esa imagen. Revisa el enlace."
+    );
+
+  };
+
+  preview.src = enlace;
+
+}
+  
 function previsualizarImagen(event){
 
   const file = event.target.files[0];
