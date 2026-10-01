@@ -481,10 +481,30 @@ transform:translateY(-50%);
    ========================================================= */
 
 #inventoryScreen{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:auto;
   background-image:url('fondo-bodega-inventario.png');
   background-size:cover;
   background-position:center center;
   background-attachment:fixed;
+  padding:25px;
+}
+
+#inventoryScreen > .screen-title,
+#inventoryScreen > .card{
+  width:100%;
+  max-width:1000px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+#inventoryScreen > .back{
+  display:block;
+  margin-left:max(0px, calc((100% - 1000px) / 2));
+  margin-bottom:10px;
 }
   /* =========================================================
    PANTALLA CLIENTE
