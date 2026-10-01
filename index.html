@@ -4303,7 +4303,7 @@ let purchaseItems = [];
 let scanning = false;
 
 let formScanMode = false;
-
+let imageSearchScanMode = false;
 let currentScanCode = null;
 
 
@@ -6283,7 +6283,20 @@ function processDetectedCode(code){
     return;
   }
 
+if(imageSearchScanMode){
 
+  imageSearchScanMode = false;
+
+  closeScanner();
+
+  document
+    .getElementById("productImageSearchCode")
+    .value = normalized;
+
+  buscarProductoPorCodigoWeb();
+
+  return;
+}
   if(formScanMode){
 
     document
