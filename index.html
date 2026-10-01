@@ -2716,7 +2716,43 @@ max-width:1110px;
 <!-- ==============================
      INVENTARIO
 ============================== -->
+<!-- ==============================
+     INICIO INVENTARIO
+============================== -->
 
+<section
+  id="inventoryHomeScreen"
+  class="hidden inventory-map-screen"
+>
+
+  <div class="inventory-map">
+
+    <button
+      type="button"
+      class="inventory-map-button inventory-map-back"
+      onclick="volverInicio()"
+      aria-label="Volver"
+    ></button>
+
+
+    <button
+      type="button"
+      class="inventory-map-button inventory-map-audio"
+      onclick="leerFuncionesInventario()"
+      aria-label="Escuchar mis funciones"
+    ></button>
+
+
+    <button
+      type="button"
+      class="inventory-map-button inventory-map-continue"
+      onclick="abrirInventario()"
+      aria-label="Continuar"
+    ></button>
+
+  </div>
+
+</section>
 <section
   id="inventoryScreen"
   class="hidden"
