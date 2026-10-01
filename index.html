@@ -4489,7 +4489,18 @@ if(rol === "Cliente"){
   );
 
 }
-function abrirCliente(){
+function abrirInventarioInicio(){
+
+  hideAllScreens();
+
+  document
+    .getElementById("inventoryHomeScreen")
+    .classList
+    .remove("hidden");
+
+}
+  
+  function abrirCliente(){
 
   hideAllScreens();
 
@@ -4497,7 +4508,6 @@ function abrirCliente(){
     .getElementById("clientHomeScreen")
     .classList
     .remove("hidden");
-
 }
  function abrirPagoCliente(){
 
