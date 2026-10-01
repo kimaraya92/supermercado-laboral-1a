@@ -4073,7 +4073,75 @@ max-width:1110px;
 
 </div>
 
+<!-- ==============================
+     BUSCAR IMAGEN POR CÓDIGO
+============================== -->
 
+<div
+  id="productImageSearchModal"
+  class="product-image-search-modal hidden"
+>
+
+  <div class="product-image-search-box">
+
+    <div class="product-image-search-head">
+
+      <h3>
+        🏷️ BUSCAR IMAGEN POR CÓDIGO
+      </h3>
+
+      <button
+        type="button"
+        class="product-image-search-close"
+        onclick="cerrarBusquedaImagenCodigo()"
+      >
+        ✖️
+      </button>
+
+    </div>
+
+    <label>
+      Código de barras
+    </label>
+
+    <input
+      id="productImageSearchCode"
+      type="text"
+      inputmode="numeric"
+      placeholder="Escribe el código de barras"
+    >
+
+    <div class="product-image-search-actions">
+
+      <button
+        type="button"
+        class="large"
+        onclick="abrirCamaraBusquedaImagen()"
+      >
+        📷 ESCANEAR CÓDIGO
+      </button>
+
+      <button
+        type="button"
+        class="large"
+        onclick="buscarProductoPorCodigoWeb()"
+      >
+        🔎 BUSCAR EN INTERNET
+      </button>
+
+    </div>
+
+    <div
+      id="productImageSearchStatus"
+      class="product-image-search-status"
+    >
+      Ingresa el código o escanéalo con la cámara.
+    </div>
+
+  </div>
+
+</div>
+  
 </main>
 
 
