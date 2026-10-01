@@ -4459,12 +4459,19 @@ function leerFuncionesInventario(){
     rol;
   if(rol === "Cliente"){
 
-    abrirCliente();
+  abrirCliente();
 
-    return;
+  return;
 
-  }
+}
 
+if(rol === "Encargado/a de inventario"){
+
+  abrirInventarioInicio();
+
+  return;
+
+}
   document
     .getElementById("roleScreen")
     .classList
