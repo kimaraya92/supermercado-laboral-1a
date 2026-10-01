@@ -4186,7 +4186,25 @@ function leerRol(texto){
   window.speechSynthesis.speak(mensaje);
 
 }
-function leerFunciones(){
+function leerFuncionesInventario(){
+
+  const funciones = [
+    "Ingresar productos.",
+    "Actualizar precios.",
+    "Agregar productos.",
+    "Buscar productos.",
+    "Editar información.",
+    "Revisar el inventario."
+  ];
+
+  const texto =
+    "Tus funciones de hoy son: " +
+    funciones.join(" ") ;
+
+  leerRol(texto);
+
+}
+  function leerFunciones(){
 
   const rol =
     window.rolSeleccionado;
