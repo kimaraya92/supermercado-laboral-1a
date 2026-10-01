@@ -7299,8 +7299,7 @@ function addProduct(){
 }
 
 function buscarImagenPorCodigo(){
-  alert("✓ El botón funciona");
-  const modal =
+   const modal =
     document.getElementById("productImageSearchModal");
 
   const input =
@@ -7369,36 +7368,7 @@ function buscarProductoPorCodigoWeb(){
     ". La búsqueda web la conectaremos en el siguiente paso.";
 
 }
-  const producto = products[String(codigo).trim()];
-
-  if(!producto){
-    alert("No encontré un producto con ese código.");
-    return;
-  }
-
-  if(!producto.image){
-    alert("Este producto no tiene una imagen guardada.");
-    return;
-  }
-
-  const preview =
-    document.getElementById("productImagePreview");
-
-  const placeholder =
-    document.getElementById("productImagePlaceholder");
-
-  const deleteButton =
-    document.getElementById("removeProductImageButton");
-
-  preview.src = producto.image;
-  preview.style.display = "block";
-
-  placeholder.style.display = "none";
-  deleteButton.style.display = "inline-block";
-
-}
-
-
+  
 function mostrarEnlaceImagen(){
 
   const enlace = prompt(
