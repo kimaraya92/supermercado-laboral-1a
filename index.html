@@ -4390,7 +4390,7 @@ let scanning = false;
 let formScanMode = false;
 let imageSearchScanMode = false;
 let currentScanCode = null;
-
+let productCameraStream = null;
 
 let currentWorker = {
   name:"",
@@ -7578,6 +7578,131 @@ function usarImagenEncontrada(imagen){
   preview.src = imagen;
 
   cerrarBusquedaImagenCodigo();
+
+}  
+function abrirCamaraProducto(){
+
+  const modal =
+    document.getElementById("productCameraModal");
+
+  const video =
+    document.getElementById("productCameraVideo");
+
+  modal.classList.remove("hidden");
+
+  navigator.mediaDevices.getUserMedia({
+    video:{
+      facingMode:"environment"
+    },
+    audio:false
+  })
+  .then(function(stream){
+
+    productCameraStream = stream;
+
+    video.srcObject = stream;
+
+  })
+  .catch(function(error){
+
+    console.error(error);
+
+    modal.classList.add("hidden");
+
+    alert(
+      "No se pudo acceder a la cámara. " +
+      "Revisa los permisos de cámara del navegador."
+    );
+
+  });
+
+}
+
+
+function capturarFotoProducto(){
+
+  const video =
+    document.getElementById("productCameraVideo");
+
+  const canvas =
+    document.getElementById("productCameraCanvas");
+
+  if(!video.videoWidth || !video.videoHeight){
+
+    alert(
+      "La cámara todavía no está lista."
+    );
+
+    return;
+
+  }
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  const context =
+    canvas.getContext("2d");
+
+  context.drawImage(
+    video,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  const imagen =
+    canvas.toDataURL("image/jpeg",0.85);
+
+  const preview =
+    document.getElementById("productImagePreview");
+
+  const placeholder =
+    document.getElementById("productImagePlaceholder");
+
+  const deleteButton =
+    document.getElementById("removeProductImageButton");
+
+  preview.src = imagen;
+
+  preview.style.display = "block";
+
+  placeholder.style.display = "none";
+
+  deleteButton.style.display = "inline-block";
+
+  cerrarCamaraProducto();
+
+}
+
+
+function cerrarCamaraProducto(){
+
+  if(productCameraStream){
+
+    productCameraStream
+      .getTracks()
+      .forEach(function(track){
+        track.stop();
+      });
+
+    productCameraStream = null;
+
+  }
+
+  const video =
+    document.getElementById("productCameraVideo");
+
+  if(video){
+    video.srcObject = null;
+  }
+
+  const modal =
+    document.getElementById("productCameraModal");
+
+  if(modal){
+    modal.classList.add("hidden");
+  }
 
 }  
 function mostrarEnlaceImagen(){
