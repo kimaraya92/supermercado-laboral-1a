@@ -1927,179 +1927,78 @@ body.printing-shopping-list #receiptPrintArea{
      PORTAL PRINCIPAL TALLER LABORAL
 ============================== -->
 
-<section id="portalScreen">
+<!-- ==============================
+     PORTAL DE ACCESO
+============================== -->
 
-  <div
-    style="
-      background:#073b8f;
-      color:white;
-      border-radius:24px;
-      padding:25px 30px;
-      margin-bottom:30px;
-      display:flex;
-      align-items:center;
-      gap:25px;
-      box-shadow:0 8px 20px rgba(0,0,0,.15);
-    "
-  >
+<section id="portalScreen" class="portal-login-screen">
 
-    <div style="flex:1;text-align:center;">
+  <div class="portal-login">
 
-      <h1
-        style="
-          margin:0;
-          font-size:42px;
-          font-weight:900;
-          letter-spacing:1px;
-        "
-      >
-        TALLER LABORAL 1A
-      </h1>
-
-      <p
-        style="
-          margin:8px 0 0;
-          font-size:20px;
-          font-weight:bold;
-          color:#ffd21c;
-        "
-      >
-        Escuela Rotario Paul Harris · Punta Arenas
-      </p>
-
-    </div>
-
-    <div
-      style="
-        width:110px;
-        height:110px;
-        background:white;
-        border-radius:50%;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        flex-shrink:0;
-        overflow:hidden;
-      "
+    <img
+      src="portal-inicio.png"
+      alt="Bienvenidos a nuestro portal"
+      class="portal-login-image"
     >
 
-      <div style="font-size:65px;">
-        🏫
+    <div class="portal-login-buttons">
+
+      <!-- ACCESO ESTUDIANTES -->
+      <div class="portal-access-card">
+
+        <h2>👩‍🎓 INGRESO ESTUDIANTES</h2>
+
+        <input
+          id="studentNameInput"
+          type="text"
+          placeholder="Escribe tu nombre"
+          autocomplete="off"
+        >
+
+        <input
+          id="studentRutInput"
+          type="text"
+          placeholder="Escribe tu RUT"
+          autocomplete="off"
+        >
+
+        <button
+          type="button"
+          onclick="ingresarEstudiante()"
+        >
+          🚀 INGRESAR
+        </button>
+
+      </div>
+
+
+      <!-- ACCESO ADMINISTRADORA -->
+      <div class="portal-access-card admin-access-card">
+
+        <h2>👩‍💼 ADMINISTRADORA</h2>
+
+        <input
+          id="adminPasswordInput"
+          type="password"
+          placeholder="Ingresa la clave"
+          autocomplete="off"
+          onkeydown="if(event.key==='Enter') ingresarAdministradora()"
+        >
+
+        <button
+          type="button"
+          onclick="ingresarAdministradora()"
+        >
+          🔐 INGRESAR
+        </button>
+
       </div>
 
     </div>
 
   </div>
-  <div style="
-    text-align:center;
-    margin-bottom:-20px;
-    transform:translateY(-25px);
-  ">
-    <img
-      src="nosotras.png"
-      alt="Profesoras del Taller Laboral 1A"
-      style="
-        width:65%;
-        max-width:900px;
-        height:auto;
-      "
-    >
-  </div>
-  
-  <div
-    style="
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:25px;
-      align-items:start;
-      justify-items:center;
-    transform:translateY(-70px);
-    "
-  >
-
-    <!-- ACTIVIDADES DE LA SEMANA -->
-
-    <button
-      type="button"
-      onclick="abrirActividades()"
-      style="
-        border:none;
-        background:transparent;
-        padding:0;
-        margin:0;
-        cursor:pointer;
-        width:100%;
-      "
-    >
-      <img
-        src="actividades-de-la-semana.png"
-        alt="Actividades de la semana"
-        style="
-          width:100%;
-          height:auto;
-          display:block;
-        "
-      >
-    </button>
-
-
-    <!-- SUPERMERCADO -->
-
-    <button
-      type="button"
-      onclick="abrirSupermercado()"
-      style="
-        border:none;
-        background:transparent;
-        padding:0;
-        margin:0;
-        cursor:pointer;
-        width:100%;
-      "
-    >
-      <img
-        src="supermercado.png"
-        alt="Supermercado"
-        style="
-          width:100%;
-          height:auto;
-          display:block;
-        "
-      >
-    </button>
-
-
-    <!-- BANCA EN LÍNEA -->
-
-    <button
-      type="button"
-      onclick="abrirBanca()"
-      style="
-        border:none;
-        background:transparent;
-        padding:0;
-        margin:0;
-        cursor:pointer;
-        width:100%;
-      "
-    >
-      <img
-        src="banca-en-linea.png"
-        alt="Banca en línea"
-        style="
-          width:88%;
-          height:auto;
-          display:block;
-        "
-      >
-    </button>
-
-  </div>
 
 </section>
-
- <section
-  id="homeScreen"
   class="hidden role-map-screen"
 >
 
