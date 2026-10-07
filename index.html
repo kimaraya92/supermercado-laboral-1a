@@ -2176,6 +2176,59 @@ body.printing-shopping-list #receiptPrintArea{
   </div>
 
 </section>
+ <!-- ==============================
+     PANEL DE ADMINISTRADORA
+============================== -->
+
+<section
+  id="adminHomeScreen"
+  class="hidden admin-map-screen"
+>
+
+  <div class="admin-map">
+
+    <!-- VOLVER AL INICIO -->
+    <button
+      type="button"
+      class="admin-map-button admin-map-back"
+      onclick="volverPortal()"
+      aria-label="Volver al inicio"
+    ></button>
+
+
+    <!-- ESTUDIANTES -->
+    <button
+      type="button"
+      class="admin-map-button admin-map-students"
+      onclick="abrirAdministracionEstudiantes()"
+      aria-label="Estudiantes"
+    ></button>
+
+
+    <!-- ACTIVIDADES -->
+    <button
+      type="button"
+      class="admin-map-button admin-map-activities"
+      onclick="abrirAdministracionActividades()"
+      aria-label="Actividades"
+    ></button>
+
+
+    <!-- BANCO -->
+    <button
+      type="button"
+      class="admin-map-button admin-map-bank"
+      onclick="abrirAdministracionBanco()"
+      aria-label="Banco"
+    ></button>
+
+  </div>
+
+</section>
+
+
+<section
+  id="homeScreen"
   class="hidden role-map-screen"
 >
 
