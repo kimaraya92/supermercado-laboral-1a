@@ -2147,60 +2147,54 @@ body.printing-shopping-list #receiptPrintArea{
       class="portal-login-image"
     >
 
-    <div class="portal-login-buttons">
+    <!-- =========================
+         INGRESO ESTUDIANTE
+    ========================== -->
 
-      <!-- ACCESO ESTUDIANTES -->
-      <div class="portal-access-card">
+    <input
+      id="studentNameInput"
+      class="portal-map-input portal-map-student-name"
+      type="text"
+      autocomplete="off"
+      aria-label="Nombre del estudiante"
+    >
 
-        <h2>👩‍🎓 INGRESO ESTUDIANTES</h2>
+    <input
+      id="studentRutInput"
+      class="portal-map-input portal-map-student-rut"
+      type="text"
+      autocomplete="off"
+      aria-label="RUT del estudiante"
+      onkeydown="if(event.key==='Enter') ingresarEstudiante()"
+    >
 
-        <input
-          id="studentNameInput"
-          type="text"
-          placeholder="Escribe tu nombre"
-          autocomplete="off"
-        >
-
-        <input
-          id="studentRutInput"
-          type="text"
-          placeholder="Escribe tu RUT"
-          autocomplete="off"
-        >
-
-        <button
-          type="button"
-          onclick="ingresarEstudiante()"
-        >
-          🚀 INGRESAR
-        </button>
-
-      </div>
+    <button
+      type="button"
+      class="portal-map-button portal-map-student-login"
+      onclick="ingresarEstudiante()"
+      aria-label="Ingresar estudiante"
+    ></button>
 
 
-      <!-- ACCESO ADMINISTRADORA -->
-      <div class="portal-access-card admin-access-card">
+    <!-- =========================
+         INGRESO ADMINISTRADORA
+    ========================== -->
 
-        <h2>👩‍💼 ADMINISTRADORA</h2>
+    <input
+      id="adminPasswordInput"
+      class="portal-map-input portal-map-admin-password"
+      type="password"
+      autocomplete="off"
+      aria-label="Clave de administradora"
+      onkeydown="if(event.key==='Enter') ingresarAdministradora()"
+    >
 
-        <input
-          id="adminPasswordInput"
-          type="password"
-          placeholder="Ingresa la clave"
-          autocomplete="off"
-          onkeydown="if(event.key==='Enter') ingresarAdministradora()"
-        >
-
-        <button
-          type="button"
-          onclick="ingresarAdministradora()"
-        >
-          🔐 INGRESAR
-        </button>
-
-      </div>
-
-    </div>
+    <button
+      type="button"
+      class="portal-map-button portal-map-admin-login"
+      onclick="ingresarAdministradora()"
+      aria-label="Ingresar administradora"
+    ></button>
 
   </div>
 
