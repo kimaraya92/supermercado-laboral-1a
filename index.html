@@ -4403,7 +4403,48 @@ let currentWorker = {
   name:"",
   role:"Vendedor/a"
 };
+/* =========================================
+   ACCESO PORTAL
+========================================= */
 
+let estudianteActual = "";
+
+function ingresarEstudiante(){
+
+  const nombre =
+    document.getElementById("studentNameInput").value.trim();
+
+  const rut =
+    document.getElementById("studentRutInput").value.trim();
+
+  if(!nombre){
+    alert("Por favor escribe tu nombre.");
+    return;
+  }
+
+  if(!rut){
+    alert("Por favor escribe tu RUT.");
+    return;
+  }
+
+  estudianteActual = nombre;
+
+  abrirPortalEstudiante();
+}
+
+
+function ingresarAdministradora(){
+
+  const clave =
+    document.getElementById("adminPasswordInput").value;
+
+  if(clave !== "1A2026"){
+    alert("❌ Clave incorrecta.");
+    return;
+  }
+
+  abrirAdministradora();
+}
 
 
 /* =========================================
