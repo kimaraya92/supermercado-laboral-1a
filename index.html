@@ -4587,20 +4587,7 @@ function saveProducts(){
     .ref("productos")
     .set(products);
 }
-/* =========================================
-   ADMINISTRADORA
-========================================= */
 
-function abrirAdministradora(){
-
-  hideAllScreens();
-
-  document
-    .getElementById("adminHomeScreen")
-    .classList
-    .remove("hidden");
-
-}
 function hideAllScreens(){
   [
     "portalScreen",
@@ -4626,7 +4613,20 @@ function hideAllScreens(){
   });
 
 }
+/* =========================================
+   ADMINISTRADORA
+========================================= */
 
+function abrirAdministradora(){
+
+  hideAllScreens();
+
+  document
+    .getElementById("adminHomeScreen")
+    .classList
+    .remove("hidden");
+
+}
 
 
 /* =========================================
