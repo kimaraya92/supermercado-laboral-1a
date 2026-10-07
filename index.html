@@ -1904,7 +1904,115 @@ body.printing-shopping-list #receiptPrintArea{
   }
 
 }
+/* ==============================
+   PORTAL DE ACCESO
+============================== */
 
+.portal-login-screen{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:auto;
+  background:#f7f2e9;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+  box-sizing:border-box;
+}
+
+.portal-login{
+  width:min(1200px,96vw);
+  max-height:95vh;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.portal-login-image{
+  width:100%;
+  max-width:1150px;
+  height:auto;
+  display:block;
+  border-radius:25px;
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+}
+
+.portal-login-buttons{
+  width:min(900px,92%);
+  margin-top:-20px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+  position:relative;
+  z-index:5;
+}
+
+.portal-access-card{
+  background:rgba(255,255,255,.96);
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,.18);
+  text-align:center;
+}
+
+.portal-access-card h2{
+  margin:0 0 15px;
+  font-size:22px;
+  color:#173f73;
+}
+
+.portal-access-card input{
+  width:100%;
+  box-sizing:border-box;
+  padding:13px 15px;
+  margin-bottom:10px;
+  border:2px solid #d7dce5;
+  border-radius:12px;
+  font-size:17px;
+  outline:none;
+}
+
+.portal-access-card input:focus{
+  border-color:#4b8edb;
+}
+
+.portal-access-card button{
+  width:100%;
+  border:none;
+  border-radius:13px;
+  padding:13px 18px;
+  font-size:17px;
+  font-weight:800;
+  cursor:pointer;
+  background:#173f73;
+  color:white;
+}
+
+.portal-access-card button:hover{
+  transform:translateY(-1px);
+  box-shadow:0 5px 12px rgba(0,0,0,.15);
+}
+
+.admin-access-card h2{
+  color:#69458f;
+}
+
+@media(max-width:700px){
+
+  .portal-login-buttons{
+    grid-template-columns:1fr;
+    margin-top:15px;
+  }
+
+  .portal-login-screen{
+    align-items:flex-start;
+  }
+
+}
 </style>
 
 </head>
