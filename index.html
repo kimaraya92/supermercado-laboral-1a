@@ -2049,6 +2049,13 @@ body.printing-shopping-list #receiptPrintArea{
   outline:none;
   box-shadow:none;
 }
+  .portal-map-password-toggle{
+  left:72.5%;
+  top:63.5%;
+  width:4.5%;
+  height:8%;
+  z-index:20;
+}
 /* ==============================
    PANEL DE ADMINISTRADORA
 ============================== */
@@ -2195,7 +2202,12 @@ body.printing-shopping-list #receiptPrintArea{
       aria-label="Clave de administradora"
       onkeydown="if(event.key==='Enter') ingresarAdministradora()"
     >
-
+    <button
+      type="button"
+      class="portal-map-button portal-map-password-toggle"
+      onclick="toggleAdminPassword()"
+      aria-label="Mostrar u ocultar clave"
+    ></button>
     <button
       type="button"
       class="portal-map-button portal-map-admin-login"
