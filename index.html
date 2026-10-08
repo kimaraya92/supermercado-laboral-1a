@@ -5237,6 +5237,17 @@ function volverPortal(){
 
   hideAllScreens();
 
+  if(estudianteActual){
+
+    document
+      .getElementById("studentPortalScreen")
+      .classList
+      .remove("hidden");
+
+    return;
+
+  }
+
   document
     .getElementById("portalScreen")
     .classList
