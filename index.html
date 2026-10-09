@@ -5160,6 +5160,15 @@ function abrirPortalEstudiante(){
     .getElementById("studentPortalName")
     .textContent = "¡Hola, " + estudianteActual + "!";
 
+  /* Guardar el portal del estudiante en el historial */
+  history.pushState(
+    {
+      appScreen:"studentPortalScreen"
+    },
+    "",
+    "#portal-estudiante"
+  );
+
 }
 function abrirActividadesEstudiante(){
 
