@@ -5293,7 +5293,52 @@ function hideAllScreens(){
   });
 
 }
- 
+ /* =========================================
+   NAVEGACIÓN CON FLECHA DEL NAVEGADOR
+========================================= */
+
+window.addEventListener("popstate", function(event){
+
+  if(!event.state || !event.state.appScreen){
+    return;
+  }
+
+  const pantalla = event.state.appScreen;
+
+  hideAllScreens();
+
+  if(pantalla === "studentPortalScreen"){
+
+    document
+      .getElementById("studentPortalScreen")
+      .classList
+      .remove("hidden");
+
+    document
+      .getElementById("studentPortalName")
+      .textContent = "¡Hola, " + estudianteActual + "!";
+
+  }
+
+  if(pantalla === "digitalNotebookScreen"){
+
+    document
+      .getElementById("digitalNotebookScreen")
+      .classList
+      .remove("hidden");
+
+    document
+      .getElementById("digitalNotebookStudentName")
+      .textContent = estudianteActual;
+
+    document
+      .getElementById("digitalNotebookStudentRut")
+      .textContent =
+        "RUT: " + rutEstudianteActual;
+
+  }
+
+});
 /* =========================================
    ADMINISTRADORA
 ========================================= */
