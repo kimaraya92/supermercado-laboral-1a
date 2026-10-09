@@ -4997,7 +4997,12 @@ function abrirPortalEstudiante(){
 }
 function abrirActividadesEstudiante(){
 
-  alert("📚 Aquí estarán las actividades de la semana.");
+  hideAllScreens();
+
+  document
+    .getElementById("digitalNotebookScreen")
+    .classList
+    .remove("hidden");
 
 }
 
