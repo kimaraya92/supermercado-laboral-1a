@@ -5118,6 +5118,27 @@ let currentWorker = {
 let estudianteActual = "";
 let rutEstudianteActual = "";
 
+let estudianteActual = "";
+let rutEstudianteActual = "";
+
+/* =========================================
+   NAVEGACIÓN DEL ESTUDIANTE
+========================================= */
+
+function registrarPantallaEstudiante(idPantalla){
+
+  history.pushState(
+    {
+      appScreen:idPantalla
+    },
+    "",
+    window.location.href.split("#")[0]
+  );
+
+}
+
+function ingresarEstudiante(){
+  
 function ingresarEstudiante(){
 
   const nombre =
