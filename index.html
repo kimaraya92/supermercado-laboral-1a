@@ -5022,6 +5022,7 @@ let currentWorker = {
 ========================================= */
 
 let estudianteActual = "";
+let rutEstudianteActual = "";
 
 function ingresarEstudiante(){
 
@@ -5041,7 +5042,8 @@ function ingresarEstudiante(){
     return;
   }
 
-  estudianteActual = nombre;
+    estudianteActual = nombre;
+  rutEstudianteActual = rut;
 
   abrirPortalEstudiante();
 }
@@ -5067,6 +5069,27 @@ function abrirActividadesEstudiante(){
     .getElementById("digitalNotebookScreen")
     .classList
     .remove("hidden");
+
+  document
+    .getElementById("digitalNotebookStudentName")
+    .textContent = estudianteActual;
+
+  document
+    .getElementById("digitalNotebookStudentRut")
+    .textContent = "RUT: " + rutEstudianteActual;
+
+  const fecha = new Date();
+
+  const opcionesFecha = {
+    day:"numeric",
+    month:"long",
+    year:"numeric"
+  };
+
+  document
+    .getElementById("digitalNotebookDate")
+    .textContent =
+      fecha.toLocaleDateString("es-CL", opcionesFecha);
 
 }
 
