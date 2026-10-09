@@ -5118,12 +5118,6 @@ let currentWorker = {
 let estudianteActual = "";
 let rutEstudianteActual = "";
 
-/* =========================================
-   HISTORIAL DE NAVEGACIÓN DE LA APP
-========================================= */
-
-let pantallaAnteriorEstudiante = null;
-
 function ingresarEstudiante(){
 
   const nombre =
@@ -5159,15 +5153,6 @@ function abrirPortalEstudiante(){
   document
     .getElementById("studentPortalName")
     .textContent = "¡Hola, " + estudianteActual + "!";
-
-  /* Guardar el portal del estudiante en el historial */
-  history.pushState(
-    {
-      appScreen:"studentPortalScreen"
-    },
-    "",
-    "#portal-estudiante"
-  );
 
 }
 function abrirActividadesEstudiante(){
@@ -5289,31 +5274,7 @@ function hideAllScreens(){
   });
 
 }
-/* =========================================
-   BOTÓN ATRÁS DEL NAVEGADOR
-========================================= */
-
-window.addEventListener("popstate", function(event){
-
-  if(
-    event.state &&
-    event.state.appScreen === "studentPortalScreen"
-  ){
-
-    hideAllScreens();
-
-    document
-      .getElementById("studentPortalScreen")
-      .classList
-      .remove("hidden");
-
-    document
-      .getElementById("studentPortalName")
-      .textContent = "¡Hola, " + estudianteActual + "!";
-
-  }
-
-});  
+ 
 /* =========================================
    ADMINISTRADORA
 ========================================= */
