@@ -2131,6 +2131,193 @@ body.printing-shopping-list #receiptPrintArea{
   width:21%;
   height:26%;
 }
+  /* ==============================
+   MI CUADERNO DIGITAL
+============================== */
+
+.digital-notebook-screen{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:auto;
+  background:#f7f2e9;
+}
+
+.digital-notebook{
+  position:relative;
+  width:100%;
+  min-height:100vh;
+  height:100vh;
+  background-image:url('cuaderno-digital.png');
+  background-size:100% 100%;
+  background-position:center center;
+  background-repeat:no-repeat;
+}
+
+/* BOTÓN VOLVER */
+.digital-notebook-back{
+  position:absolute;
+  left:2%;
+  top:3%;
+  padding:10px 18px;
+  border:none;
+  border-radius:12px;
+  background:rgba(255,255,255,.88);
+  color:#4a4a4a;
+  font-family:"Trebuchet MS", sans-serif;
+  font-size:clamp(14px,1.2vw,19px);
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 3px 10px rgba(0,0,0,.12);
+  z-index:20;
+}
+
+.digital-notebook-back:hover{
+  background:#ffffff;
+  transform:translateY(-1px);
+}
+
+/* TÍTULO */
+.digital-notebook-title{
+  position:absolute;
+  left:20%;
+  top:5%;
+  width:60%;
+  text-align:center;
+  font-family:"Trebuchet MS", sans-serif;
+  font-size:clamp(28px,3vw,48px);
+  font-weight:bold;
+  color:#3f4a4c;
+  z-index:10;
+}
+
+/* DATOS DEL ESTUDIANTE */
+.digital-notebook-student{
+  position:absolute;
+  right:3%;
+  top:3%;
+  text-align:right;
+  font-family:"Trebuchet MS", sans-serif;
+  color:#3f4a4c;
+  z-index:10;
+}
+
+.digital-notebook-student-name{
+  font-size:clamp(16px,1.4vw,22px);
+  font-weight:bold;
+}
+
+.digital-notebook-student-rut{
+  margin-top:3px;
+  font-size:clamp(12px,1vw,16px);
+}
+
+/* FECHA */
+.digital-notebook-date{
+  position:absolute;
+  right:3%;
+  top:11%;
+  font-family:"Trebuchet MS", sans-serif;
+  font-size:clamp(13px,1vw,17px);
+  color:#5f6668;
+  z-index:10;
+}
+
+/* CONTENEDOR DE ACTIVIDADES */
+.digital-notebook-content{
+  position:absolute;
+  left:10%;
+  right:10%;
+  top:18%;
+  bottom:7%;
+  overflow:auto;
+  padding:20px;
+  z-index:10;
+}
+
+/* TÍTULOS DE SECCIÓN */
+.digital-notebook-section-title{
+  margin:0 0 15px 0;
+  font-family:"Trebuchet MS", sans-serif;
+  font-size:clamp(20px,2vw,30px);
+  color:#3f4a4c;
+}
+
+/* CONTENEDOR DE TARJETAS */
+.digital-notebook-list{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-bottom:30px;
+}
+
+/* TARJETA DE ACTIVIDAD */
+.digital-notebook-card{
+  background:rgba(255,255,255,.92);
+  border-radius:18px;
+  padding:20px;
+  min-height:130px;
+  box-shadow:0 5px 18px rgba(0,0,0,.12);
+}
+
+.digital-notebook-card h3{
+  margin:0 0 8px 0;
+  font-family:"Trebuchet MS", sans-serif;
+  font-size:clamp(17px,1.4vw,23px);
+  color:#374447;
+}
+
+.digital-notebook-card p{
+  margin:4px 0;
+  font-family:"Trebuchet MS", sans-serif;
+  font-size:14px;
+  color:#687276;
+}
+
+/* BOTÓN DE ACTIVIDAD */
+.digital-notebook-action{
+  margin-top:12px;
+  padding:9px 16px;
+  border:none;
+  border-radius:10px;
+  background:#526f73;
+  color:white;
+  font-family:"Trebuchet MS", sans-serif;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.digital-notebook-action:hover{
+  opacity:.9;
+}
+
+/* ACTIVIDAD REALIZADA */
+.digital-notebook-card.completed{
+  opacity:.78;
+}
+
+.digital-notebook-card.completed .digital-notebook-action{
+  background:#6d8b72;
+}
+
+/* ADAPTACIÓN */
+@media(max-width:900px){
+  .digital-notebook-list{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:600px){
+  .digital-notebook-list{
+    grid-template-columns:1fr;
+  }
+
+  .digital-notebook-content{
+    left:5%;
+    right:5%;
+  }
+}
 /* ==============================
    PANEL DE ADMINISTRADORA
 ============================== */
