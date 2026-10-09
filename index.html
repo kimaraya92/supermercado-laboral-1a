@@ -2184,24 +2184,33 @@ body.printing-shopping-list #receiptPrintArea{
 /* TÍTULO */
 .digital-notebook-title{
   position:relative;
-  width:70%;
-  margin:25px auto 25px;
+  width:60%;
+  margin:25px auto 18px;
+  padding:12px 25px;
+  box-sizing:border-box;
   text-align:center;
   font-family:"Trebuchet MS", sans-serif;
   font-size:clamp(28px,3vw,46px);
   font-weight:bold;
   color:#28383c;
+  background:rgba(255,255,255,.88);
+  border-radius:20px;
+  box-shadow:0 4px 16px rgba(0,0,0,.12);
   z-index:10;
 }
 
-/* DATOS DEL ESTUDIANTE */
 .digital-notebook-student{
   position:absolute;
   right:3%;
   top:3%;
+  padding:10px 18px;
+  box-sizing:border-box;
   text-align:right;
   font-family:"Trebuchet MS", sans-serif;
   color:#3f4a4c;
+  background:rgba(255,255,255,.92);
+  border-radius:14px;
+  box-shadow:0 3px 12px rgba(0,0,0,.12);
   z-index:10;
 }
 
@@ -2218,12 +2227,18 @@ body.printing-shopping-list #receiptPrintArea{
 /* FECHA */
 .digital-notebook-date{
   position:relative;
-  width:90%;
-  margin:0 auto 18px;
+  width:max-content;
+  max-width:90%;
+  margin:0 5% 18px auto;
+  padding:7px 14px;
+  box-sizing:border-box;
   text-align:right;
   font-family:"Trebuchet MS", sans-serif;
   font-size:clamp(12px,1vw,16px);
   color:#5f6668;
+  background:rgba(255,255,255,.82);
+  border-radius:12px;
+  box-shadow:0 3px 10px rgba(0,0,0,.10);
   z-index:10;
 }
 
@@ -5157,6 +5172,7 @@ function hideAllScreens(){
    [
     "portalScreen",
     "studentPortalScreen",
+    "digitalNotebookScreen",
     "adminHomeScreen",
     "homeScreen",
     "roleScreen",
