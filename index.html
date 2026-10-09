@@ -5339,7 +5339,14 @@ window.addEventListener("popstate", function(event){
         "RUT: " + rutEstudianteActual;
 
   }
+  if(pantalla === "homeScreen"){
 
+    document
+      .getElementById("homeScreen")
+      .classList
+      .remove("hidden");
+
+  }
 });
 /* =========================================
    ADMINISTRADORA
