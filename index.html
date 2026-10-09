@@ -5290,6 +5290,31 @@ function hideAllScreens(){
 
 }
 /* =========================================
+   BOTÓN ATRÁS DEL NAVEGADOR
+========================================= */
+
+window.addEventListener("popstate", function(event){
+
+  if(
+    event.state &&
+    event.state.appScreen === "studentPortalScreen"
+  ){
+
+    hideAllScreens();
+
+    document
+      .getElementById("studentPortalScreen")
+      .classList
+      .remove("hidden");
+
+    document
+      .getElementById("studentPortalName")
+      .textContent = "¡Hola, " + estudianteActual + "!";
+
+  }
+
+});  
+/* =========================================
    ADMINISTRADORA
 ========================================= */
 
