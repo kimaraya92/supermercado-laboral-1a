@@ -2520,6 +2520,90 @@ body.printing-shopping-list #receiptPrintArea{
   </div>
 
 </section>
+  <!-- ==============================
+     MI CUADERNO DIGITAL
+============================== -->
+
+<section
+  id="digitalNotebookScreen"
+  class="hidden digital-notebook-screen"
+>
+
+  <div class="digital-notebook">
+
+    <!-- VOLVER AL PORTAL -->
+    <button
+      type="button"
+      class="digital-notebook-back"
+      onclick="abrirPortalEstudiante()"
+    >
+      ← Volver al Portal
+    </button>
+
+    <!-- TÍTULO -->
+    <div class="digital-notebook-title">
+      MI CUADERNO DIGITAL
+    </div>
+
+    <!-- DATOS DEL ESTUDIANTE -->
+    <div class="digital-notebook-student">
+
+      <div
+        id="digitalNotebookStudentName"
+        class="digital-notebook-student-name"
+      ></div>
+
+      <div
+        id="digitalNotebookStudentRut"
+        class="digital-notebook-student-rut"
+      ></div>
+
+    </div>
+
+    <!-- FECHA -->
+    <div
+      id="digitalNotebookDate"
+      class="digital-notebook-date"
+    ></div>
+
+    <!-- CONTENIDO -->
+    <div class="digital-notebook-content">
+
+      <!-- PENDIENTES -->
+      <section>
+
+        <h2 class="digital-notebook-section-title">
+          Actividades pendientes
+        </h2>
+
+        <div
+          id="digitalNotebookPending"
+          class="digital-notebook-list"
+        >
+        </div>
+
+      </section>
+
+      <!-- REALIZADAS -->
+      <section>
+
+        <h2 class="digital-notebook-section-title">
+          Actividades realizadas
+        </h2>
+
+        <div
+          id="digitalNotebookCompleted"
+          class="digital-notebook-list"
+        >
+        </div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+</section>
  <!-- ==============================
      PANEL DE ADMINISTRADORA
 ============================== -->
