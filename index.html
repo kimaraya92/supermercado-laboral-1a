@@ -2679,9 +2679,9 @@ body.printing-shopping-list #receiptPrintArea{
 .teacher-calendar-month{
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  gap:4px;
-  margin:14px 0 12px;
+  justify-content:center;
+  gap:8px;
+  margin:0 0 8px;
 }
 
 .teacher-calendar-month strong{
@@ -2689,17 +2689,24 @@ body.printing-shopping-list #receiptPrintArea{
   font-size:12px;
   text-align:center;
   text-transform:capitalize;
+  white-space:nowrap;
 }
 
 .teacher-calendar-month button{
-  width:26px;
-  height:26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:22px;
+  height:24px;
   flex-shrink:0;
+  padding:0;
+  margin:0;
   border:0;
-  border-radius:8px;
-  background:#fce7f3;
+  border-radius:0;
+  background:transparent;
   color:#a14e82;
-  font-size:20px;
+  font-size:21px;
+  line-height:1;
   cursor:pointer;
 }
 
@@ -3374,11 +3381,7 @@ body.printing-shopping-list #receiptPrintArea{
       </nav>
 
             <div class="teacher-calendar">
-        <div class="teacher-calendar-heading">
-          <span>🗓️</span>
-          <strong>Mi calendario</strong>
-        </div>
-
+        
         <div class="teacher-calendar-month">
           <button type="button" id="calendarPrevMonth" aria-label="Mes anterior">‹</button>
           <strong id="calendarMonthLabel">Mes Año</strong>
