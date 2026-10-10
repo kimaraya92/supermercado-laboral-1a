@@ -7624,23 +7624,24 @@ function checkPayment(){
   }
 
 
+    if(estudianteCalculaVuelto()){
+
+    message.textContent =
+      "✅ ¡Muy bien! El vuelto es correcto. Puedes continuar.";
+
+    message.className =
+      "payment-message success";
+
+    return;
+
+  }
+
+
   message.textContent =
-    "✅ ¡Muy bien! El vuelto es correcto. Puedes imprimir la boleta.";
+    "💰 Aquí tienes el vuelto que debes entregar.";
 
   message.className =
     "payment-message success";
-
-
-  document
-    .getElementById("paymentModal")
-    .classList
-    .add("hidden");
-
-
-  document
-    .getElementById("receiptPrintArea")
-    .classList
-    .remove("hidden");
 
 }
 
