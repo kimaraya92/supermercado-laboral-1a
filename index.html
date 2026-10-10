@@ -1159,12 +1159,19 @@ transform:translateY(-50%);
   justify-content:center;
 
   padding:20px;
+
+  overflow-y:auto;
+  box-sizing:border-box;
 }
 
 
 .payment-box{
 
   width:min(520px,calc(100vw - 40px));
+
+  max-height:calc(100vh - 40px);
+
+  overflow-y:auto;
 
   background:#fff;
 
@@ -1175,6 +1182,8 @@ transform:translateY(-50%);
   box-shadow:0 10px 35px rgba(0,0,0,.30);
 
   text-align:center;
+
+  box-sizing:border-box;
 }
 
 
