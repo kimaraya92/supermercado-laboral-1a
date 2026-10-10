@@ -7425,20 +7425,10 @@ function checkPayment(){
       ).value
     );
 
-
-  const change =
-    Number(
-      document.getElementById(
-        "changeGiven"
-      ).value
-    );
-
-
   const message =
     document.getElementById(
       "paymentMessage"
     );
-
 
   if(!received){
 
@@ -7466,35 +7456,78 @@ function checkPayment(){
   }
 
 
-  if(
-    !Number.isFinite(change) ||
-    change < 0
-  ){
+  /*
+     ESTEBAN, RENATA Y ALMENDRA
+     CALCULAN EL VUELTO
+  */
 
-    message.textContent =
-      "Ingresa el vuelto que entregarás.";
+  if(estudianteCalculaVuelto()){
 
-    message.className =
-      "payment-message error";
+    const change =
+      Number(
+        document.getElementById(
+          "changeGiven"
+        ).value
+      );
 
-    return;
+
+    if(
+      !Number.isFinite(change) ||
+      change < 0
+    ){
+
+      message.textContent =
+        "Ingresa el vuelto que entregarás.";
+
+      message.className =
+        "payment-message error";
+
+      return;
+
+    }
+
+
+    const correctChange =
+      received - purchaseTotal;
+
+
+    if(change !== correctChange){
+
+      message.textContent =
+        "❌ El vuelto no es correcto. Revisa tu cálculo e inténtalo nuevamente.";
+
+      message.className =
+        "payment-message error";
+
+      return;
+
+    }
 
   }
 
 
-  const correctChange =
-    received - purchaseTotal;
+  /*
+     MAURICIO Y GERARDO
+     RECIBEN AYUDA AUTOMÁTICA
+  */
+
+  else{
+
+    const automaticChange =
+      received - purchaseTotal;
 
 
-  if(change !== correctChange){
+    document
+      .getElementById(
+        "automaticChangeAmount"
+      )
+      .textContent =
+        money(automaticChange);
 
-    message.textContent =
-      "❌ El vuelto no es correcto. Revisa tu cálculo e inténtalo nuevamente.";
 
-    message.className =
-      "payment-message error";
-
-    return;
+    mostrarDesgloseVuelto(
+      automaticChange
+    );
 
   }
 
@@ -7512,7 +7545,7 @@ function checkPayment(){
     .add("hidden");
 
 
-    document
+  document
     .getElementById("receiptPrintArea")
     .classList
     .remove("hidden");
