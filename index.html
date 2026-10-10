@@ -7552,7 +7552,72 @@ function checkPayment(){
 
 }
 
+function mostrarDesgloseVuelto(monto){
 
+  const contenedor =
+    document.getElementById(
+      "changeBreakdown"
+    );
+
+  contenedor.innerHTML = "";
+
+  const denominaciones = [
+
+    {valor:20000, tipo:"billete", nombre:"$20.000"},
+    {valor:10000, tipo:"billete", nombre:"$10.000"},
+    {valor:5000, tipo:"billete", nombre:"$5.000"},
+    {valor:2000, tipo:"billete", nombre:"$2.000"},
+    {valor:1000, tipo:"billete", nombre:"$1.000"},
+    {valor:500, tipo:"moneda", nombre:"$500"},
+    {valor:100, tipo:"moneda", nombre:"$100"},
+    {valor:50, tipo:"moneda", nombre:"$50"},
+    {valor:10, tipo:"moneda", nombre:"$10"}
+
+  ];
+
+  let restante = monto;
+
+  denominaciones.forEach(function(denominacion){
+
+    const cantidad =
+      Math.floor(
+        restante / denominacion.valor
+      );
+
+    if(cantidad > 0){
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "change-breakdown-item";
+
+      item.innerHTML =
+
+        "<span class='change-breakdown-icon'>" +
+        (
+          denominacion.tipo === "billete"
+            ? "💵"
+            : "🪙"
+        ) +
+        "</span>" +
+
+        "<strong>" +
+        cantidad +
+        " × " +
+        denominacion.nombre +
+        "</strong>";
+
+      contenedor.appendChild(item);
+
+      restante -=
+        cantidad * denominacion.valor;
+
+    }
+
+  });
+
+}
 function closePaymentModal(){
 
   document
