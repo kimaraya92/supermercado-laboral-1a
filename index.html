@@ -2888,63 +2888,102 @@ body.printing-shopping-list #receiptPrintArea{
   </div>
 
 </section>
- <!-- ==============================
-     PANEL DE ADMINISTRADORA
-============================== -->
 
-<section
-  id="adminHomeScreen"
-  class="hidden admin-map-screen"
->
+<!-- PORTAL ROSADITO DE ADMINISTRADORA -->
+<section id="adminHomeScreen" class="hidden admin-map-screen">
+  <div class="teacher-portal">
 
-  <div class="admin-map">
+    <aside class="teacher-sidebar">
+      <div class="teacher-brand">
+        <span class="teacher-brand-icon">♡</span>
+        <div>
+          <strong>Laboral 1A</strong>
+          <small>Mi espacio docente</small>
+        </div>
+      </div>
 
-    <!-- VOLVER AL INICIO -->
-    <button
-      type="button"
-      class="admin-map-button admin-map-back"
-      onclick="volverPortal()"
-      aria-label="Volver al inicio"
-    ></button>
+      <nav class="teacher-menu">
+        <button type="button" class="teacher-menu-item active">
+          <span>🌸</span> Actividades
+        </button>
+        <button type="button" class="teacher-menu-item">
+          <span>👩‍🎓</span> Estudiantes
+        </button>
+        <button type="button" class="teacher-menu-item">
+          <span>🏦</span> Banco
+        </button>
+        <button type="button" class="teacher-menu-item">
+          <span>🛒</span> Supermercado
+        </button>
+        <button type="button" class="teacher-menu-item">
+          <span>📚</span> Biblioteca
+        </button>
+        <button type="button" class="teacher-menu-item">
+          <span>🗑️</span> Papelera
+        </button>
+      </nav>
 
+      <div class="teacher-calendar">
+        <div class="teacher-calendar-heading">
+          <span>🗓️</span>
+          <strong>Mi calendario</strong>
+        </div>
+        <p>Tu espacio para organizarte ✨</p>
+        <button type="button" class="teacher-calendar-open">
+          Abrir mi planner →
+        </button>
+      </div>
+    </aside>
 
-    <!-- ESTUDIANTES -->
-    <button
-      type="button"
-      class="admin-map-button admin-map-students"
-      onclick="abrirAdministracionEstudiantes()"
-      aria-label="Estudiantes"
-    ></button>
+    <main class="teacher-main">
+      <header class="teacher-header">
+        <div>
+          <p class="teacher-eyebrow">TU ESPACIO DE ORGANIZACIÓN</p>
+          <h1>¡Hola, profe! 🌷</h1>
+          <p>¿Qué vamos a preparar hoy?</p>
+        </div>
+        <button type="button" class="teacher-new-activity">
+          + Nueva actividad
+        </button>
+      </header>
 
+      <section class="teacher-summary">
+        <article class="teacher-summary-card pink">
+          <span>🌸</span>
+          <p>Actividades creadas</p>
+          <strong>0</strong>
+        </article>
+        <article class="teacher-summary-card purple">
+          <span>📝</span>
+          <p>Pendientes de revisar</p>
+          <strong>0</strong>
+        </article>
+        <article class="teacher-summary-card yellow">
+          <span>✨</span>
+          <p>Actividades publicadas</p>
+          <strong>0</strong>
+        </article>
+      </section>
 
-    <!-- ACTIVIDADES -->
-    <button
-      type="button"
-      class="admin-map-button admin-map-activities"
-      onclick="abrirAdministracionActividades()"
-      aria-label="Actividades"
-    ></button>
+      <section class="teacher-activities">
+        <div class="teacher-section-heading">
+          <div>
+            <h2>Mis actividades 💕</h2>
+            <p>Organiza y prepara las experiencias de aprendizaje.</p>
+          </div>
+          <input type="search" placeholder="Buscar actividad..."
+            aria-label="Buscar actividad">
+        </div>
 
-
-    <!-- SUPERMERCADO -->
-    <button
-      type="button"
-      class="admin-map-button admin-map-supermarket"
-      onclick="abrirAdministracionSupermercado()"
-      aria-label="Supermercado"
-    ></button>
-
-
-    <!-- BANCO -->
-    <button
-      type="button"
-      class="admin-map-button admin-map-bank"
-      onclick="abrirAdministracionBanco()"
-      aria-label="Banco"
-    ></button>
+        <div class="teacher-empty-state">
+          <span>🌷</span>
+          <h3>¡Aquí comenzará tu espacio de actividades!</h3>
+          <p>Cuando creemos actividades, aparecerán organizadas aquí.</p>
+        </div>
+      </section>
+    </main>
 
   </div>
-
 </section>
 
 
