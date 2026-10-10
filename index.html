@@ -2646,10 +2646,11 @@ body.printing-shopping-list #receiptPrintArea{
 }
 
 .teacher-calendar{
+  flex-shrink:0;
   margin-top:auto;
-  padding:14px;
+  padding:8px 9px 10px;
   border:1px solid #f2d8e9;
-  border-radius:17px;
+  border-radius:15px;
   background:#fff7fc;
 }
 
@@ -2714,12 +2715,12 @@ body.printing-shopping-list #receiptPrintArea{
 .teacher-calendar-days{
   display:grid;
   grid-template-columns:repeat(7,minmax(0,1fr));
-  gap:3px;
+  gap:1px;
   text-align:center;
 }
 
 .teacher-calendar-weekdays span{
-  padding:5px 0;
+  padding:2px 0;
   color:#a18b9e;
   font-size:10px;
   font-weight:bold;
@@ -2734,12 +2735,12 @@ body.printing-shopping-list #receiptPrintArea{
   aspect-ratio:1;
   padding:0;
   border:0;
-  border-radius:7px;
+  border-radius:5px;
   background:transparent;
   color:#76677b;
   font:inherit;
-  font-size:11px;
-}
+  font-size:10px;
+  }
 
 .teacher-calendar-days button{
   cursor:pointer;
@@ -3395,10 +3396,7 @@ body.printing-shopping-list #receiptPrintArea{
 
         <div id="teacherCalendarDays" class="teacher-calendar-days"></div>
 
-        <button type="button" class="teacher-calendar-open" id="openTeacherPlanner">
-          Abrir mi planner →
-        </button>
-      </div>
+        </div>
     </aside>
 
     <main class="teacher-main">
