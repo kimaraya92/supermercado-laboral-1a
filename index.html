@@ -2556,6 +2556,8 @@ body.printing-shopping-list #receiptPrintArea{
 }
 
 .teacher-sidebar{
+  position:sticky;
+  top:0;
   width:245px;
   flex:0 0 245px;
   height:100vh;
@@ -2568,7 +2570,6 @@ body.printing-shopping-list #receiptPrintArea{
   background:#ffffff;
   border-right:1px solid #f2e5f0;
 }
-
 .teacher-brand{
   display:flex;
   align-items:center;
@@ -2767,11 +2768,10 @@ body.printing-shopping-list #receiptPrintArea{
 .teacher-main{
   flex:1;
   min-width:0;
-  height:100vh;
+  min-height:100vh;
   padding:30px 36px;
   box-sizing:border-box;
-  overflow-y:auto;
-  overflow-x:hidden;
+  overflow:visible;
 }
 
 .teacher-header{
