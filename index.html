@@ -2677,7 +2677,98 @@ body.printing-shopping-list #receiptPrintArea{
   color:#8052a0;
   cursor:pointer;
 }
+.teacher-calendar-month{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:4px;
+  margin:14px 0 12px;
+}
 
+.teacher-calendar-month strong{
+  color:#754568;
+  font-size:12px;
+  text-align:center;
+  text-transform:capitalize;
+}
+
+.teacher-calendar-month button{
+  width:26px;
+  height:26px;
+  flex-shrink:0;
+  border:0;
+  border-radius:8px;
+  background:#fce7f3;
+  color:#a14e82;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.teacher-calendar-weekdays,
+.teacher-calendar-days{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:3px;
+  text-align:center;
+}
+
+.teacher-calendar-weekdays span{
+  padding:5px 0;
+  color:#a18b9e;
+  font-size:10px;
+  font-weight:bold;
+}
+
+.teacher-calendar-days button,
+.teacher-calendar-days span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  aspect-ratio:1;
+  padding:0;
+  border:0;
+  border-radius:7px;
+  background:transparent;
+  color:#76677b;
+  font:inherit;
+  font-size:11px;
+}
+
+.teacher-calendar-days button{
+  cursor:pointer;
+}
+
+.teacher-calendar-days button:hover{
+  background:#f3e8ff;
+}
+
+.teacher-calendar-days button.today{
+  background:#fce7f3;
+  color:#b83278;
+  font-weight:bold;
+  outline:1px solid #e8b4d4;
+}
+
+.teacher-calendar-days button.selected{
+  background:#dca4ca;
+  color:#ffffff;
+  font-weight:bold;
+}
+
+.teacher-calendar-days button.has-reminder::after{
+  content:"";
+  width:4px;
+  height:4px;
+  position:absolute;
+  margin-top:18px;
+  border-radius:50%;
+  background:#a14e82;
+}
+
+.teacher-calendar-days button{
+  position:relative;
+}
 .teacher-main{
   flex:1;
   min-width:0;
