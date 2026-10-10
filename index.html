@@ -7471,10 +7471,20 @@ function showTotal(){
     .className =
       "payment-message";
 
-  document
+    document
     .getElementById("changeAutomaticBox")
     .classList
     .add("hidden");
+
+  document
+    .getElementById("automaticChangeAmount")
+    .textContent =
+      "$0";
+
+  document
+    .getElementById("changeBreakdown")
+    .innerHTML =
+      "";
 
   document
     .getElementById("changeManualBox")
@@ -7488,11 +7498,7 @@ function showTotal(){
       .classList
       .add("hidden");
 
-    document
-      .getElementById("changeAutomaticBox")
-      .classList
-      .remove("hidden");
-
+  }
   }
 
 
