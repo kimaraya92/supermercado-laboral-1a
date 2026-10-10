@@ -5819,12 +5819,32 @@ function volverPortal(){
 }
 function abrirVenta(){
 
+  currentWorker = {
+    name: estudianteActual,
+    rut: rutEstudianteActual,
+    role: "Cajero/a"
+  };
+
+  document
+    .getElementById("saleWorkerName")
+    .textContent =
+      estudianteActual;
+
+  document
+    .getElementById("saleWorkerRole")
+    .textContent =
+      "Cajero/a";
+
+  newPurchase();
+
   hideAllScreens();
 
   document
-    .getElementById("workerScreen")
+    .getElementById("saleScreen")
     .classList
     .remove("hidden");
+
+  registrarPantalla("saleScreen");
 
 }
 
