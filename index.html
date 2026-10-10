@@ -1166,7 +1166,7 @@ transform:translateY(-50%);
 
 
 .payment-box{
-
+  position:relative;
   width:min(520px,calc(100vw - 40px));
 
   max-height:calc(100vh - 40px);
@@ -1186,6 +1186,40 @@ transform:translateY(-50%);
   box-sizing:border-box;
 }
 
+  .payment-close{
+
+  position:absolute;
+
+  top:12px;
+  right:14px;
+
+  width:44px;
+  height:44px;
+
+  border:none;
+  border-radius:50%;
+
+  background:transparent;
+
+  color:#e91e63;
+
+  font-size:32px;
+  font-weight:900;
+
+  cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  z-index:10;
+}
+
+.payment-close:hover{
+
+  background:#fce4ec;
+
+}
 
 .payment-box h2{
 
