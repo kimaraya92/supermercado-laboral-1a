@@ -3286,7 +3286,7 @@ max-width:1110px;
       </div>
 
 
-      <label>
+            <label>
         💵 DINERO RECIBIDO
       </label>
 
@@ -3298,18 +3298,44 @@ max-width:1110px;
         placeholder="Ingresa el dinero recibido"
       >
 
+      <div id="changeManualBox">
 
-      <label>
-        💰 VUELTO QUE ENTREGARÉ
-      </label>
+        <label>
+          💰 VUELTO QUE ENTREGARÉ
+        </label>
 
-      <input
-        type="number"
-        id="changeGiven"
-        min="0"
-        step="10"
-        placeholder="Ingresa el vuelto"
+        <input
+          type="number"
+          id="changeGiven"
+          min="0"
+          step="10"
+          placeholder="Ingresa el vuelto"
+        >
+
+      </div>
+
+      <div
+        id="changeAutomaticBox"
+        class="hidden"
       >
+
+        <div class="automatic-change-title">
+          💰 VUELTO
+        </div>
+
+        <div
+          id="automaticChangeAmount"
+          class="automatic-change-amount"
+        >
+          $0
+        </div>
+
+        <div
+          id="changeBreakdown"
+          class="change-breakdown"
+        ></div>
+
+      </div>
 
 
       <div
@@ -4999,7 +5025,30 @@ let currentWorker = {
 
 let estudianteActual = "";
 let rutEstudianteActual = "";
+function normalizarNombreEstudiante(nombre){
 
+  return String(nombre || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"");
+
+}
+
+function estudianteCalculaVuelto(){
+
+  const nombre =
+    normalizarNombreEstudiante(
+      estudianteActual
+    );
+
+  return [
+    "esteban",
+    "renata",
+    "almendra"
+  ].includes(nombre);
+
+}
 /* =========================================
    NAVEGACIÓN DE LA APLICACIÓN
 ========================================= */
@@ -7310,28 +7359,49 @@ function showTotal(){
       money(purchaseTotal);
 
 
-  document
+    document
     .getElementById("moneyReceived")
     .value =
       "";
-
 
   document
     .getElementById("changeGiven")
     .value =
       "";
 
-
   document
     .getElementById("paymentMessage")
     .textContent =
       "";
 
-
   document
     .getElementById("paymentMessage")
     .className =
       "payment-message";
+
+  document
+    .getElementById("changeAutomaticBox")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("changeManualBox")
+    .classList
+    .remove("hidden");
+
+  if(!estudianteCalculaVuelto()){
+
+    document
+      .getElementById("changeManualBox")
+      .classList
+      .add("hidden");
+
+    document
+      .getElementById("changeAutomaticBox")
+      .classList
+      .remove("hidden");
+
+  }
 
 
   document
