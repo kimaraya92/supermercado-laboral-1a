@@ -7678,13 +7678,26 @@ function checkPayment(){
   }
 
 
-    if(estudianteCalculaVuelto()){
+        if(estudianteCalculaVuelto()){
 
     message.textContent =
-      "✅ ¡Muy bien! El vuelto es correcto. Puedes continuar.";
+      "✅ ¡Muy bien! El vuelto es correcto.";
 
     message.className =
       "payment-message success";
+
+
+    document
+      .getElementById("paymentModal")
+      .classList
+      .add("hidden");
+
+
+    document
+      .getElementById("receiptPrintArea")
+      .classList
+      .remove("hidden");
+
 
     return;
 
