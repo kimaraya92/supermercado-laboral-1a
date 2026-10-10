@@ -2536,7 +2536,10 @@ body.printing-shopping-list #receiptPrintArea{
    PANEL DE ADMINISTRADORA
 ============================== */
 
-```css
+/* ==============================
+   PANEL DE ADMINISTRADORA
+============================== */
+
 .admin-map-screen{
   position:fixed;
   inset:0;
@@ -2561,35 +2564,332 @@ body.printing-shopping-list #receiptPrintArea{
   width:245px;
   flex:0 0 245px;
   height:100vh;
-  min-height:0;
   box-sizing:border-box;
   padding:25px 16px 20px;
   display:flex;
   flex-direction:column;
-  overflow:hidden;
+  overflow-y:auto;
+  overflow-x:hidden;
   background:#ffffff;
   border-right:1px solid #f2e5f0;
+}
+
+.teacher-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 6px 28px;
+}
+
+.teacher-brand-icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:45px;
+  height:45px;
+  flex-shrink:0;
+  border-radius:15px;
+  background:#fce7f3;
+  color:#c13f81;
+  font-size:30px;
+}
+
+.teacher-brand strong,
+.teacher-brand small{
+  display:block;
+}
+
+.teacher-brand strong{
+  font-size:19px;
+  color:#754568;
+}
+
+.teacher-brand small{
+  margin-top:4px;
+  font-size:11px;
+  color:#9b8499;
+}
+
+.teacher-menu{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.teacher-menu-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:100%;
+  padding:13px 12px;
+  border:0;
+  border-radius:13px;
+  background:transparent;
+  color:#76677b;
+  text-align:left;
+  font:inherit;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.teacher-menu-item span{
+  font-size:19px;
+}
+
+.teacher-menu-item:hover{
+  background:#fff0f7;
+}
+
+.teacher-menu-item.active{
+  background:#fce7f3;
+  color:#b83278;
+  font-weight:bold;
+}
+
+.teacher-calendar{
+  margin-top:auto;
+  padding:14px;
+  border:1px solid #f2d8e9;
+  border-radius:17px;
+  background:#fff7fc;
+}
+
+.teacher-calendar-heading{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#a14e82;
+  font-size:13px;
+}
+
+.teacher-calendar p{
+  font-size:12px;
+  line-height:1.5;
+  color:#90788b;
+}
+
+.teacher-calendar-open{
+  width:100%;
+  padding:9px 5px;
+  border:0;
+  border-radius:10px;
+  background:#f3e8ff;
+  color:#8052a0;
+  cursor:pointer;
 }
 
 .teacher-main{
   flex:1;
   min-width:0;
   height:100vh;
-  padding:36px;
+  padding:30px 36px;
   box-sizing:border-box;
   overflow-y:auto;
   overflow-x:hidden;
 }
-```
+
+.teacher-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:24px;
+}
+
+.teacher-eyebrow{
+  margin:0 0 12px;
+  color:#b66b9b;
+  font-size:11px;
+  letter-spacing:1.5px;
+}
+
+.teacher-header h1{
+  margin:0;
+  color:#754568;
+  font-size:clamp(26px,2.5vw,34px);
+  white-space:nowrap;
+}
+
+.teacher-header p:not(.teacher-eyebrow){
+  margin:9px 0 0;
+  color:#968298;
+}
+
+.teacher-new-activity{
+  padding:11px 18px;
+  border:0;
+  border-radius:12px;
+  background:#dca4ca;
+  color:#ffffff;
+  font-size:14px;
+  font-weight:bold;
+  white-space:nowrap;
+  cursor:pointer;
+  box-shadow:0 4px 12px #dca4ca33;
+}
+
+.teacher-summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+  margin-bottom:26px;
+}
+
+.teacher-summary-card{
+  padding:22px;
+  border-radius:19px;
+  border:1px solid #f0e4ef;
+  box-shadow:0 5px 16px #76506a0a;
+}
+
+.teacher-summary-card.pink{
+  background:#fff0f7;
+}
+
+.teacher-summary-card.purple{
+  background:#f3edff;
+}
+
+.teacher-summary-card.yellow{
+  background:#fff8df;
+}
+
+.teacher-summary-card span{
+  font-size:24px;
+}
+
+.teacher-summary-card p{
+  margin:12px 0 8px;
+  color:#8b778c;
+  font-size:13px;
+}
+
+.teacher-summary-card strong{
+  color:#75506f;
+  font-size:30px;
+}
+
+.teacher-activities{
+  padding:25px;
+  border:1px solid #f0e4ef;
+  border-radius:20px;
+  background:#ffffff;
+  box-shadow:0 5px 20px #76506a0a;
+}
+
+.teacher-section-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:15px;
+  margin-bottom:24px;
+}
+
+.teacher-section-heading h2{
+  margin:0 0 8px;
+  color:#754568;
+  font-size:22px;
+}
+
+.teacher-section-heading p{
+  margin:0;
+  color:#968298;
+  font-size:13px;
+}
+
+.teacher-section-heading input{
+  width:230px;
+  max-width:100%;
+  padding:11px 14px;
+  box-sizing:border-box;
+  border:1px solid #ead9e8;
+  border-radius:12px;
+  background:#fffafd;
+  font:inherit;
+}
+
+.teacher-empty-state{
+  padding:45px 15px;
+  border:1px dashed #e8cfe2;
+  border-radius:17px;
+  background:#fffafd;
+  text-align:center;
+}
+
+.teacher-empty-state span{
+  font-size:38px;
+}
+
+.teacher-empty-state h3{
+  color:#875b7d;
+  font-size:18px;
+}
+
+.teacher-empty-state p{
+  color:#9b879b;
+  font-size:14px;
+}
+
+@media(max-width:900px){
+  .teacher-sidebar{
+    width:195px;
+    flex-basis:195px;
+    padding:20px 10px;
+  }
+
+  .teacher-main{
+    padding:24px 18px;
+  }
+
+  .teacher-summary{
+    grid-template-columns:1fr;
+  }
+
+  .teacher-header h1{
+    white-space:normal;
+  }
+}
+
+@media(max-width:600px){
+  .teacher-portal{
+    flex-direction:column;
+    height:auto;
+    min-height:100vh;
+    overflow:visible;
+  }
+
   .teacher-sidebar{
     width:100%;
-    min-height:auto;
+    height:auto;
+    min-height:0;
+    flex-basis:auto;
+    overflow:visible;
   }
 
   .teacher-calendar{
     margin-top:18px;
   }
 
+  .teacher-main{
+    height:auto;
+    min-height:100vh;
+    padding:20px 12px;
+    overflow:visible;
+  }
+
+  .teacher-activities{
+    padding:16px;
+  }
+
+  .teacher-summary{
+    grid-template-columns:1fr;
+  }
+
+  .teacher-header{
+    flex-direction:column;
+  }
+}
   .teacher-main{
     padding:20px 12px;
   }
