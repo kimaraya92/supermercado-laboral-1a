@@ -2847,6 +2847,78 @@ aspect-ratio:auto;
   font-size:38px;
 }
  
+/* FORMULARIO Y LISTA DEL PLANNER */
+.teacher-planner-form{
+  display:grid;
+  gap:16px;
+  margin:24px 0;
+  padding:22px;
+  border:1px solid #f2d8e9;
+  border-radius:16px;
+  background:#fffafd;
+}
+
+.teacher-planner-field{
+  display:grid;
+  gap:7px;
+}
+
+.teacher-planner-field label{
+  color:#754568;
+  font-size:14px;
+  font-weight:bold;
+}
+
+.teacher-planner-field input,
+.teacher-planner-field textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:12px 14px;
+  border:1px solid #e8c6dd;
+  border-radius:10px;
+  background:#ffffff;
+  color:#554454;
+  font:inherit;
+}
+
+.teacher-planner-field textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.teacher-planner-save{
+  justify-self:start;
+  padding:12px 20px;
+  border:0;
+  border-radius:12px;
+  background:#dca4ca;
+  color:#ffffff;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.teacher-planner-list{
+  display:grid;
+  gap:12px;
+  margin-top:20px;
+}
+
+.teacher-planner-reminder{
+  padding:18px;
+  border:1px solid #f2d8e9;
+  border-radius:14px;
+  background:#ffffff;
+}
+
+.teacher-planner-reminder strong{
+  color:#754568;
+}
+
+.teacher-planner-reminder p{
+  color:#90788b;
+  white-space:pre-wrap;
+}
+
 .teacher-main{
   flex:1;
   width:0;
@@ -3532,11 +3604,48 @@ aspect-ratio:auto;
           Selecciona una fecha en el calendario.
         </p>
 
-        <div class="teacher-planner-empty">
-          <span>🗓️</span>
-          <strong>Organicemos este día</strong>
-          <p>Pronto podrás agregar recordatorios y actividades para esta fecha.</p>
+       
+        <form id="teacherPlannerForm" class="teacher-planner-form">
+          <input type="hidden" id="teacherPlannerSelectedDate">
+
+          <div class="teacher-planner-field">
+            <label for="teacherPlannerTitle">¿Qué debemos recordar?</label>
+            <input
+              type="text"
+              id="teacherPlannerTitle"
+              placeholder="Ej.: Comprar ingredientes"
+              maxlength="120"
+              required
+            >
+          </div>
+
+          <div class="teacher-planner-field">
+            <label for="teacherPlannerTime">Hora (opcional)</label>
+            <input type="time" id="teacherPlannerTime">
+          </div>
+
+          <div class="teacher-planner-field">
+            <label for="teacherPlannerDetails">Detalles (opcional)</label>
+            <textarea
+              id="teacherPlannerDetails"
+              placeholder="Anota materiales, pendientes o indicaciones..."
+              maxlength="1000"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="teacher-planner-save">
+            ＋ Agregar recordatorio
+          </button>
+        </form>
+
+        <div id="teacherPlannerList" class="teacher-planner-list"></div>
+
+        <div id="teacherPlannerEmpty" class="teacher-planner-empty">
+          <span>🌷</span>
+          <strong>Tu día está listo para organizarse</strong>
+          <p>Los recordatorios aparecerán aquí.</p>
         </div>
+
       </section>
 
       
