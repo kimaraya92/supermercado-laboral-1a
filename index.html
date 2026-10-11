@@ -2812,9 +2812,10 @@ body.printing-shopping-list #receiptPrintArea{
 .teacher-header{
   display:flex;
   flex-direction:column;
-  align-items:flex-start;
+  align-items:center;
   gap:0;
   margin-bottom:24px;
+  text-align:center;
 }
 
 .teacher-eyebrow{
@@ -2830,18 +2831,22 @@ body.printing-shopping-list #receiptPrintArea{
   font-size:clamp(25px,2.4vw,34px);
   line-height:1.25;
   white-space:nowrap;
+  text-align:center;
 }
 
 .teacher-header p:not(.teacher-eyebrow){
   margin:9px 0 0;
   color:#968298;
   font-size:15px;
+  text-align:center;
 }
 
 .teacher-new-activity{
   align-self:flex-end;
-  margin-top:20px;
-  padding:10px 17px;
+  width:auto;
+  min-width:190px;
+  margin-top:18px;
+  padding:10px 18px;
   border:0;
   border-radius:12px;
   background:#dca4ca;
@@ -2852,7 +2857,6 @@ body.printing-shopping-list #receiptPrintArea{
   cursor:pointer;
   box-shadow:0 4px 12px #dca4ca33;
 }
-
 .teacher-summary{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
