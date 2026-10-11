@@ -11346,42 +11346,47 @@ auth.onAuthStateChanged(function(user){
 </script>
 
 
+
 <script>
-/* ABRIR Y CERRAR EL CREADOR DE ACTIVIDADES */
+/* ABRIR Y CERRAR LA VENTANA DE CREAR ACTIVIDADES */
 (function(){
   const openButton = document.getElementById("openTeacherActivityCreator");
-  const creator = document.getElementById("teacherActivityCreator");
-  const backButton = document.getElementById("teacherActivityCreatorBack");
-  const main = document.querySelector("#adminHomeScreen .teacher-main");
+  const modal = document.getElementById("teacherActivityCreator");
+  const closeButton = document.getElementById("teacherActivityCreatorBack");
 
-  if(!openButton || !creator || !backButton || !main) return;
+  if(!openButton || !modal || !closeButton) return;
 
-  const dashboardSections = [
-    main.querySelector(".teacher-header"),
-    main.querySelector(".teacher-summary"),
-    main.querySelector(".teacher-activities")
-  ];
+  function openModal(){
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
 
-  openButton.addEventListener("click", function(){
-    const planner = document.getElementById("teacherPlanner");
-    if(planner) planner.classList.add("hidden");
+    const titleInput = document.getElementById("newActivityTitle");
+    if(titleInput) titleInput.focus();
+  }
 
-    dashboardSections.forEach(function(section){
-      if(section) section.classList.add("hidden");
-    });
+  function closeModal(){
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
+    openButton.focus();
+  }
 
-    creator.classList.remove("hidden");
+  openButton.addEventListener("click", openModal);
+  closeButton.addEventListener("click", closeModal);
+
+  modal.addEventListener("click", function(event){
+    if(event.target === modal){
+      closeModal();
+    }
   });
 
-  backButton.addEventListener("click", function(){
-    creator.classList.add("hidden");
-
-    dashboardSections.forEach(function(section){
-      if(section) section.classList.remove("hidden");
-    });
+  document.addEventListener("keydown", function(event){
+    if(event.key === "Escape" && !modal.classList.contains("hidden")){
+      closeModal();
+    }
   });
 })();
 </script>
+
 
 </body>
 
