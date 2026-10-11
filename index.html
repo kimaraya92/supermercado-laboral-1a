@@ -11402,20 +11402,23 @@ auth.onAuthStateChanged(function(user){
 
 
 
+
 <script>
-/* ABRIR Y CERRAR LA VENTANA DE CREAR ACTIVIDADES */
+/* VENTANA Y GUARDADO DE BORRADORES */
 (function(){
   const openButton = document.getElementById("openTeacherActivityCreator");
   const modal = document.getElementById("teacherActivityCreator");
   const closeButton = document.getElementById("teacherActivityCreatorBack");
+  const cancelButton = document.getElementById("cancelTeacherActivity");
+  const saveButton = document.getElementById("saveTeacherActivityDraft");
+  const titleInput = document.getElementById("newActivityTitle");
+  const descriptionInput = document.getElementById("newActivityDescription");
 
-  if(!openButton || !modal || !closeButton) return;
+  if(!openButton || !modal || !closeButton || !cancelButton || !saveButton) return;
 
   function openModal(){
     modal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
-
-    const titleInput = document.getElementById("newActivityTitle");
     if(titleInput) titleInput.focus();
   }
 
@@ -11427,11 +11430,10 @@ auth.onAuthStateChanged(function(user){
 
   openButton.addEventListener("click", openModal);
   closeButton.addEventListener("click", closeModal);
+  cancelButton.addEventListener("click", closeModal);
 
   modal.addEventListener("click", function(event){
-    if(event.target === modal){
-      closeModal();
-    }
+    if(event.target === modal) closeModal();
   });
 
   document.addEventListener("keydown", function(event){
@@ -11439,8 +11441,57 @@ auth.onAuthStateChanged(function(user){
       closeModal();
     }
   });
+
+  saveButton.addEventListener("click", async function(){
+    const title = titleInput.value.trim();
+    const description = descriptionInput.value.trim();
+
+    if(!title){
+      alert("Escribe el nombre de la actividad antes de guardar.");
+      titleInput.focus();
+      return;
+    }
+
+    if(!description){
+      alert("Escribe las instrucciones para los estudiantes.");
+      descriptionInput.focus();
+      return;
+    }
+
+    if(typeof database === "undefined" || typeof auth === "undefined" || !auth.currentUser){
+      alert("No se pudo conectar con la base de datos. Comprueba tu conexión e inténtalo nuevamente.");
+      return;
+    }
+
+    saveButton.disabled = true;
+    saveButton.textContent = "Guardando...";
+
+    try{
+      const userId = auth.currentUser.uid;
+      const draftRef = database.ref("actividades/borradores/" + userId).push();
+
+      await draftRef.set({
+        titulo: title,
+        instrucciones: description,
+        estado: "borrador",
+        creadoEn: firebase.database.ServerValue.TIMESTAMP
+      });
+
+      alert("¡Borrador guardado correctamente! 🌷");
+      titleInput.value = "";
+      descriptionInput.value = "";
+      closeModal();
+    }catch(error){
+      console.error("Error al guardar el borrador:", error);
+      alert("No se pudo guardar el borrador. Revisa los permisos de Firebase e inténtalo nuevamente.");
+    }finally{
+      saveButton.disabled = false;
+      saveButton.textContent = "💗 Guardar borrador";
+    }
+  });
 })();
 </script>
+
 
 
 </body>
