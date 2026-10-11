@@ -10789,6 +10789,49 @@ auth.onAuthStateChanged(function(user){
 
 });
 
+/* ABRIR EL PLANNER DESDE EL CALENDARIO */
+(function(){
+  const planner = document.getElementById("teacherPlanner");
+  const plannerDate = document.getElementById("teacherPlannerDate");
+  const backButton = document.getElementById("teacherPlannerBack");
+  const main = document.querySelector("#adminHomeScreen .teacher-main");
+
+  if(!planner || !plannerDate || !backButton || !main) return;
+
+  const dashboardSections = [
+    main.querySelector(".teacher-header"),
+    main.querySelector(".teacher-summary"),
+    main.querySelector(".teacher-activities")
+  ];
+
+  document.addEventListener("teacherCalendarDateSelected", function(event){
+    const data = event.detail;
+    const date = new Date(data.year, data.month - 1, data.day);
+
+    plannerDate.textContent = "Fecha seleccionada: "
+      + date.toLocaleDateString("es-CL", {
+          weekday:"long",
+          day:"numeric",
+          month:"long",
+          year:"numeric"
+        });
+
+    dashboardSections.forEach(function(section){
+      if(section) section.classList.add("hidden");
+    });
+
+    planner.classList.remove("hidden");
+  });
+
+  backButton.addEventListener("click", function(){
+    planner.classList.add("hidden");
+
+    dashboardSections.forEach(function(section){
+      if(section) section.classList.remove("hidden");
+    });
+  });
+})();
+
 /* =========================================
    CALENDARIO MENSUAL DE ADMINISTRADORA
 ========================================= */
