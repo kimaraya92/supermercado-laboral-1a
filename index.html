@@ -3588,7 +3588,7 @@ aspect-ratio:auto;
                     <h1>¡Hola Kim y Connie! 🌷</h1>
           <p>¿Qué vamos a preparar hoy?</p>
         </div>
-                <button type="button" class="teacher-new-activity">
+                <button type="button" class="teacher-new-activity" id="openTeacherActivityCreator">
                     📝 ➕ NUEVA ACTIVIDAD
         </button>
       </header>
@@ -11271,3 +11271,40 @@ auth.onAuthStateChanged(function(user){
 </body>
 
 </html>
+
+<script>
+/* ABRIR Y CERRAR EL CREADOR DE ACTIVIDADES */
+(function(){
+  const openButton = document.getElementById("openTeacherActivityCreator");
+  const creator = document.getElementById("teacherActivityCreator");
+  const backButton = document.getElementById("teacherActivityCreatorBack");
+  const main = document.querySelector("#adminHomeScreen .teacher-main");
+
+  if(!openButton || !creator || !backButton || !main) return;
+
+  const dashboardSections = [
+    main.querySelector(".teacher-header"),
+    main.querySelector(".teacher-summary"),
+    main.querySelector(".teacher-activities")
+  ];
+
+  openButton.addEventListener("click", function(){
+    const planner = document.getElementById("teacherPlanner");
+    if(planner) planner.classList.add("hidden");
+
+    dashboardSections.forEach(function(section){
+      if(section) section.classList.add("hidden");
+    });
+
+    creator.classList.remove("hidden");
+  });
+
+  backButton.addEventListener("click", function(){
+    creator.classList.add("hidden");
+
+    dashboardSections.forEach(function(section){
+      if(section) section.classList.remove("hidden");
+    });
+  });
+})();
+</script>
