@@ -10898,6 +10898,130 @@ auth.onAuthStateChanged(function(user){
 
 });
 
+/* GUARDAR Y MOSTRAR RECORDATORIOS DEL PLANNER */
+(function(){
+  const form = document.getElementById("teacherPlannerForm");
+  const titleInput = document.getElementById("teacherPlannerTitle");
+  const timeInput = document.getElementById("teacherPlannerTime");
+  const detailsInput = document.getElementById("teacherPlannerDetails");
+  const selectedDateInput = document.getElementById("teacherPlannerSelectedDate");
+  const list = document.getElementById("teacherPlannerList");
+  const empty = document.getElementById("teacherPlannerEmpty");
+
+  if(!form || !titleInput || !selectedDateInput || !list || !empty) return;
+  if(typeof database === "undefined") return;
+
+  let selectedDate = "";
+  let remindersRef = null;
+  let remindersListener = null;
+
+  function showReminders(snapshot){
+    list.innerHTML = "";
+    const reminders = snapshot.val() || {};
+    const entries = Object.entries(reminders);
+
+    empty.style.display = entries.length ? "none" : "block";
+
+    entries.sort(function(a,b){
+      return (a[1].time || "99:99").localeCompare(b[1].time || "99:99");
+    });
+
+    entries.forEach(function(entry){
+      const id = entry[0];
+      const reminder = entry[1];
+
+      const card = document.createElement("article");
+      card.className = "teacher-planner-reminder";
+
+      const title = document.createElement("strong");
+      title.textContent = reminder.title || "Recordatorio";
+
+      const time = document.createElement("p");
+      time.textContent = reminder.time ? "🕒 " + reminder.time : "Sin hora definida";
+
+      const details = document.createElement("p");
+      details.textContent = reminder.details || "";
+
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.className = "teacher-planner-back";
+      deleteButton.textContent = "🗑️ Eliminar";
+
+      deleteButton.addEventListener("click", function(){
+        if(!confirm("¿Quieres eliminar este recordatorio?")) return;
+        database.ref("plannerRecordatorios/" + selectedDate + "/" + id)
+          .remove()
+          .catch(function(error){
+            console.error("No se pudo eliminar el recordatorio:", error);
+            alert("No se pudo eliminar. Revisa la conexión e inténtalo otra vez.");
+          });
+      });
+
+      card.appendChild(title);
+      card.appendChild(time);
+      if(reminder.details){
+        card.appendChild(details);
+      }
+      card.appendChild(deleteButton);
+      list.appendChild(card);
+    });
+  }
+
+  document.addEventListener("teacherCalendarDateSelected", function(event){
+    const data = event.detail;
+    selectedDate = data.date;
+    selectedDateInput.value = selectedDate;
+
+    if(remindersRef && remindersListener){
+      remindersRef.off("value", remindersListener);
+    }
+
+    remindersRef = database.ref("plannerRecordatorios/" + selectedDate);
+    remindersListener = showReminders;
+
+    remindersRef.on("value", remindersListener, function(error){
+      console.error("No se pudieron cargar los recordatorios:", error);
+      alert("No se pudieron cargar los recordatorios. Revisa la conexión.");
+    });
+
+    form.reset();
+    selectedDateInput.value = selectedDate;
+  });
+
+  form.addEventListener("submit", function(event){
+    event.preventDefault();
+
+    const date = selectedDateInput.value;
+    const title = titleInput.value.trim();
+
+    if(!date){
+      alert("Selecciona primero un día en el calendario.");
+      return;
+    }
+
+    if(!title) return;
+
+    const saveButton = form.querySelector('[type="submit"]');
+    saveButton.disabled = true;
+
+    database.ref("plannerRecordatorios/" + date).push({
+      title: title,
+      time: timeInput.value || "",
+      details: detailsInput.value.trim(),
+      createdAt: Date.now()
+    }).then(function(){
+      form.reset();
+      selectedDateInput.value = date;
+      titleInput.focus();
+    }).catch(function(error){
+      console.error("No se pudo guardar el recordatorio:", error);
+      alert("No se pudo guardar. Revisa la conexión e inténtalo otra vez.");
+    }).finally(function(){
+      saveButton.disabled = false;
+    });
+  });
+})();
+
 /* ABRIR EL PLANNER DESDE EL CALENDARIO */
 (function(){
   const planner = document.getElementById("teacherPlanner");
