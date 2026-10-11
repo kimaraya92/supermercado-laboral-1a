@@ -3077,6 +3077,47 @@ aspect-ratio:auto;
   }
 }
 
+.teacher-activity-actions{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:30px;
+  padding-top:20px;
+  border-top:1px solid #f2dce9;
+}
+
+.teacher-activity-cancel,
+.teacher-activity-save{
+  padding:12px 20px;
+  border-radius:12px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  transition:background 0.2s ease;
+}
+
+.teacher-activity-cancel{
+  border:1px solid #f0d4e7;
+  background:#ffffff;
+  color:#a14e82;
+}
+
+.teacher-activity-cancel:hover{
+  background:#fff0f7;
+}
+
+.teacher-activity-save{
+  border:1px solid #c985b1;
+  background:#b96c9b;
+  color:#ffffff;
+}
+
+.teacher-activity-save:hover{
+  background:#a95789;
+}
+
 .teacher-summary{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -3737,12 +3778,26 @@ aspect-ratio:auto;
             💗 Estado inicial: borrador
           </p>
 
+         
           <p style="color:#968298;font-size:13px;">
             En los siguientes pasos agregaremos recursos, pictogramas,
             asignación de estudiantes y vista previa.
           </p>
-        </div>
-      </section>
+
+          <div class="teacher-activity-actions">
+            <button
+              type="button"
+              id="cancelTeacherActivity"
+              class="teacher-activity-cancel"
+            >Cancelar</button>
+
+            <button
+              type="button"
+              id="saveTeacherActivityDraft"
+              class="teacher-activity-save"
+            >💗 Guardar borrador</button>
+          </div>
+
 
       <section id="teacherPlanner" class="teacher-planner hidden">
         <button type="button" id="teacherPlannerBack" class="teacher-planner-back">
