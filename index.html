@@ -3628,44 +3628,52 @@ aspect-ratio:auto;
         </div>
       </section>
 
-      <section id="teacherActivityCreator" class="teacher-planner hidden">
-        <button type="button" id="teacherActivityCreatorBack" class="teacher-planner-back">
-          ← Volver a mis actividades
-        </button>
+      
+      <section id="teacherActivityCreator" class="teacher-activity-modal hidden">
+        <div class="teacher-activity-modal-content">
+          <button
+            type="button"
+            id="teacherActivityCreatorBack"
+            class="teacher-activity-modal-close"
+            aria-label="Cerrar ventana"
+            title="Cerrar"
+          >✕</button>
 
-        <h2>Crear una actividad 🌷</h2>
-        <p class="teacher-planner-date">
-          Prepara una experiencia de aprendizaje para tus estudiantes.
-        </p>
+          <h2>🌷 Crear una actividad</h2>
+          <p class="teacher-planner-date">
+            Prepara una experiencia de aprendizaje para tus estudiantes.
+          </p>
 
-        <div class="teacher-planner-field">
-          <label for="newActivityTitle">Nombre de la actividad</label>
-          <input
-            type="text"
-            id="newActivityTitle"
-            placeholder="Ej.: Reconocemos los alimentos"
-            maxlength="120"
-          >
+          <div class="teacher-planner-field">
+            <label for="newActivityTitle">Nombre de la actividad</label>
+            <input
+              type="text"
+              id="newActivityTitle"
+              placeholder="Ej.: Reconocemos los alimentos"
+              maxlength="120"
+            >
+          </div>
+
+          <div class="teacher-planner-field">
+            <label for="newActivityDescription">Instrucciones para los estudiantes</label>
+            <textarea
+              id="newActivityDescription"
+              placeholder="Escribe las instrucciones paso a paso..."
+              maxlength="3000"
+            ></textarea>
+          </div>
+
+          <p style="color:#a14e82;font-weight:600;">
+            💗 Estado inicial: borrador
+          </p>
+
+          <p style="color:#968298;font-size:13px;">
+            En los siguientes pasos agregaremos recursos, pictogramas,
+            asignación de estudiantes y vista previa.
+          </p>
         </div>
-
-        <div class="teacher-planner-field">
-          <label for="newActivityDescription">Instrucciones para los estudiantes</label>
-          <textarea
-            id="newActivityDescription"
-            placeholder="Escribe las instrucciones paso a paso..."
-            maxlength="3000"
-          ></textarea>
-        </div>
-
-        <p style="color:#a14e82;font-weight:600;">
-          💗 Estado inicial: borrador
-        </p>
-
-        <p style="color:#968298;font-size:13px;">
-          En los siguientes pasos agregaremos recursos, pictogramas,
-          asignación de estudiantes y vista previa.
-        </p>
       </section>
+
       <section id="teacherPlanner" class="teacher-planner hidden">
         <button type="button" id="teacherPlannerBack" class="teacher-planner-back">
           ← Volver a mis actividades
