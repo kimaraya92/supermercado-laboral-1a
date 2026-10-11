@@ -2920,7 +2920,10 @@ aspect-ratio:auto;
 }
 
 .teacher-home-button{
-  display:inline-flex;
+  display:inline-flex !important;
+  width:fit-content !important;
+  max-width:max-content;
+  flex:0 0 auto !important;
   align-items:center;
   justify-content:center;
   margin:0 0 14px 0;
@@ -2938,6 +2941,7 @@ aspect-ratio:auto;
 
 .teacher-home-button:hover{
   background:#fff0f7;
+}
 }
   .teacher-main{
   flex:1;
