@@ -2919,7 +2919,24 @@ aspect-ratio:auto;
   white-space:pre-wrap;
 }
 
-.teacher-main{
+.teacher-home-button{
+  display:block;
+  margin:0 0 14px auto;
+  padding:10px 16px;
+  border:1px solid #f0d4e7;
+  border-radius:12px;
+  background:#ffffff;
+  color:#a14e82;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 3px 10px #dca4ca18;
+}
+
+.teacher-home-button:hover{
+  background:#fff0f7;
+}
+  .teacher-main{
   flex:1;
   width:0;
   max-width:none;
@@ -3547,6 +3564,13 @@ aspect-ratio:auto;
     </aside>
 
     <main class="teacher-main">
+            <button
+        type="button"
+        class="teacher-home-button"
+        onclick="volverInicio()"
+      >
+        🏠 Volver al inicio
+      </button>
       <header class="teacher-header">
         <div>
           <p class="teacher-eyebrow">TU ESPACIO DE ORGANIZACIÓN</p>
