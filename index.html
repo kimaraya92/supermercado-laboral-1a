@@ -57,7 +57,13 @@ main{
   margin:0;
   padding:30px 36px;
 }
-
+body:has(#adminHomeScreen:not(.hidden)) > main{
+  width:100%;
+  max-width:none;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 .hidden{
   display:none !important;
 }
