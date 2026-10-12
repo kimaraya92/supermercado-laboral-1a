@@ -12253,6 +12253,146 @@ window.editarBorradorDocente = async function(activityId){
 })();
 </script>
 
+<script>
+(function(){
+  const trashList = document.getElementById("teacherTrashList");
+  const trashEmpty = document.getElementById("teacherTrashEmpty");
+
+  if(!trashList || !trashEmpty ||
+     typeof auth === "undefined" ||
+     typeof database === "undefined") return;
+
+  let listenerAttached = false;
+
+  function makeButton(text, title, color){
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = text;
+    button.title = title;
+    button.style.cssText =
+      "width:36px;height:36px;min-width:36px;display:flex;" +
+      "align-items:center;justify-content:center;padding:0;" +
+      "font-size:19px;border:1px solid #f0d4e7;border-radius:10px;" +
+      "background:#fff6fb;cursor:pointer;color:" + color + ";";
+    return button;
+  }
+
+  function renderTrash(snapshot){
+    trashList.replaceChildren();
+    let count = 0;
+
+    snapshot.forEach(function(child){
+      const data = child.val();
+      if(!data || typeof data !== "object") return;
+
+      count++;
+
+      const card = document.createElement("article");
+      card.className = "teacher-activity-card";
+
+      const cover = document.createElement("div");
+      cover.className = "teacher-activity-cover";
+
+      if(typeof data.portada === "string" &&
+         data.portada.startsWith("data:image/")){
+        const image = document.createElement("img");
+        image.src = data.portada;
+        image.alt = "Portada de " + (data.titulo || "la actividad");
+        cover.appendChild(image);
+      }else{
+        cover.textContent = "🌷";
+      }
+
+      const info = document.createElement("div");
+      info.className = "teacher-activity-info";
+
+      const status = document.createElement("span");
+      status.className = "teacher-activity-status";
+      status.textContent = "En papelera";
+
+      const title = document.createElement("h3");
+      title.textContent = data.titulo || "Actividad sin título";
+
+      const description = document.createElement("p");
+      description.textContent = data.instrucciones || "";
+
+      info.append(status, title, description);
+
+      const actions = document.createElement("div");
+      actions.style.cssText =
+        "display:flex;flex-direction:column;gap:8px;" +
+        "align-items:center;justify-content:center;";
+
+      const restoreButton = makeButton("↩️", "Restaurar actividad", "#a14e82");
+      restoreButton.setAttribute("aria-label", "Restaurar actividad");
+
+      restoreButton.addEventListener("click", async function(){
+        if(!auth.currentUser) return;
+        if(!confirm('¿Restaurar "' + (data.titulo || "esta actividad") + '"?')) return;
+
+        restoreButton.disabled = true;
+        try{
+          const restoredData = Object.assign({}, data);
+          delete restoredData.eliminadoEn;
+
+          const userId = auth.currentUser.uid;
+          const updates = {};
+          updates["actividades/borradores/" + userId + "/" + child.key] = restoredData;
+          updates["actividades/papelera/" + userId + "/" + child.key] = null;
+
+          await database.ref().update(updates);
+        }catch(error){
+          console.error("Error al restaurar la actividad:", error);
+          alert("No se pudo restaurar la actividad. Inténtalo nuevamente.");
+          restoreButton.disabled = false;
+        }
+      });
+
+      const deleteButton = makeButton("🗑️", "Eliminar definitivamente", "#c14f69");
+      deleteButton.setAttribute("aria-label", "Eliminar definitivamente");
+
+      deleteButton.addEventListener("click", async function(){
+        if(!auth.currentUser) return;
+        if(!confirm('¿Eliminar definitivamente "' + (data.titulo || "esta actividad") + '"? Esta acción no se puede deshacer.')) return;
+
+        deleteButton.disabled = true;
+        try{
+          await database.ref(
+            "actividades/papelera/" + auth.currentUser.uid + "/" + child.key
+          ).remove();
+        }catch(error){
+          console.error("Error al eliminar definitivamente:", error);
+          alert("No se pudo eliminar la actividad. Inténtalo nuevamente.");
+          deleteButton.disabled = false;
+        }
+      });
+
+      actions.append(restoreButton, deleteButton);
+      card.append(cover, info, actions);
+      trashList.appendChild(card);
+    });
+
+    trashEmpty.style.display = count ? "none" : "";
+  }
+
+  auth.onAuthStateChanged(function(user){
+    if(!user || listenerAttached) return;
+    listenerAttached = true;
+
+    database.ref("actividades/papelera/" + user.uid).on(
+      "value",
+      renderTrash,
+      function(error){
+        console.error("No se pudo cargar la papelera:", error);
+        trashEmpty.style.display = "";
+        trashEmpty.querySelector("p").textContent =
+          "No se pudo cargar la papelera. Revisa la conexión.";
+      }
+    );
+  });
+})();
+</script>
+
 
 </body>
 
