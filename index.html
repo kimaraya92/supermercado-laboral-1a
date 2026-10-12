@@ -6502,7 +6502,106 @@ function abrirActividadesEstudiante(){
   cargarActividadesPublicadasEstudiante();
   registrarPantalla("digitalNotebookScreen");
 }
+/* CARGAR ACTIVIDADES PUBLICADAS EN EL CUADERNO DEL ESTUDIANTE */
+let actividadesPublicadasEstudianteListener = false;
 
+function cargarActividadesPublicadasEstudiante(){
+
+  const pendientes = document.getElementById("digitalNotebookPending");
+  const realizadas = document.getElementById("digitalNotebookCompleted");
+
+  if(!pendientes || !realizadas) return;
+
+  pendientes.textContent = "Cargando actividades publicadas...";
+
+  if(typeof database === "undefined"){
+    pendientes.textContent = "No se pudo conectar con las actividades.";
+    return;
+  }
+
+  // Evita registrar el mismo listener varias veces.
+  if(actividadesPublicadasEstudianteListener) return;
+  actividadesPublicadasEstudianteListener = true;
+
+  database.ref("actividades/publicadas").on("value", function(snapshot){
+
+    pendientes.replaceChildren();
+
+    let cantidad = 0;
+
+    snapshot.forEach(function(docenteSnapshot){
+
+      docenteSnapshot.forEach(function(actividadSnapshot){
+
+        const actividad = actividadSnapshot.val();
+
+        if(!actividad || typeof actividad !== "object") return;
+
+        cantidad++;
+
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "digital-notebook-activity";
+
+        if(
+          typeof actividad.portada === "string" &&
+          actividad.portada.startsWith("data:image/")
+        ){
+          const imagen = document.createElement("img");
+          imagen.src = actividad.portada;
+          imagen.alt = "";
+          imagen.loading = "lazy";
+          imagen.style.width = "100%";
+          imagen.style.maxHeight = "220px";
+          imagen.style.objectFit = "cover";
+          imagen.style.borderRadius = "12px";
+          tarjeta.appendChild(imagen);
+        }
+
+        const titulo = document.createElement("h3");
+        titulo.textContent = actividad.titulo || "Actividad sin título";
+        tarjeta.appendChild(titulo);
+
+        const instrucciones = document.createElement("p");
+        instrucciones.textContent = actividad.instrucciones || "";
+        tarjeta.appendChild(instrucciones);
+
+        const enlaceRecurso =
+          actividad.recurso && actividad.recurso.enlace
+            ? String(actividad.recurso.enlace).trim()
+            : "";
+
+        if(/^https?:\/\//i.test(enlaceRecurso)){
+
+          const enlace = document.createElement("a");
+          enlace.href = enlaceRecurso;
+          enlace.target = "_blank";
+          enlace.rel = "noopener noreferrer";
+          enlace.textContent = "Abrir actividad ↗";
+          enlace.className = "digital-notebook-activity-link";
+
+          tarjeta.appendChild(enlace);
+        }
+
+        pendientes.appendChild(tarjeta);
+      });
+    });
+
+    if(cantidad === 0){
+      pendientes.textContent = "Todavía no hay actividades publicadas.";
+    }
+
+    realizadas.textContent =
+      "El registro de actividades realizadas se habilitará en una próxima etapa.";
+
+  }, function(error){
+
+    console.error("Error al cargar las actividades publicadas:", error);
+
+    pendientes.textContent =
+      "No se pudieron cargar las actividades. Revisa la conexión y los permisos.";
+
+  });
+}
 function abrirSupermercadoEstudiante(){
 
   hideAllScreens();
