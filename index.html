@@ -12058,22 +12058,42 @@ if(coverImageData.length > 500000){
   throw new Error("La portada quedó demasiado grande. Elige una imagen más pequeña.");
 }
 
+
 const publishRequested = modal.dataset.publishActivity === "true";
-const targetCategory = publishRequested ? "publicadas" : "borradores";
+let targetCategory = publishRequested ? "publicadas" : "borradores";
+
 const draftRef = database.ref("actividades/borradores/" + userId);
-const targetRef = database.ref("actividades/" + targetCategory + "/" + userId);
+const publishedRef = database.ref("actividades/publicadas/" + userId);
+
 let existingData = {};
+let existingCategory = "";
 let activityId = editingId;
 
-if(editingId){
-  const snapshot = await draftRef.child(editingId).once("value");
+if (editingId) {
+  let snapshot = await draftRef.child(editingId).once("value");
 
-  if(!snapshot.exists()){
-    throw new Error("No encontramos el borrador que intentas editar.");
+  if (snapshot.exists()) {
+    existingCategory = "borradores";
+  } else {
+    snapshot = await publishedRef.child(editingId).once("value");
+    existingCategory = "publicadas";
+  }
+
+  if (!snapshot.exists()) {
+    throw new Error("No encontramos la actividad que intentas editar.");
   }
 
   existingData = snapshot.val() || {};
-}else{
+
+  // Una actividad publicada continúa publicada al editarla.
+  if (existingCategory === "publicadas") {
+    targetCategory = "publicadas";
+  }
+} else {
+  const targetRef = database.ref(
+    "actividades/" + targetCategory + "/" + userId
+  );
+
   activityId = targetRef.push().key;
 }
 
