@@ -12213,45 +12213,68 @@ window.editarBorradorDocente = async function(activityId){
 
 </script>
 
+
 <script>
 (function(){
-  const trashButton = document.getElementById("teacherTrashMenuButton");
+  const main = document.querySelector("#adminHomeScreen .teacher-main");
   const menuButtons = document.querySelectorAll(".teacher-menu-item");
-  const activityList = document.getElementById("teacherActivityList");
+  const activitiesButton = document.getElementById("teacherActivitiesMenuButton");
+  const trashButton = document.getElementById("teacherTrashMenuButton");
+  const header = main && main.querySelector(".teacher-header");
+  const summary = main && main.querySelector(".teacher-summary");
+  const activitySection = main && main.querySelector("#teacherActivityList")
+    ?.closest(".teacher-activities");
   const trashSection = document.getElementById("teacherTrashSection");
+  const planner = document.getElementById("teacherPlanner");
 
-  if(!trashButton || !activityList || !trashSection) return;
+  if(!main || !activitiesButton || !trashButton ||
+     !header || !summary || !activitySection || !trashSection) return;
 
-  const activitySection = activityList.closest(".teacher-activities");
-
-  function showSection(section, button){
-    if(activitySection) activitySection.classList.add("hidden");
+  function showScreen(screen, activeButton){
+    header.classList.add("hidden");
+    summary.classList.add("hidden");
+    activitySection.classList.add("hidden");
     trashSection.classList.add("hidden");
 
-    section.classList.remove("hidden");
+    if(planner) planner.classList.add("hidden");
 
-    menuButtons.forEach(function(item){
-      item.classList.remove("active");
+    if(screen === "activities"){
+      header.classList.remove("hidden");
+      summary.classList.remove("hidden");
+      activitySection.classList.remove("hidden");
+    }else if(screen === "trash"){
+      trashSection.classList.remove("hidden");
+    }else if(screen === "planner" && planner){
+      planner.classList.remove("hidden");
+    }
+
+    menuButtons.forEach(function(button){
+      button.classList.remove("active");
     });
 
-    button.classList.add("active");
+    if(activeButton) activeButton.classList.add("active");
   }
 
-  trashButton.addEventListener("click", function(){
-    showSection(trashSection, trashButton);
+  activitiesButton.addEventListener("click", function(){
+    showScreen("activities", activitiesButton);
   });
 
-  
-  const activitiesButton = document.getElementById("teacherActivitiesMenuButton");
+  trashButton.addEventListener("click", function(){
+    showScreen("trash", trashButton);
+  });
 
+  document.addEventListener("teacherOpenPlannerScreen", function(){
+    showScreen("planner", null);
+  });
 
-  if(activitiesButton){
-    activitiesButton.addEventListener("click", function(){
-      showSection(activitySection, activitiesButton);
-    });
-  }
+  document.addEventListener("teacherReturnToActivities", function(){
+    showScreen("activities", activitiesButton);
+  });
+
+  showScreen("activities", activitiesButton);
 })();
 </script>
+
 
 <script>
 (function(){
