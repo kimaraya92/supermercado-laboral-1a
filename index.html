@@ -11673,9 +11673,17 @@ auth.onAuthStateChanged(function(user){
       const userId = auth.currentUser.uid;
       const draftRef = database.ref("actividades/borradores/" + userId).push();
 
-            await draftRef.set({
+            
+      const coverImageData = await getCoverImageData();
+
+      if(coverImageData.length > 500000){
+        throw new Error("La portada quedó demasiado grande. Elige una imagen más pequeña.");
+      }
+
+      await draftRef.set({
         titulo: title,
         instrucciones: description,
+        portada: coverImageData,
         recurso: {
           tipo: resourceType,
           enlace: resourceUrl
@@ -11683,6 +11691,7 @@ auth.onAuthStateChanged(function(user){
         estado: "borrador",
         creadoEn: firebase.database.ServerValue.TIMESTAMP
       });
+
 
       alert("¡Borrador guardado correctamente! 🌷");
       titleInput.value = "";
