@@ -11822,14 +11822,15 @@ if(coverImageData.length > 500000){
   throw new Error("La portada quedó demasiado grande. Elige una imagen más pequeña.");
 }
 
-const baseRef = database.ref("actividades/borradores/" + userId);
-let draftRef;
+const publishRequested = modal.dataset.publishActivity === "true";
+const targetCategory = publishRequested ? "publicadas" : "borradores";
+const draftRef = database.ref("actividades/borradores/" + userId);
+const targetRef = database.ref("actividades/" + targetCategory + "/" + userId);
 let existingData = {};
+let activityId = editingId;
 
 if(editingId){
-  draftRef = baseRef.child(editingId);
-
-  const snapshot = await draftRef.once("value");
+  const snapshot = await draftRef.child(editingId).once("value");
 
   if(!snapshot.exists()){
     throw new Error("No encontramos el borrador que intentas editar.");
@@ -11837,7 +11838,7 @@ if(editingId){
 
   existingData = snapshot.val() || {};
 }else{
-  draftRef = baseRef.push();
+  activityId = targetRef.push().key;
 }
 
 const portadaFinal = coverImageData || existingData.portada || "";
@@ -11850,16 +11851,22 @@ const activityData = {
     tipo: resourceType,
     enlace: resourceUrl
   },
-  estado: "borrador"
+  estado: publishRequested ? "publicada" : "borrador",
+  creadoEn: existingData.creadoEn || firebase.database.ServerValue.TIMESTAMP
 };
 
-if(editingId){
-  await draftRef.update(activityData);
-}else{
-  activityData.creadoEn = firebase.database.ServerValue.TIMESTAMP;
-  await draftRef.set(activityData);
+if(publishRequested){
+  activityData.publicadoEn = firebase.database.ServerValue.TIMESTAMP;
 }
 
+const updates = {};
+updates["actividades/" + targetCategory + "/" + userId + "/" + activityId] = activityData;
+
+if(editingId && publishRequested){
+  updates["actividades/borradores/" + userId + "/" + editingId] = null;
+}
+
+await database.ref().update(updates);
 
       
 alert(
