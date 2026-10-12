@@ -12141,24 +12141,56 @@ closeModal();
     });
   }
 
-  auth.onAuthStateChanged(function(user){
-    if(!user || draftsListenerAttached) return;
+ 
+auth.onAuthStateChanged(function(user){
+  if(!user || draftsListenerAttached) return;
 
-    draftsListenerAttached = true;
+  draftsListenerAttached = true;
 
-    database.ref("actividades/borradores/" + user.uid).on(
-      "value",
-      function(snapshot){
-        renderDrafts(snapshot, false);
-      },
-      function(error){
-        console.error("No se pudieron cargar los borradores:", error);
-        emptyState.style.display = "";
-        emptyState.querySelector("p").textContent =
-          "No se pudieron cargar las actividades. Revisa la conexión e inténtalo nuevamente.";
-      }
-    );
-  });
+  // Cargar los borradores del docente.
+  database.ref("actividades/borradores/" + user.uid).on(
+    "value",
+    function(snapshot){
+      renderDrafts(snapshot, false);
+    },
+    function(error){
+      console.error("No se pudieron cargar los borradores:", error);
+      emptyState.style.display = "";
+      emptyState.querySelector("p").textContent =
+        "No se pudieron cargar los borradores. Revisa la conexión.";
+    }
+  );
+
+  // Cargar las actividades publicadas del docente.
+  database.ref("actividades/publicadas/" + user.uid).on(
+    "value",
+    function(snapshot){
+      currentPublished = [];
+
+      snapshot.forEach(function(child){
+        const data = child.val();
+
+        if(data && typeof data === "object"){
+          currentPublished.push({
+            id: child.key,
+            data: data
+          });
+        }
+      });
+
+      currentPublished.sort(function(a, b){
+        return Number(b.data.publicadoEn || b.data.creadoEn || 0) -
+               Number(a.data.publicadoEn || a.data.creadoEn || 0);
+      });
+
+      renderDraftsFromCurrent();
+    },
+    function(error){
+      console.error("No se pudieron cargar las publicadas:", error);
+    }
+  );
+});
+
 })();
 
 window.editarBorradorDocente = async function(activityId){
