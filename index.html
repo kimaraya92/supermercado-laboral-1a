@@ -12493,6 +12493,21 @@ closeModal();
         card.appendChild(moveControls);
       }
 
+      if (!isDraft) {
+        const editPublishedButton = createElement("button", "", "✏️ Editar");
+        editPublishedButton.type = "button";
+        editPublishedButton.title = "Editar actividad publicada";
+        editPublishedButton.style.cssText =
+          "margin-top:10px;padding:8px 14px;border:1px solid #f0d4e7;" +
+          "border-radius:10px;background:#fff6fb;color:#a14e82;cursor:pointer;";
+
+        editPublishedButton.addEventListener("click", function () {
+          window.editarBorradorDocente(item.id);
+        });
+
+        card.appendChild(editPublishedButton);
+      }
+
       activityList.appendChild(card);
     });
   }
