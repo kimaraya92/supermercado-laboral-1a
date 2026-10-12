@@ -12033,14 +12033,21 @@ closeModal();
       editButton.type = "button";
       editButton.title = "Editar actividad";
       editButton.setAttribute("aria-label", "Editar " + (data.titulo || "actividad"));
-      editButton.style.width = "34px";
-      editButton.style.height = "34px";
+      editButton.style.width = "42px";
+      editButton.style.height = "42px";
+      editButton.style.display = "flex";
+      editButton.style.alignItems = "center";
+      editButton.style.justifyContent = "center";
+      editButton.style.padding = "0";
+      editButton.style.lineHeight = "1";
+      editButton.style.fontSize = "20px";
+      editButton.style.boxSizing = "border-box";
+      editButton.style.flexShrink = "0";
       editButton.style.border = "1px solid #f0d4e7";
       editButton.style.borderRadius = "10px";
       editButton.style.background = "#fff6fb";
       editButton.style.cursor = "pointer";
-      editButton.addEventListener("click", function(){
-        window.editarBorradorDocente(item.id);
+
       });
       card.appendChild(editButton);
 
