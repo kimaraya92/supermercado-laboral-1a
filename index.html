@@ -11525,6 +11525,45 @@ auth.onAuthStateChanged(function(user){
   const resourceTypeInput = document.getElementById("newActivityResourceType");
   const resourceUrlInput = document.getElementById("newActivityResourceUrl");
 
+  const coverImageInput = document.getElementById("newActivityCoverImage");
+  const coverPreview = document.getElementById("newActivityCoverPreview");
+  let coverImagePreviewUrl = "";
+
+  if(coverImageInput && coverPreview){
+    coverImageInput.addEventListener("change", function(){
+      const file = coverImageInput.files[0];
+
+      if(!file){
+        coverImagePreviewUrl = "";
+        coverPreview.innerHTML = "<span>🖼️</span><p>La foto aparecerá aquí</p>";
+        return;
+      }
+
+      if(!file.type.startsWith("image/")){
+        alert("Selecciona un archivo de imagen.");
+        coverImageInput.value = "";
+        return;
+      }
+
+      if(coverImagePreviewUrl){
+        URL.revokeObjectURL(coverImagePreviewUrl);
+      }
+
+      coverImagePreviewUrl = URL.createObjectURL(file);
+      coverPreview.innerHTML = "";
+
+      const image = document.createElement("img");
+      image.src = coverImagePreviewUrl;
+      image.alt = "Vista previa de la portada de la actividad";
+      image.style.width = "100%";
+      image.style.height = "180px";
+      image.style.objectFit = "cover";
+      image.style.borderRadius = "12px";
+
+      coverPreview.appendChild(image);
+    });
+  }
+
   if(!openButton || !modal || !closeButton || !cancelButton || !saveButton) return;
 
   function openModal(){
