@@ -11797,27 +11797,52 @@ auth.onAuthStateChanged(function(user){
     saveButton.textContent = "Guardando...";
 
     try{
-      const userId = auth.currentUser.uid;
-      const draftRef = database.ref("actividades/borradores/" + userId).push();
+      
+const userId = auth.currentUser.uid;
+const editingId = modal.dataset.editingActivityId || "";
+const coverImageData = await getCoverImageData();
 
-            
-      const coverImageData = await getCoverImageData();
+if(coverImageData.length > 500000){
+  throw new Error("La portada quedó demasiado grande. Elige una imagen más pequeña.");
+}
 
-      if(coverImageData.length > 500000){
-        throw new Error("La portada quedó demasiado grande. Elige una imagen más pequeña.");
-      }
+const baseRef = database.ref("actividades/borradores/" + userId);
+let draftRef;
+let existingData = {};
 
-      await draftRef.set({
-        titulo: title,
-        instrucciones: description,
-        portada: coverImageData,
-        recurso: {
-          tipo: resourceType,
-          enlace: resourceUrl
-        },
-        estado: "borrador",
-        creadoEn: firebase.database.ServerValue.TIMESTAMP
-      });
+if(editingId){
+  draftRef = baseRef.child(editingId);
+
+  const snapshot = await draftRef.once("value");
+
+  if(!snapshot.exists()){
+    throw new Error("No encontramos el borrador que intentas editar.");
+  }
+
+  existingData = snapshot.val() || {};
+}else{
+  draftRef = baseRef.push();
+}
+
+const portadaFinal = coverImageData || existingData.portada || "";
+
+const activityData = {
+  titulo: title,
+  instrucciones: description,
+  portada: portadaFinal,
+  recurso: {
+    tipo: resourceType,
+    enlace: resourceUrl
+  },
+  estado: "borrador"
+};
+
+if(editingId){
+  await draftRef.update(activityData);
+}else{
+  activityData.creadoEn = firebase.database.ServerValue.TIMESTAMP;
+  await draftRef.set(activityData);
+}
 
 
       alert("¡Borrador guardado correctamente! 🌷");
