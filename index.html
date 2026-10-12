@@ -6562,6 +6562,32 @@ function cargarActividadesPublicadasEstudiante(){
         const actividad = actividadSnapshot.val();
 
         if(!actividad || typeof actividad !== "object") return;
+        
+        function normalizarNombreEstudiante(nombre) {
+          return String(nombre || "")
+            .trim()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+        }
+
+        const destinatarios = Array.isArray(actividad.estudiantes)
+          ? actividad.estudiantes
+          : [];
+
+        const nombreActual = normalizarNombreEstudiante(estudianteActual);
+
+        // Las actividades nuevas solo aparecen a sus destinatarios.
+        // Las antiguas, sin destinatarios registrados, se mantienen visibles.
+        if (
+          destinatarios.length > 0 &&
+          !destinatarios.some(function (nombre) {
+            return normalizarNombreEstudiante(nombre) === nombreActual;
+          })
+        ) {
+          return;
+        }
+
 
         cantidad++;
 
