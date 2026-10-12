@@ -11869,10 +11869,14 @@ if(editingId && publishRequested){
 await database.ref().update(updates);
 
       
+const wasPublishing = modal.dataset.publishActivity === "true";
+
 alert(
-  modal.dataset.editingActivityId
-    ? "¡Actividad actualizada correctamente! 🌷"
-    : "¡Borrador guardado correctamente! 🌷"
+  wasPublishing
+    ? "¡Actividad publicada correctamente! 🚀"
+    : (modal.dataset.editingActivityId
+        ? "¡Borrador actualizado correctamente! 🌷"
+        : "¡Borrador guardado correctamente! 🌷")
 );
 
 delete modal.dataset.editingActivityId;
@@ -11912,6 +11916,7 @@ closeModal();
       console.error("Error al guardar el borrador:", error);
       alert("No se pudo guardar el borrador. Revisa los permisos de Firebase e inténtalo nuevamente.");
     }finally{
+      delete modal.dataset.publishActivity;
       saveButton.disabled = false;
       saveButton.textContent = "💗 Guardar borrador";
     }
