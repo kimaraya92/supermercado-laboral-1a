@@ -11997,6 +11997,11 @@ const selectedStudents = Array.from(
 });
 
 
+    if(selectedStudents.length === 0){
+      alert("Selecciona al menos un estudiante o marca «Todos los estudiantes».");
+      return;
+    }
+
     if(!title){
       alert("Escribe el nombre de la actividad antes de guardar.");
       titleInput.focus();
