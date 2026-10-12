@@ -3343,7 +3343,22 @@ aspect-ratio:auto;
   gap:5px;
 }
 
+
+.teacher-activity-move{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  flex-shrink:0;
+}
+
 .teacher-activity-move button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  line-height:1;
   width:34px;
   height:34px;
   border:1px solid #f0d4e7;
@@ -3353,6 +3368,7 @@ aspect-ratio:auto;
   font-size:18px;
   cursor:pointer;
 }
+
 
 .teacher-activity-move button:disabled{
   opacity:0.35;
@@ -11874,9 +11890,12 @@ auth.onAuthStateChanged(function(user){
         console.error("No se pudo guardar el orden:", error);
         alert("No se pudo guardar el nuevo orden. Inténtalo nuevamente.");
       })
-      .finally(function(){
-        savingOrder = false;
-      });
+      
+.finally(function(){
+  savingOrder = false;
+  renderDraftsFromCurrent();
+});
+
   }
 
   function renderDraftsFromCurrent(){
