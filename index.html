@@ -11820,6 +11820,111 @@ auth.onAuthStateChanged(function(user){
 </script>
 
 
+<script>
+/* MOSTRAR LOS BORRADORES EN LA GALERÍA DOCENTE */
+(function(){
+  const activityList = document.getElementById("teacherActivityList");
+  const emptyState = document.getElementById("teacherActivityEmpty");
+
+  if(!activityList || !emptyState || typeof auth === "undefined" ||
+     typeof database === "undefined") return;
+
+  let draftsListenerAttached = false;
+
+  function createElement(tag, className, text){
+    const element = document.createElement(tag);
+    if(className) element.className = className;
+    if(text !== undefined) element.textContent = text;
+    return element;
+  }
+
+  function renderDrafts(snapshot){
+    activityList.replaceChildren();
+
+    const drafts = [];
+
+    snapshot.forEach(function(child){
+      const data = child.val();
+      if(data && typeof data === "object"){
+        drafts.push({
+          id: child.key,
+          data: data
+        });
+      }
+    });
+
+    drafts.sort(function(a, b){
+      const orderA = Number(a.data.orden ?? a.data.creadoEn ?? 0);
+      const orderB = Number(b.data.orden ?? b.data.creadoEn ?? 0);
+      return orderA - orderB;
+    });
+
+    emptyState.style.display = drafts.length ? "none" : "";
+
+    drafts.forEach(function(item){
+      const data = item.data;
+      const card = createElement("article", "teacher-activity-card");
+
+      const cover = createElement("div", "teacher-activity-cover");
+
+      if(typeof data.portada === "string" && data.portada.startsWith("data:image/")){
+        const image = document.createElement("img");
+        image.src = data.portada;
+        image.alt = "Portada de " + (data.titulo || "la actividad");
+        cover.appendChild(image);
+      }else{
+        cover.textContent = "🌷";
+      }
+
+      const info = createElement("div", "teacher-activity-info");
+      info.appendChild(createElement("span", "teacher-activity-status", "Borrador"));
+      info.appendChild(createElement("h3", "", data.titulo || "Actividad sin título"));
+      info.appendChild(createElement("p", "", data.instrucciones || ""));
+
+      const resource = data.recurso || {};
+      if(typeof resource.enlace === "string" && resource.enlace.trim()){
+        try{
+          const url = new URL(resource.enlace.trim());
+          if(url.protocol === "https:" || url.protocol === "http:"){
+            const link = createElement("a", "", "Abrir recurso ↗");
+            link.href = url.href;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.style.display = "inline-block";
+            link.style.marginTop = "4px";
+            link.style.color = "#a14e82";
+            info.appendChild(link);
+          }
+        }catch(error){
+          console.warn("Enlace de recurso no válido:", error);
+        }
+      }
+
+      card.appendChild(cover);
+      card.appendChild(info);
+      activityList.appendChild(card);
+    });
+  }
+
+  auth.onAuthStateChanged(function(user){
+    if(!user || draftsListenerAttached) return;
+
+    draftsListenerAttached = true;
+
+    database.ref("actividades/borradores/" + user.uid).on(
+      "value",
+      renderDrafts,
+      function(error){
+        console.error("No se pudieron cargar los borradores:", error);
+        emptyState.style.display = "";
+        emptyState.querySelector("p").textContent =
+          "No se pudieron cargar las actividades. Revisa la conexión e inténtalo nuevamente.";
+      }
+    );
+  });
+})();
+</script>
+
 
 </body>
 
