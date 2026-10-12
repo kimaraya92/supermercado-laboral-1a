@@ -11987,6 +11987,15 @@ auth.onAuthStateChanged(function(user){
     const description = descriptionInput.value.trim();
     const resourceType = resourceTypeInput ? resourceTypeInput.value : "";
     const resourceUrl = resourceUrlInput ? resourceUrlInput.value.trim() : "";
+    const areaInput = document.getElementById("newActivityArea");
+    const area = areaInput ? areaInput.value.trim() : "";
+
+const selectedStudents = Array.from(
+  document.querySelectorAll(".activity-student-option:checked")
+).map(function (checkbox) {
+  return checkbox.value.trim();
+});
+
 
     if(!title){
       alert("Escribe el nombre de la actividad antes de guardar.");
@@ -12039,9 +12048,12 @@ if(editingId){
 
 const portadaFinal = coverImageData || existingData.portada || "";
 
+
 const activityData = {
   titulo: title,
   instrucciones: description,
+  area: area,
+  estudiantes: selectedStudents,
   portada: portadaFinal,
   recurso: {
     tipo: resourceType,
@@ -12050,6 +12062,7 @@ const activityData = {
   estado: publishRequested ? "publicada" : "borrador",
   creadoEn: existingData.creadoEn || firebase.database.ServerValue.TIMESTAMP
 };
+
 
 if(publishRequested){
   activityData.publicadoEn = firebase.database.ServerValue.TIMESTAMP;
