@@ -12110,7 +12110,7 @@ const activityData = {
     tipo: resourceType,
     enlace: resourceUrl
   },
-  estado: publishRequested ? "publicada" : "borrador",
+  estado: targetCategory === "publicadas" ? "publicada" : "borrador",
   creadoEn: existingData.creadoEn || firebase.database.ServerValue.TIMESTAMP
 };
 
