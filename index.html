@@ -12211,6 +12211,46 @@ window.editarBorradorDocente = async function(activityId){
 
 </script>
 
+<script>
+(function(){
+  const trashButton = document.getElementById("teacherTrashMenuButton");
+  const menuButtons = document.querySelectorAll(".teacher-menu-item");
+  const activityList = document.getElementById("teacherActivityList");
+  const trashSection = document.getElementById("teacherTrashSection");
+
+  if(!trashButton || !activityList || !trashSection) return;
+
+  const activitySection = activityList.closest(".teacher-activities");
+
+  function showSection(section, button){
+    if(activitySection) activitySection.classList.add("hidden");
+    trashSection.classList.add("hidden");
+
+    section.classList.remove("hidden");
+
+    menuButtons.forEach(function(item){
+      item.classList.remove("active");
+    });
+
+    button.classList.add("active");
+  }
+
+  trashButton.addEventListener("click", function(){
+    showSection(trashSection, trashButton);
+  });
+
+  const activitiesButton = document.querySelector(
+    '.teacher-menu-item:not(#teacherTrashMenuButton)'
+  );
+
+  if(activitiesButton){
+    activitiesButton.addEventListener("click", function(){
+      showSection(activitySection, activitiesButton);
+    });
+  }
+})();
+</script>
+
 
 </body>
 
