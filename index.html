@@ -11494,20 +11494,14 @@ auth.onAuthStateChanged(function(user){
   });
 })();
 
-/* ABRIR EL PLANNER DESDE EL CALENDARIO */
+
+/* ABRIR EL PLANNER COMO PANTALLA INDEPENDIENTE */
 (function(){
   const planner = document.getElementById("teacherPlanner");
   const plannerDate = document.getElementById("teacherPlannerDate");
   const backButton = document.getElementById("teacherPlannerBack");
-  const main = document.querySelector("#adminHomeScreen .teacher-main");
 
-  if(!planner || !plannerDate || !backButton || !main) return;
-
-  const dashboardSections = [
-    main.querySelector(".teacher-header"),
-    main.querySelector(".teacher-summary"),
-    main.querySelector(".teacher-activities")
-  ];
+  if(!planner || !plannerDate || !backButton) return;
 
   document.addEventListener("teacherCalendarDateSelected", function(event){
     const data = event.detail;
@@ -11521,21 +11515,14 @@ auth.onAuthStateChanged(function(user){
           year:"numeric"
         });
 
-    dashboardSections.forEach(function(section){
-      if(section) section.classList.add("hidden");
-    });
-
-    planner.classList.remove("hidden");
+    document.dispatchEvent(new Event("teacherOpenPlannerScreen"));
   });
 
   backButton.addEventListener("click", function(){
-    planner.classList.add("hidden");
-
-    dashboardSections.forEach(function(section){
-      if(section) section.classList.remove("hidden");
-    });
+    document.dispatchEvent(new Event("teacherReturnToActivities"));
   });
 })();
+
 
 /* =========================================
    CALENDARIO MENSUAL DE ADMINISTRADORA
