@@ -11995,6 +11995,7 @@ closeModal();
 
   }
 
+  
   function renderDraftsFromCurrent(){
     renderDrafts(null, true);
   }
@@ -12011,23 +12012,56 @@ closeModal();
       });
 
       const allHaveOrder = currentDrafts.every(function(item){
-        return Number.isFinite(Number(item.data.orden)) &&
-          item.data.orden !== undefined && item.data.orden !== null;
+        return item.data.orden !== undefined &&
+          item.data.orden !== null &&
+          Number.isFinite(Number(item.data.orden));
       });
 
       currentDrafts.sort(function(a, b){
         if(allHaveOrder){
           return Number(a.data.orden) - Number(b.data.orden);
         }
-        return Number(a.data.creadoEn || 0) - Number(b.data.creadoEn || 0);
+        return Number(a.data.creadoEn || 0) -
+               Number(b.data.creadoEn || 0);
       });
     }
 
-    activityList.replaceChildren();
-    emptyState.style.display = currentDrafts.length ? "none" : "";
+    const drafts = currentDrafts.map(function(item){
+      return Object.assign({}, item, {tipo: "borrador"});
+    });
 
-    currentDrafts.forEach(function(item, index){
+    const published = currentPublished.map(function(item){
+      return Object.assign({}, item, {tipo: "publicada"});
+    });
+
+    let visibleItems = [];
+
+    if(currentFilter === "borradores"){
+      visibleItems = drafts;
+    }else if(currentFilter === "publicadas"){
+      visibleItems = published;
+    }else{
+      visibleItems = drafts.concat(published);
+    }
+
+    activityList.replaceChildren();
+
+    emptyState.style.display = visibleItems.length ? "none" : "";
+
+    const emptyMessage = emptyState.querySelector("p");
+    if(emptyMessage){
+      emptyMessage.textContent =
+        currentFilter === "borradores"
+          ? "Aquí aparecerán tus actividades guardadas como borradores."
+          : currentFilter === "publicadas"
+            ? "Aquí aparecerán las actividades que hayas publicado."
+            : "Las actividades guardadas y publicadas aparecerán aquí.";
+    }
+
+    visibleItems.forEach(function(item){
       const data = item.data;
+      const isDraft = item.tipo === "borrador";
+
       const card = createElement("article", "teacher-activity-card");
       const cover = createElement("div", "teacher-activity-cover");
 
@@ -12042,14 +12076,27 @@ closeModal();
       }
 
       const info = createElement("div", "teacher-activity-info");
-      info.appendChild(createElement("span", "teacher-activity-status", "Borrador"));
-      info.appendChild(createElement("h3", "", data.titulo || "Actividad sin título"));
+
+      info.appendChild(createElement(
+        "span",
+        "teacher-activity-status",
+        isDraft ? "Borrador" : "🚀 Publicada"
+      ));
+
+      info.appendChild(createElement(
+        "h3",
+        "",
+        data.titulo || "Actividad sin título"
+      ));
+
       info.appendChild(createElement("p", "", data.instrucciones || ""));
 
       const resource = data.recurso || {};
+
       if(typeof resource.enlace === "string" && resource.enlace.trim()){
         try{
           const url = new URL(resource.enlace.trim());
+
           if(url.protocol === "https:" || url.protocol === "http:"){
             const link = createElement("a", "", "Abrir recurso ↗");
             link.href = url.href;
@@ -12065,83 +12112,121 @@ closeModal();
         }
       }
 
-      
-      const actionControls = createElement("div", "teacher-activity-actions-vertical");
-      actionControls.style.cssText = "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;flex-shrink:0;";
-
-      function styleActionButton(button, color){
-        button.type = "button";
-        button.style.cssText = "width:36px;height:36px;min-width:36px;display:flex;align-items:center;justify-content:center;padding:0;margin:0;line-height:1;font-size:19px;box-sizing:border-box;border:1px solid #f0d4e7;border-radius:10px;background:#fff6fb;cursor:pointer;flex-shrink:0;color:" + color + ";";
-      }
-
-      const editButton = createElement("button", "", "✏️");
-      editButton.title = "Editar actividad";
-      editButton.setAttribute("aria-label", "Editar " + (data.titulo || "actividad"));
-      styleActionButton(editButton, "#a14e82");
-      editButton.addEventListener("click", function(){
-        window.editarBorradorDocente(item.id);
-      });
-
-      const deleteButton = createElement("button", "", "🗑️");
-      deleteButton.title = "Mover a la papelera";
-      deleteButton.setAttribute("aria-label", "Mover a la papelera " + (data.titulo || "actividad"));
-      styleActionButton(deleteButton, "#c14f69");
-
-      deleteButton.addEventListener("click", async function(){
-        if(!confirm('¿Mover "' + (data.titulo || "esta actividad") + '" a la papelera? Podrás restaurarla después.')) return;
-        if(!auth.currentUser) return;
-
-        deleteButton.disabled = true;
-        try{
-          const userId = auth.currentUser.uid;
-          const updates = {};
-          updates["actividades/papelera/" + userId + "/" + item.id] = Object.assign({}, data, {
-            eliminadoEn: firebase.database.ServerValue.TIMESTAMP
-          });
-          updates["actividades/borradores/" + userId + "/" + item.id] = null;
-          await database.ref().update(updates);
-        }catch(error){
-          console.error("Error al mover la actividad:", error);
-          alert("No se pudo mover la actividad a la papelera.");
-          deleteButton.disabled = false;
-        }
-      });
-
-      actionControls.appendChild(editButton);
-      actionControls.appendChild(deleteButton);
-      card.appendChild(actionControls);
-
-
-      const moveControls = createElement("div", "teacher-activity-move");
-      const upButton = createElement("button", "", "↑");
-      upButton.type = "button";
-      upButton.title = "Mover actividad hacia arriba";
-      upButton.setAttribute("aria-label", "Mover " + (data.titulo || "actividad") + " hacia arriba");
-      upButton.disabled = index === 0 || savingOrder;
-      upButton.addEventListener("click", function(){
-        moveDraft(index, -1);
-      });
-
-      const downButton = createElement("button", "", "↓");
-      downButton.type = "button";
-      downButton.title = "Mover actividad hacia abajo";
-      downButton.setAttribute("aria-label", "Mover " + (data.titulo || "actividad") + " hacia abajo");
-      downButton.disabled = index === currentDrafts.length - 1 || savingOrder;
-      downButton.addEventListener("click", function(){
-        moveDraft(index, 1);
-      });
-
-      moveControls.appendChild(upButton);
-      moveControls.appendChild(downButton);
-
       card.appendChild(cover);
       card.appendChild(info);
-      card.appendChild(moveControls);
+
+      // Solo los borradores tendrán controles de edición y orden.
+      if(isDraft){
+        const draftIndex = currentDrafts.findIndex(function(draft){
+          return draft.id === item.id;
+        });
+
+        const actions = createElement(
+          "div",
+          "teacher-activity-actions-vertical"
+        );
+
+        actions.style.cssText =
+          "display:flex;flex-direction:column;align-items:center;" +
+          "justify-content:center;gap:8px;flex-shrink:0;";
+
+        function styleActionButton(button, color){
+          button.type = "button";
+          button.style.cssText =
+            "width:36px;height:36px;min-width:36px;display:flex;" +
+            "align-items:center;justify-content:center;padding:0;" +
+            "margin:0;line-height:1;font-size:19px;box-sizing:border-box;" +
+            "border:1px solid #f0d4e7;border-radius:10px;" +
+            "background:#fff6fb;cursor:pointer;flex-shrink:0;color:" +
+            color + ";";
+        }
+
+        const editButton = createElement("button", "", "✏️");
+        editButton.title = "Editar borrador";
+        editButton.setAttribute(
+          "aria-label",
+          "Editar " + (data.titulo || "borrador")
+        );
+        styleActionButton(editButton, "#a14e82");
+
+        editButton.addEventListener("click", function(){
+          window.editarBorradorDocente(item.id);
+        });
+
+        const deleteButton = createElement("button", "", "🗑️");
+        deleteButton.title = "Mover a la papelera";
+        deleteButton.setAttribute(
+          "aria-label",
+          "Mover a la papelera " + (data.titulo || "borrador")
+        );
+        styleActionButton(deleteButton, "#c14f69");
+
+        deleteButton.addEventListener("click", async function(){
+          if(!confirm(
+            '¿Mover "' + (data.titulo || "este borrador") +
+            '" a la papelera? Podrás restaurarlo después.'
+          )) return;
+
+          if(!auth.currentUser) return;
+
+          deleteButton.disabled = true;
+
+          try{
+            const userId = auth.currentUser.uid;
+            const updates = {};
+
+            updates["actividades/papelera/" + userId + "/" + item.id] =
+              Object.assign({}, data, {
+                eliminadoEn: firebase.database.ServerValue.TIMESTAMP
+              });
+
+            updates["actividades/borradores/" + userId + "/" + item.id] =
+              null;
+
+            await database.ref().update(updates);
+          }catch(error){
+            console.error("Error al mover el borrador:", error);
+            alert("No se pudo mover el borrador a la papelera.");
+            deleteButton.disabled = false;
+          }
+        });
+
+        actions.appendChild(editButton);
+        actions.appendChild(deleteButton);
+        card.appendChild(actions);
+
+        const moveControls = createElement("div", "teacher-activity-move");
+
+        const upButton = createElement("button", "", "↑");
+        upButton.type = "button";
+        upButton.title = "Mover borrador hacia arriba";
+        upButton.disabled = draftIndex <= 0 || savingOrder;
+
+        upButton.addEventListener("click", function(){
+          moveDraft(draftIndex, -1);
+        });
+
+        const downButton = createElement("button", "", "↓");
+        downButton.type = "button";
+        downButton.title = "Mover borrador hacia abajo";
+        downButton.disabled =
+          draftIndex < 0 ||
+          draftIndex === currentDrafts.length - 1 ||
+          savingOrder;
+
+        downButton.addEventListener("click", function(){
+          moveDraft(draftIndex, 1);
+        });
+
+        moveControls.appendChild(upButton);
+        moveControls.appendChild(downButton);
+        card.appendChild(moveControls);
+      }
+
       activityList.appendChild(card);
     });
   }
 
- 
 auth.onAuthStateChanged(function(user){
   if(!user || draftsListenerAttached) return;
 
