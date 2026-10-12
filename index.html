@@ -11835,6 +11835,30 @@ auth.onAuthStateChanged(function(user){
   const descriptionInput = document.getElementById("newActivityDescription");
   const resourceTypeInput = document.getElementById("newActivityResourceType");
   const resourceUrlInput = document.getElementById("newActivityResourceUrl");
+  
+  const selectAllStudents = document.getElementById("activitySelectAllStudents");
+  const studentOptions = document.querySelectorAll(".activity-student-option");
+
+  if (selectAllStudents) {
+    selectAllStudents.addEventListener("change", function () {
+      studentOptions.forEach(function (checkbox) {
+        checkbox.checked = selectAllStudents.checked;
+      });
+    });
+  }
+
+  studentOptions.forEach(function (checkbox) {
+    checkbox.addEventListener("change", function () {
+      const allSelected = Array.from(studentOptions).every(function (option) {
+        return option.checked;
+      });
+
+      if (selectAllStudents) {
+        selectAllStudents.checked = allSelected;
+      }
+    });
+  });
+
 
   const coverImageInput = document.getElementById("newActivityCoverImage");
   const coverPreview = document.getElementById("newActivityCoverPreview");
