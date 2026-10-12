@@ -11845,10 +11845,46 @@ if(editingId){
 }
 
 
-      alert("¡Borrador guardado correctamente! 🌷");
-      titleInput.value = "";
-      descriptionInput.value = "";
-      closeModal();
+      
+alert(
+  modal.dataset.editingActivityId
+    ? "¡Actividad actualizada correctamente! 🌷"
+    : "¡Borrador guardado correctamente! 🌷"
+);
+
+delete modal.dataset.editingActivityId;
+
+titleInput.value = "";
+descriptionInput.value = "";
+resourceTypeInput.value = "imagen";
+resourceUrlInput.value = "";
+
+if(coverImageInput){
+  coverImageInput.value = "";
+}
+
+const resourceFileInput = document.getElementById("newActivityResourceFile");
+if(resourceFileInput){
+  resourceFileInput.value = "";
+}
+
+if(coverImagePreviewUrl){
+  URL.revokeObjectURL(coverImagePreviewUrl);
+  coverImagePreviewUrl = "";
+}
+
+if(coverPreview){
+  coverPreview.innerHTML = "<span>🖼️</span><p>La foto aparecerá aquí</p>";
+}
+
+const formTitle = document.getElementById("teacherActivityFormTitle");
+if(formTitle){
+  formTitle.textContent = "🌷 Crear una actividad";
+}
+
+saveButton.textContent = "💗 Guardar borrador";
+closeModal();
+
     }catch(error){
       console.error("Error al guardar el borrador:", error);
       alert("No se pudo guardar el borrador. Revisa los permisos de Firebase e inténtalo nuevamente.");
