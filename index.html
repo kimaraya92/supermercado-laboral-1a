@@ -12193,7 +12193,7 @@ closeModal();
 
         actions.appendChild(editButton);
         actions.appendChild(deleteButton);
-        card.appendChild(actions);
+        card.insertBefore(actions, card.firstChild);
 
         const moveControls = createElement("div", "teacher-activity-move");
 
