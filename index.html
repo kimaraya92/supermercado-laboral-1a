@@ -4054,10 +4054,6 @@ aspect-ratio:auto;
 
       <section id="teacherPlanner" class="teacher-planner hidden">
 
-        <button type="button" id="teacherPlannerBack" class="teacher-planner-back">
-          ← Volver a mis actividades
-        </button>
-
         <h2>Mi planner 🌷</h2>
         <p id="teacherPlannerDate" class="teacher-planner-date">
           Selecciona una fecha en el calendario.
@@ -11497,11 +11493,12 @@ auth.onAuthStateChanged(function(user){
 
 /* ABRIR EL PLANNER COMO PANTALLA INDEPENDIENTE */
 (function(){
+  
   const planner = document.getElementById("teacherPlanner");
   const plannerDate = document.getElementById("teacherPlannerDate");
-  const backButton = document.getElementById("teacherPlannerBack");
 
-  if(!planner || !plannerDate || !backButton) return;
+  if(!planner || !plannerDate) return;
+
 
   document.addEventListener("teacherCalendarDateSelected", function(event){
     const data = event.detail;
