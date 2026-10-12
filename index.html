@@ -11658,6 +11658,7 @@ auth.onAuthStateChanged(function(user){
   const closeButton = document.getElementById("teacherActivityCreatorBack");
   const cancelButton = document.getElementById("cancelTeacherActivity");
   const saveButton = document.getElementById("saveTeacherActivityDraft");
+  const publishButton = document.getElementById("publishTeacherActivity");
   const titleInput = document.getElementById("newActivityTitle");
   const descriptionInput = document.getElementById("newActivityDescription");
   const resourceTypeInput = document.getElementById("newActivityResourceType");
@@ -11719,6 +11720,10 @@ auth.onAuthStateChanged(function(user){
   openButton.addEventListener("click", openModal);
   closeButton.addEventListener("click", closeModal);
   cancelButton.addEventListener("click", closeModal);
+  publishButton.addEventListener("click", function(){
+  modal.dataset.publishActivity = "true";
+  saveButton.click();
+});
 
   modal.addEventListener("click", function(event){
     if(event.target === modal) closeModal();
