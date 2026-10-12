@@ -6024,7 +6024,9 @@ max-width:1110px;
 <script
   src="https://www.gstatic.com/firebasejs/12.19.0/firebase-auth-compat.js"
 ></script>
-
+<script
+  src="https://www.gstatic.com/firebasejs/12.19.0/firebase-storage-compat.js"
+></script>
 <script>
 
 const firebaseConfig = {
@@ -6058,7 +6060,8 @@ const database =
   firebase.database();
 const auth =
   firebase.auth();
-
+const storage =
+  firebase.storage();
 
 auth.signInAnonymously()
   .then(function(){
