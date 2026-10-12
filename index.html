@@ -12536,9 +12536,21 @@ window.editarBorradorDocente = async function(activityId){
 
   try{
     const userId = auth.currentUser.uid;
-    const snapshot = await database
+    
+    let snapshot = await database
       .ref("actividades/borradores/" + userId + "/" + activityId)
       .once("value");
+
+    let categoriaActividad = "borradores";
+
+    if (!snapshot.exists()) {
+      snapshot = await database
+        .ref("actividades/publicadas/" + userId + "/" + activityId)
+        .once("value");
+
+      categoriaActividad = "publicadas";
+    }
+
 
     if(!snapshot.exists()){
       alert("No encontramos ese borrador. Actualiza la página e inténtalo nuevamente.");
