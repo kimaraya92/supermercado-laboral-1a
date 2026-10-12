@@ -11498,6 +11498,8 @@ auth.onAuthStateChanged(function(user){
   const saveButton = document.getElementById("saveTeacherActivityDraft");
   const titleInput = document.getElementById("newActivityTitle");
   const descriptionInput = document.getElementById("newActivityDescription");
+  const resourceTypeInput = document.getElementById("newActivityResourceType");
+  const resourceUrlInput = document.getElementById("newActivityResourceUrl");
 
   if(!openButton || !modal || !closeButton || !cancelButton || !saveButton) return;
 
@@ -11530,6 +11532,8 @@ auth.onAuthStateChanged(function(user){
   saveButton.addEventListener("click", async function(){
     const title = titleInput.value.trim();
     const description = descriptionInput.value.trim();
+    const resourceType = resourceTypeInput ? resourceTypeInput.value : "";
+    const resourceUrl = resourceUrlInput ? resourceUrlInput.value.trim() : "";
 
     if(!title){
       alert("Escribe el nombre de la actividad antes de guardar.");
@@ -11555,9 +11559,13 @@ auth.onAuthStateChanged(function(user){
       const userId = auth.currentUser.uid;
       const draftRef = database.ref("actividades/borradores/" + userId).push();
 
-      await draftRef.set({
+            await draftRef.set({
         titulo: title,
         instrucciones: description,
+        recurso: {
+          tipo: resourceType,
+          enlace: resourceUrl
+        },
         estado: "borrador",
         creadoEn: firebase.database.ServerValue.TIMESTAMP
       });
