@@ -12032,6 +12032,71 @@ auth.onAuthStateChanged(function(user){
   });
 })();
 
+window.editarBorradorDocente = async function(activityId){
+  if(!auth.currentUser){
+    alert("No se pudo identificar la sesión docente.");
+    return;
+  }
+
+  try{
+    const userId = auth.currentUser.uid;
+    const snapshot = await database
+      .ref("actividades/borradores/" + userId + "/" + activityId)
+      .once("value");
+
+    if(!snapshot.exists()){
+      alert("No encontramos ese borrador. Actualiza la página e inténtalo nuevamente.");
+      return;
+    }
+
+    const data = snapshot.val();
+
+    const modal = document.getElementById("teacherActivityCreator");
+    const titleInput = document.getElementById("newActivityTitle");
+    const descriptionInput = document.getElementById("newActivityDescription");
+    const resourceTypeInput = document.getElementById("newActivityResourceType");
+    const resourceUrlInput = document.getElementById("newActivityResourceUrl");
+    const coverPreview = document.getElementById("newActivityCoverPreview");
+    const formTitle = document.getElementById("teacherActivityFormTitle");
+
+    titleInput.value = data.titulo || "";
+    descriptionInput.value = data.instrucciones || "";
+    resourceTypeInput.value = data.recurso?.tipo || "enlace";
+    resourceUrlInput.value = data.recurso?.enlace || "";
+
+    if(formTitle){
+      formTitle.textContent = "✏️ Editar actividad";
+    }
+
+    if(coverPreview){
+      coverPreview.replaceChildren();
+
+      if(typeof data.portada === "string" &&
+         data.portada.startsWith("data:image/")){
+        const image = document.createElement("img");
+        image.src = data.portada;
+        image.alt = "Portada actual de la actividad";
+        image.style.width = "100%";
+        image.style.height = "180px";
+        image.style.objectFit = "cover";
+        image.style.borderRadius = "12px";
+        coverPreview.appendChild(image);
+      }else{
+        coverPreview.textContent = "🖼️ Esta actividad no tiene portada.";
+      }
+    }
+
+    modal.dataset.editingActivityId = activityId;
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    titleInput.focus();
+
+  }catch(error){
+    console.error("Error al abrir el borrador:", error);
+    alert("No se pudo abrir el borrador. Inténtalo nuevamente.");
+  }
+};
+
 </script>
 
 
