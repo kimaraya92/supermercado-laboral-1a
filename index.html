@@ -4118,7 +4118,7 @@ aspect-ratio:auto;
               type="button"
               id="saveTeacherActivityDraft"
               class="teacher-activity-save"
-            >💗 Guardar borrador</button>
+            >💗 Guardar actividad </button>
 
             <button
               type="button"
@@ -12169,7 +12169,7 @@ if(formTitle){
   formTitle.textContent = "🌷 Crear una actividad";
 }
 
-saveButton.textContent = "💗 Guardar borrador";
+saveButton.textContent = "💗 Guardar actividad";
 closeModal();
 
     }catch(error){
@@ -12178,7 +12178,7 @@ closeModal();
     }finally{
       delete modal.dataset.publishActivity;
       saveButton.disabled = false;
-      saveButton.textContent = "💗 Guardar borrador";
+      saveButton.textContent = "💗 Guardar actividad";
     }
   });
 })();
