@@ -11821,7 +11821,8 @@ auth.onAuthStateChanged(function(user){
 
 
 <script>
-/* MOSTRAR LOS BORRADORES EN LA GALERÍA DOCENTE */
+
+/* MOSTRAR Y ORDENAR LOS BORRADORES EN LA GALERÍA DOCENTE */
 (function(){
   const activityList = document.getElementById("teacherActivityList");
   const emptyState = document.getElementById("teacherActivityEmpty");
@@ -11830,6 +11831,8 @@ auth.onAuthStateChanged(function(user){
      typeof database === "undefined") return;
 
   let draftsListenerAttached = false;
+  let currentDrafts = [];
+  let savingOrder = false;
 
   function createElement(tag, className, text){
     const element = document.createElement(tag);
@@ -11838,36 +11841,82 @@ auth.onAuthStateChanged(function(user){
     return element;
   }
 
-  function renderDrafts(snapshot){
-    activityList.replaceChildren();
+  function moveDraft(index, direction){
+    if(savingOrder) return;
 
-    const drafts = [];
+    const newIndex = index + direction;
+    if(newIndex < 0 || newIndex >= currentDrafts.length) return;
 
-    snapshot.forEach(function(child){
-      const data = child.val();
-      if(data && typeof data === "object"){
-        drafts.push({
-          id: child.key,
-          data: data
+    const reordered = currentDrafts.slice();
+    const temp = reordered[index];
+    reordered[index] = reordered[newIndex];
+    reordered[newIndex] = temp;
+
+    const updates = {};
+    reordered.forEach(function(item, position){
+      updates[item.id + "/orden"] = position;
+    });
+
+    savingOrder = true;
+
+    database.ref("actividades/borradores/" + auth.currentUser.uid)
+      .update(updates)
+      .then(function(){
+        currentDrafts = reordered.map(function(item, position){
+          return {
+            id: item.id,
+            data: Object.assign({}, item.data, {orden: position})
+          };
         });
-      }
-    });
+        renderDraftsFromCurrent();
+      })
+      .catch(function(error){
+        console.error("No se pudo guardar el orden:", error);
+        alert("No se pudo guardar el nuevo orden. Inténtalo nuevamente.");
+      })
+      .finally(function(){
+        savingOrder = false;
+      });
+  }
 
-    drafts.sort(function(a, b){
-      const orderA = Number(a.data.orden ?? a.data.creadoEn ?? 0);
-      const orderB = Number(b.data.orden ?? b.data.creadoEn ?? 0);
-      return orderA - orderB;
-    });
+  function renderDraftsFromCurrent(){
+    renderDrafts(null, true);
+  }
 
-    emptyState.style.display = drafts.length ? "none" : "";
+  function renderDrafts(snapshot, useCurrent){
+    if(!useCurrent){
+      currentDrafts = [];
 
-    drafts.forEach(function(item){
+      snapshot.forEach(function(child){
+        const data = child.val();
+        if(data && typeof data === "object"){
+          currentDrafts.push({id: child.key, data: data});
+        }
+      });
+
+      const allHaveOrder = currentDrafts.every(function(item){
+        return Number.isFinite(Number(item.data.orden)) &&
+          item.data.orden !== undefined && item.data.orden !== null;
+      });
+
+      currentDrafts.sort(function(a, b){
+        if(allHaveOrder){
+          return Number(a.data.orden) - Number(b.data.orden);
+        }
+        return Number(a.data.creadoEn || 0) - Number(b.data.creadoEn || 0);
+      });
+    }
+
+    activityList.replaceChildren();
+    emptyState.style.display = currentDrafts.length ? "none" : "";
+
+    currentDrafts.forEach(function(item, index){
       const data = item.data;
       const card = createElement("article", "teacher-activity-card");
-
       const cover = createElement("div", "teacher-activity-cover");
 
-      if(typeof data.portada === "string" && data.portada.startsWith("data:image/")){
+      if(typeof data.portada === "string" &&
+         data.portada.startsWith("data:image/")){
         const image = document.createElement("img");
         image.src = data.portada;
         image.alt = "Portada de " + (data.titulo || "la actividad");
@@ -11900,8 +11949,31 @@ auth.onAuthStateChanged(function(user){
         }
       }
 
+      const moveControls = createElement("div", "teacher-activity-move");
+      const upButton = createElement("button", "", "↑");
+      upButton.type = "button";
+      upButton.title = "Mover actividad hacia arriba";
+      upButton.setAttribute("aria-label", "Mover " + (data.titulo || "actividad") + " hacia arriba");
+      upButton.disabled = index === 0 || savingOrder;
+      upButton.addEventListener("click", function(){
+        moveDraft(index, -1);
+      });
+
+      const downButton = createElement("button", "", "↓");
+      downButton.type = "button";
+      downButton.title = "Mover actividad hacia abajo";
+      downButton.setAttribute("aria-label", "Mover " + (data.titulo || "actividad") + " hacia abajo");
+      downButton.disabled = index === currentDrafts.length - 1 || savingOrder;
+      downButton.addEventListener("click", function(){
+        moveDraft(index, 1);
+      });
+
+      moveControls.appendChild(upButton);
+      moveControls.appendChild(downButton);
+
       card.appendChild(cover);
       card.appendChild(info);
+      card.appendChild(moveControls);
       activityList.appendChild(card);
     });
   }
@@ -11913,7 +11985,9 @@ auth.onAuthStateChanged(function(user){
 
     database.ref("actividades/borradores/" + user.uid).on(
       "value",
-      renderDrafts,
+      function(snapshot){
+        renderDrafts(snapshot, false);
+      },
       function(error){
         console.error("No se pudieron cargar los borradores:", error);
         emptyState.style.display = "";
@@ -11923,6 +11997,7 @@ auth.onAuthStateChanged(function(user){
     );
   });
 })();
+
 </script>
 
 
