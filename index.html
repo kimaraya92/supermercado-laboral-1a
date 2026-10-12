@@ -3821,9 +3821,11 @@ aspect-ratio:auto;
       </div>
 
       <nav class="teacher-menu">
-        <button type="button" class="teacher-menu-item active">
+        
+        <button type="button" class="teacher-menu-item active" id="teacherActivitiesMenuButton">
           <span>🌸</span> Actividades
         </button>
+
         <button type="button" class="teacher-menu-item">
           <span>👩‍🎓</span> Estudiantes
         </button>
@@ -12239,9 +12241,9 @@ window.editarBorradorDocente = async function(activityId){
     showSection(trashSection, trashButton);
   });
 
-  const activitiesButton = document.querySelector(
-    '.teacher-menu-item:not(#teacherTrashMenuButton)'
-  );
+  
+  const activitiesButton = document.getElementById("teacherActivitiesMenuButton");
+
 
   if(activitiesButton){
     activitiesButton.addEventListener("click", function(){
