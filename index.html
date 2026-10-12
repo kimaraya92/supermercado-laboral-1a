@@ -4017,10 +4017,36 @@ aspect-ratio:auto;
             ></textarea>
           </div>
 
-          
-          <p style="color:#a14e82;font-weight:600;">
-            💗 Estado inicial: borrador
-          </p>
+    
+<div class="teacher-planner-field">
+  <label>¿Para qué estudiantes está dirigida?</label>
+
+  <label>
+    <input type="checkbox" id="activitySelectAllStudents">
+    Todos los estudiantes
+  </label>
+
+  <div id="activityStudentOptions"
+       style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px;">
+
+    <label><input type="checkbox" class="activity-student-option" value="Esteban"> Esteban</label>
+    <label><input type="checkbox" class="activity-student-option" value="Almendra"> Almendra</label>
+    <label><input type="checkbox" class="activity-student-option" value="Renata"> Renata</label>
+    <label><input type="checkbox" class="activity-student-option" value="Gerardo"> Gerardo</label>
+    <label><input type="checkbox" class="activity-student-option" value="Mauricio"> Mauricio</label>
+
+  </div>
+</div>
+
+<div class="teacher-planner-field">
+  <label for="newActivityArea">Área o asignatura</label>
+  <input
+    type="text"
+    id="newActivityArea"
+    placeholder="Ej.: Matemática funcional"
+    maxlength="100"
+  >
+</div>
 
           
 <div class="teacher-resource-section">
