@@ -12029,27 +12029,52 @@ closeModal();
         }
       }
 
+      
+      const actionControls = createElement("div", "teacher-activity-actions-vertical");
+      actionControls.style.cssText = "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;flex-shrink:0;";
+
+      function styleActionButton(button, color){
+        button.type = "button";
+        button.style.cssText = "width:36px;height:36px;min-width:36px;display:flex;align-items:center;justify-content:center;padding:0;margin:0;line-height:1;font-size:19px;box-sizing:border-box;border:1px solid #f0d4e7;border-radius:10px;background:#fff6fb;cursor:pointer;flex-shrink:0;color:" + color + ";";
+      }
+
       const editButton = createElement("button", "", "✏️");
-      editButton.type = "button";
       editButton.title = "Editar actividad";
       editButton.setAttribute("aria-label", "Editar " + (data.titulo || "actividad"));
-      editButton.style.width = "42px";
-      editButton.style.height = "42px";
-      editButton.style.display = "flex";
-      editButton.style.alignItems = "center";
-      editButton.style.justifyContent = "center";
-      editButton.style.padding = "0";
-      editButton.style.lineHeight = "1";
-      editButton.style.fontSize = "20px";
-      editButton.style.boxSizing = "border-box";
-      editButton.style.flexShrink = "0";
-      editButton.style.border = "1px solid #f0d4e7";
-      editButton.style.borderRadius = "10px";
-      editButton.style.background = "#fff6fb";
-      editButton.style.cursor = "pointer";
-
+      styleActionButton(editButton, "#a14e82");
+      editButton.addEventListener("click", function(){
+        window.editarBorradorDocente(item.id);
       });
-      card.appendChild(editButton);
+
+      const deleteButton = createElement("button", "", "🗑️");
+      deleteButton.title = "Mover a la papelera";
+      deleteButton.setAttribute("aria-label", "Mover a la papelera " + (data.titulo || "actividad"));
+      styleActionButton(deleteButton, "#c14f69");
+
+      deleteButton.addEventListener("click", async function(){
+        if(!confirm('¿Mover "' + (data.titulo || "esta actividad") + '" a la papelera? Podrás restaurarla después.')) return;
+        if(!auth.currentUser) return;
+
+        deleteButton.disabled = true;
+        try{
+          const userId = auth.currentUser.uid;
+          const updates = {};
+          updates["actividades/papelera/" + userId + "/" + item.id] = Object.assign({}, data, {
+            eliminadoEn: firebase.database.ServerValue.TIMESTAMP
+          });
+          updates["actividades/borradores/" + userId + "/" + item.id] = null;
+          await database.ref().update(updates);
+        }catch(error){
+          console.error("Error al mover la actividad:", error);
+          alert("No se pudo mover la actividad a la papelera.");
+          deleteButton.disabled = false;
+        }
+      });
+
+      actionControls.appendChild(editButton);
+      actionControls.appendChild(deleteButton);
+      card.appendChild(actionControls);
+
 
       const moveControls = createElement("div", "teacher-activity-move");
       const upButton = createElement("button", "", "↑");
