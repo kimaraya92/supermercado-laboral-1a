@@ -11925,9 +11925,27 @@ closeModal();
   if(!activityList || !emptyState || typeof auth === "undefined" ||
      typeof database === "undefined") return;
 
-  let draftsListenerAttached = false;
+    let draftsListenerAttached = false;
   let currentDrafts = [];
+  let currentPublished = [];
+  let currentFilter = "todas";
   let savingOrder = false;
+
+  const statusFilters = document.getElementById("activityStatusFilters");
+
+  if(statusFilters){
+    statusFilters.querySelectorAll("[data-filter]").forEach(function(button){
+      button.addEventListener("click", function(){
+        currentFilter = button.dataset.filter;
+
+        statusFilters.querySelectorAll("[data-filter]").forEach(function(filterButton){
+          filterButton.classList.toggle("active", filterButton === button);
+        });
+
+        renderDraftsFromCurrent();
+      });
+    });
+  }
 
   function createElement(tag, className, text){
     const element = document.createElement(tag);
