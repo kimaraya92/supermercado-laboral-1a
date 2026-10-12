@@ -12589,6 +12589,34 @@ window.editarBorradorDocente = async function(activityId){
 
     titleInput.value = data.titulo || "";
     descriptionInput.value = data.instrucciones || "";
+    
+    const areaInput = document.getElementById("newActivityArea");
+
+    if (areaInput) {
+      areaInput.value = data.area || "";
+    }
+
+    const studentCheckboxes = document.querySelectorAll(".activity-student-option");
+    const selectAllCheckbox = document.getElementById("activitySelectAllStudents");
+    const savedStudents = Array.isArray(data.estudiantes)
+      ? data.estudiantes
+      : [];
+
+    studentCheckboxes.forEach(function (checkbox) {
+      checkbox.checked = savedStudents.some(function (nombre) {
+        return normalizarNombreEstudiante(nombre) ===
+          normalizarNombreEstudiante(checkbox.value);
+      });
+    });
+
+    if (selectAllCheckbox) {
+      selectAllCheckbox.checked =
+        studentCheckboxes.length > 0 &&
+        Array.from(studentCheckboxes).every(function (checkbox) {
+          return checkbox.checked;
+        });
+    }
+
     resourceTypeInput.value = data.recurso?.tipo || "enlace";
     resourceUrlInput.value = data.recurso?.enlace || "";
 
