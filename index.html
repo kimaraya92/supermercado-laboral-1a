@@ -4021,23 +4021,44 @@ aspect-ratio:auto;
 <div class="teacher-planner-field">
   <label>¿Para qué estudiantes está dirigida?</label>
 
-  <label>
-    <input type="checkbox" id="activitySelectAllStudents">
-    Todos los estudiantes
-  </label>
+  <div style="position:relative;">
+    <button
+      type="button"
+      id="activityStudentsDropdown"
+      aria-expanded="false"
+      style="width:100%;padding:12px 14px;border:1px solid #e7b9d5;border-radius:12px;background:#fff;text-align:left;color:#76516b;cursor:pointer;"
+    >
+      <span id="activityStudentsSummary">Seleccionar estudiantes</span>
+      <span style="float:right;">⌄</span>
+    </button>
 
-  <div id="activityStudentOptions"
-       style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px;">
+    <div
+      id="activityStudentOptions"
+      hidden
+      style="position:absolute;z-index:20;top:calc(100% + 6px);left:0;right:0;padding:12px;background:#fff;border:1px solid #e7b9d5;border-radius:12px;box-shadow:0 8px 24px #00000018;"
+    >
+      <input
+        type="text"
+        id="activityStudentSearch"
+        placeholder="Buscar estudiante..."
+        style="width:100%;box-sizing:border-box;margin-bottom:10px;padding:10px;border:1px solid #ead4e2;border-radius:8px;"
+      >
 
-    <label><input type="checkbox" class="activity-student-option" value="Esteban"> Esteban</label>
-    <label><input type="checkbox" class="activity-student-option" value="Almendra"> Almendra</label>
-    <label><input type="checkbox" class="activity-student-option" value="Renata"> Renata</label>
-    <label><input type="checkbox" class="activity-student-option" value="Gerardo"> Gerardo</label>
-    <label><input type="checkbox" class="activity-student-option" value="Mauricio"> Mauricio</label>
+      <label style="display:block;padding:8px 4px;">
+        <input type="checkbox" id="activitySelectAllStudents">
+        Todos los estudiantes
+      </label>
 
+      <div style="display:grid;grid-template-columns:1fr;gap:8px;">
+        <label><input type="checkbox" class="activity-student-option" value="Esteban"> Esteban</label>
+        <label><input type="checkbox" class="activity-student-option" value="Almendra"> Almendra</label>
+        <label><input type="checkbox" class="activity-student-option" value="Renata"> Renata</label>
+        <label><input type="checkbox" class="activity-student-option" value="Gerardo"> Gerardo</label>
+        <label><input type="checkbox" class="activity-student-option" value="Mauricio"> Mauricio</label>
+      </div>
+    </div>
   </div>
 </div>
-
 <div class="teacher-planner-field">
   <label for="newActivityArea">Área o asignatura</label>
   <input
