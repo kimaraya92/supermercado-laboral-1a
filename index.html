@@ -11935,18 +11935,6 @@ auth.onAuthStateChanged(function(user){
   });
 
   updateStudentsSummary();
-
-  studentOptions.forEach(function (checkbox) {
-    checkbox.addEventListener("change", function () {
-      const allSelected = Array.from(studentOptions).every(function (option) {
-        return option.checked;
-      });
-
-      if (selectAllStudents) {
-        selectAllStudents.checked = allSelected;
-      }
-    });
-  });
     
   const coverImageInput = document.getElementById("newActivityCoverImage");
   const coverPreview = document.getElementById("newActivityCoverPreview");
