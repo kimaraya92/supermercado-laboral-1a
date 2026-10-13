@@ -12134,10 +12134,13 @@ if (editingId) {
 
   existingData = snapshot.val() || {};
 
-  // Una actividad publicada continúa publicada al editarla.
+  
   if (existingCategory === "publicadas") {
     targetCategory = "publicadas";
+  } else {
+    targetCategory = publishRequested ? "publicadas" : "borradores";
   }
+
 } else {
   const targetRef = database.ref(
     "actividades/" + targetCategory + "/" + userId
