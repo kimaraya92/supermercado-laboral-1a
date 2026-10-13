@@ -13315,9 +13315,16 @@ window.editarBorradorDocente = async function(activityId){
   `;
 
   pantalla.style.cssText =
-    "position:fixed;inset:0;z-index:9999;overflow:auto;background:#fff8fc;";
+  "width:100%;min-height:100vh;box-sizing:border-box;" +
+  "overflow:auto;background:#fff8fc;";
 
-  document.body.appendChild(pantalla);
+const panelDerecho = document.querySelector(
+  "#adminHomeScreen .teacher-main"
+);
+
+if(!panelDerecho) return;
+
+panelDerecho.appendChild(pantalla);
 
   boton.addEventListener("click", function(){
     document.getElementById("adminHomeScreen").classList.add("hidden");
