@@ -12807,7 +12807,10 @@ window.editarBorradorDocente = async function(activityId){
     }
 
     modal.dataset.editingActivityId = activityId;
+    modal.dataset.editingActivityCategory = categoriaActividad;
+    modal.dataset.publishActivity = "false";
     modal.classList.remove("hidden");
+
     document.body.style.overflow = "hidden";
     titleInput.focus();
 
