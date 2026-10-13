@@ -12706,6 +12706,40 @@ closeModal();
         publishedActions.appendChild(updatePublishedButton);
         publishedActions.appendChild(deletePublishedButton);
         card.insertBefore(publishedActions, card.firstChild);
+                const publishedIndex = currentPublished.findIndex(function(entry){
+          return entry.id === item.id;
+        });
+
+        const publishedMoveControls = createElement(
+          "div",
+          "teacher-activity-move"
+        );
+
+        const publishedUpButton = createElement("button", "", "↑");
+        publishedUpButton.type = "button";
+        publishedUpButton.title = "Mover actividad publicada hacia arriba";
+        publishedUpButton.disabled =
+          publishedIndex <= 0 || savingOrder;
+
+        publishedUpButton.addEventListener("click", function(){
+          movePublished(publishedIndex, -1);
+        });
+
+        const publishedDownButton = createElement("button", "", "↓");
+        publishedDownButton.type = "button";
+        publishedDownButton.title = "Mover actividad publicada hacia abajo";
+        publishedDownButton.disabled =
+          publishedIndex < 0 ||
+          publishedIndex === currentPublished.length - 1 ||
+          savingOrder;
+
+        publishedDownButton.addEventListener("click", function(){
+          movePublished(publishedIndex, 1);
+        });
+
+        publishedMoveControls.appendChild(publishedUpButton);
+        publishedMoveControls.appendChild(publishedDownButton);
+        card.appendChild(publishedMoveControls);
       }
 
       activityList.appendChild(card);
