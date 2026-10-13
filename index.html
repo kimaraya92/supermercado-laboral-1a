@@ -10227,10 +10227,11 @@ function cerrarCamaraProducto(){
   }
 
 }  
+
 function mostrarEnlaceImagen(){
 
   const enlace = prompt(
-    "Pega aquí el enlace de la imagen:"
+    "Pega aquí el enlace directo de la imagen:"
   );
 
   if(!enlace){
@@ -10261,14 +10262,15 @@ function mostrarEnlaceImagen(){
     deleteButton.style.display = "none";
 
     alert(
-      "No se pudo cargar esa imagen. Revisa el enlace."
+      "No se pudo mostrar la imagen. Prueba con un enlace directo al archivo de imagen."
     );
 
   };
 
-  preview.src = enlace;
+  preview.src = enlace.trim();
 
 }
+
   
 function previsualizarImagen(event){
 
