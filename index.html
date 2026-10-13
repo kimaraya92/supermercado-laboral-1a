@@ -12172,10 +12172,16 @@ if(publishRequested){
 }
 
 const updates = {};
-updates["actividades/" + targetCategory + "/" + userId + "/" + activityId] = activityData;
 
-if(editingId && publishRequested){
-  updates["actividades/borradores/" + userId + "/" + editingId] = null;
+if (editingId && existingCategory === "publicadas" && !publishRequested) {
+  updates["actividades/edicionesPendientes/" + userId + "/" + activityId] = activityData;
+  updates["actividades/publicadas/" + userId + "/" + activityId + "/actualizacionPendiente"] = true;
+} else {
+  updates["actividades/" + targetCategory + "/" + userId + "/" + activityId] = activityData;
+
+  if (editingId && publishRequested) {
+    updates["actividades/borradores/" + userId + "/" + editingId] = null;
+  }
 }
 
 await database.ref().update(updates);
