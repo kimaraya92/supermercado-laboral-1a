@@ -6447,6 +6447,8 @@ let scannedCount = 0;
 
 let purchaseItems = [];
 
+let productoPendienteVenta = null;
+
 let scanning = false;
 
 let formScanMode = false;
@@ -8436,75 +8438,101 @@ document.addEventListener(
 
   }
 );
+
 function processCode(code){
 
-  const normalized =
-    String(code).trim();
-
+  const normalized = String(code).trim();
 
   if(!normalized){
     return;
   }
 
+  const modal = document.getElementById("confirmProductModal");
 
-  currentScanCode =
-    normalized;
-
-
-  const product =
-    products[normalized];
-
-
-  if(product){
-
-    showProduct(product);
-
-
-    document
-      .getElementById("saleStatus")
-      .textContent =
-        "✓ Producto reconocido.";
-
-  }else{
-
-    document
-      .getElementById("rProduct")
-      .textContent =
-        "Producto no registrado";
-
-
-    document
-      .getElementById("rBrand")
-      .textContent =
-        "Código: " + normalized;
-
-
-    document
-      .getElementById("rContent")
-      .textContent =
-        "";
-
-
-    document
-      .getElementById("rPrice")
-      .textContent =
-        "";
-
-
-    document
-      .getElementById("result")
-      .classList
-      .remove("hidden");
-
-
-    document
-      .getElementById("saleStatus")
-      .textContent =
-        "Código leído, pero no está en el catálogo.";
-
+  if(!modal.classList.contains("hidden")){
+    return;
   }
 
+  currentScanCode = normalized;
+
+  const product = products[normalized];
+
+  if(!product){
+    document.getElementById("rProduct").textContent =
+      "Producto no registrado";
+
+    document.getElementById("rBrand").textContent =
+      "Código: " + normalized;
+
+    document.getElementById("rContent").textContent = "";
+    document.getElementById("rPrice").textContent = "";
+
+    document.getElementById("result").classList.remove("hidden");
+
+    document.getElementById("saleStatus").textContent =
+      "Código leído, pero no está en el catálogo.";
+
+    return;
+  }
+
+  productoPendienteVenta = product;
+
+  document.getElementById("confirmProductName").textContent =
+    product.product || "";
+
+  document.getElementById("confirmProductBrand").textContent =
+    [product.brand, product.content].filter(Boolean).join(" · ");
+
+  document.getElementById("confirmProductPrice").textContent =
+    money(product.price);
+
+  const image = document.getElementById("confirmProductImage");
+
+  if(product.image){
+    image.src = product.image;
+    image.style.display = "block";
+  }else{
+    image.removeAttribute("src");
+    image.style.display = "none";
+  }
+
+  modal.classList.remove("hidden");
+
+  document.getElementById("saleStatus").textContent =
+    "Confirma el producto para agregarlo a la compra.";
+
+  const acceptButton = modal.querySelector("button");
+
+  if(acceptButton){
+    acceptButton.focus();
+  }
 }
+
+function confirmarProductoVenta(){
+
+  if(!productoPendienteVenta){
+    return;
+  }
+
+  const producto = productoPendienteVenta;
+
+  productoPendienteVenta = null;
+
+  document.getElementById("confirmProductModal").classList.add("hidden");
+
+  showProduct(producto);
+
+  document.getElementById("saleStatus").textContent =
+    "✓ Producto agregado a la compra.";
+
+  const manualInput = document.getElementById("manualCodeInput");
+
+  if(!document.getElementById("manualCodeBox").classList.contains("hidden")){
+    manualInput.value = "";
+    manualInput.focus();
+  }
+}
+
 
 
 
