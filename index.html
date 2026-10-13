@@ -6614,8 +6614,8 @@ function cargarActividadesPublicadasEstudiante(){
 
       cantidad++;
 
-      const tarjeta = document.createElement("article");
-      tarjeta.className = "digital-notebook-activity";
+            const tarjeta = document.createElement("article");
+      tarjeta.className = "digital-notebook-card";
 
       if(
         typeof actividad.portada === "string" &&
@@ -6625,20 +6625,24 @@ function cargarActividadesPublicadasEstudiante(){
         imagen.src = actividad.portada;
         imagen.alt = "";
         imagen.loading = "lazy";
-        imagen.style.width = "100%";
-        imagen.style.maxHeight = "220px";
+        imagen.style.width = "96px";
+        imagen.style.height = "76px";
+        imagen.style.minWidth = "96px";
         imagen.style.objectFit = "cover";
-        imagen.style.borderRadius = "12px";
+        imagen.style.borderRadius = "10px";
         tarjeta.appendChild(imagen);
       }
 
+      const info = document.createElement("div");
+      info.className = "digital-notebook-card-info";
+
       const titulo = document.createElement("h3");
       titulo.textContent = actividad.titulo || "Actividad sin título";
-      tarjeta.appendChild(titulo);
+      info.appendChild(titulo);
 
       const instrucciones = document.createElement("p");
       instrucciones.textContent = actividad.instrucciones || "";
-      tarjeta.appendChild(instrucciones);
+      info.appendChild(instrucciones);
 
       const enlaceRecurso =
         actividad.recurso && actividad.recurso.enlace
@@ -6652,9 +6656,12 @@ function cargarActividadesPublicadasEstudiante(){
         enlace.rel = "noopener noreferrer";
         enlace.textContent = "Abrir actividad ↗";
         enlace.className = "digital-notebook-activity-link";
-        tarjeta.appendChild(enlace);
+        enlace.style.display = "inline-block";
+        enlace.style.marginTop = "6px";
+        info.appendChild(enlace);
       }
 
+      tarjeta.appendChild(info);
       pendientes.appendChild(tarjeta);
     });
 
