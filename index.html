@@ -11878,7 +11878,7 @@ auth.onAuthStateChanged(function(user){
       studentOptions.forEach(function (checkbox) {
         checkbox.checked = selectAllStudents.checked;
       });
-      updateStudentsSummary();
+            if (typeof updateStudentsSummary === "function") updateStudentsSummary();
     });
   }
 
