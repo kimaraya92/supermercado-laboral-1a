@@ -12628,7 +12628,6 @@ window.editarBorradorDocente = async function(activityId){
     const modal = document.getElementById("teacherActivityCreator");
     const titleInput = document.getElementById("newActivityTitle");
     const descriptionInput = document.getElementById("newActivityDescription");
-    const resourceTypeInput = document.getElementById("newActivityResourceType");
     const resourceUrlInput = document.getElementById("newActivityResourceUrl");
     const coverPreview = document.getElementById("newActivityCoverPreview");
     const formTitle = document.getElementById("teacherActivityFormTitle");
@@ -12663,7 +12662,6 @@ window.editarBorradorDocente = async function(activityId){
         });
     }
 
-    resourceTypeInput.value = data.recurso?.tipo || "enlace";
     resourceUrlInput.value = data.recurso?.enlace || "";
 
     if(formTitle){
