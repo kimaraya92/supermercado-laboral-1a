@@ -11912,7 +11912,7 @@ auth.onAuthStateChanged(function(user){
     });
   }
 
-  if(!openButton || !modal || !closeButton || !cancelButton || !saveButton) return;
+    if(!openButton || !modal || !closeButton || !saveButton) return;
 
   function openModal(){
     modal.classList.remove("hidden");
@@ -11928,12 +11928,17 @@ auth.onAuthStateChanged(function(user){
 
   openButton.addEventListener("click", openModal);
   closeButton.addEventListener("click", closeModal);
-  cancelButton.addEventListener("click", closeModal);
-  publishButton.addEventListener("click", function(){
-  modal.dataset.publishActivity = "true";
-  saveButton.click();
-});
 
+  if(cancelButton){
+    cancelButton.addEventListener("click", closeModal);
+  }
+
+  if(publishButton){
+    publishButton.addEventListener("click", function(){
+      modal.dataset.publishActivity = "true";
+      saveButton.click();
+    });
+  }
   modal.addEventListener("click", function(event){
     if(event.target === modal) closeModal();
   });
