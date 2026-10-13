@@ -11873,12 +11873,16 @@ auth.onAuthStateChanged(function(user){
   const selectAllStudents = document.getElementById("activitySelectAllStudents");
   const studentOptions = document.querySelectorAll(".activity-student-option");
 
-  if (selectAllStudents) {
+    if (selectAllStudents) {
     selectAllStudents.addEventListener("change", function () {
       studentOptions.forEach(function (checkbox) {
         checkbox.checked = selectAllStudents.checked;
       });
-        const studentsDropdown = document.getElementById("activityStudentsDropdown");
+      updateStudentsSummary();
+    });
+  }
+
+  const studentsDropdown = document.getElementById("activityStudentsDropdown");
   const studentsSummary = document.getElementById("activityStudentsSummary");
   const studentsSearch = document.getElementById("activityStudentSearch");
 
@@ -11916,14 +11920,11 @@ auth.onAuthStateChanged(function(user){
 
   if (studentsSearch) {
     studentsSearch.addEventListener("input", function () {
-      const search = studentsSearch.value
-        .trim()
-        .toLocaleLowerCase("es");
+      const search = studentsSearch.value.trim().toLocaleLowerCase("es");
 
       studentOptions.forEach(function (checkbox) {
         const label = checkbox.closest("label");
         const name = checkbox.value.toLocaleLowerCase("es");
-
         label.hidden = !name.includes(search);
       });
     });
@@ -11934,10 +11935,18 @@ auth.onAuthStateChanged(function(user){
   });
 
   updateStudentsSummary();
-    });
-  }
 
   studentOptions.forEach(function (checkbox) {
+    checkbox.addEventListener("change", function () {
+      const allSelected = Array.from(studentOptions).every(function (option) {
+        return option.checked;
+      });
+
+      if (selectAllStudents) {
+        selectAllStudents.checked = allSelected;
+      }
+    });
+  });
     checkbox.addEventListener("change", function () {
       const allSelected = Array.from(studentOptions).every(function (option) {
         return option.checked;
