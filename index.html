@@ -6555,90 +6555,108 @@ function cargarActividadesPublicadasEstudiante(){
   database.ref("actividades/publicadas").on("value", function(snapshot){
 
     pendientes.replaceChildren();
+    pendientes.replaceChildren();
+
+    const actividadesOrdenadas = [];
+
+    snapshot.forEach(function(docenteSnapshot){
+      docenteSnapshot.forEach(function(actividadSnapshot){
+        const actividad = actividadSnapshot.val();
+
+        if(actividad && typeof actividad === "object"){
+          actividadesOrdenadas.push({
+            id: actividadSnapshot.key,
+            data: actividad
+          });
+        }
+      });
+    });
+
+    const todasTienenOrden = actividadesOrdenadas.every(function(item){
+      return item.data.orden !== undefined &&
+        item.data.orden !== null &&
+        Number.isFinite(Number(item.data.orden));
+    });
+
+    actividadesOrdenadas.sort(function(a, b){
+      if(todasTienenOrden){
+        return Number(a.data.orden) - Number(b.data.orden);
+      }
+      return Number(a.data.publicadoEn || a.data.creadoEn || 0) -
+        Number(b.data.publicadoEn || b.data.creadoEn || 0);
+    });
 
     let cantidad = 0;
 
-    snapshot.forEach(function(docenteSnapshot){
+    function normalizarNombreEstudiante(nombre){
+      return String(nombre || "")
+        .trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+    }
 
-      docenteSnapshot.forEach(function(actividadSnapshot){
+    const nombreActual = normalizarNombreEstudiante(estudianteActual);
 
-        const actividad = actividadSnapshot.val();
+    actividadesOrdenadas.forEach(function(item){
+      const actividad = item.data;
+      const destinatarios = Array.isArray(actividad.estudiantes)
+        ? actividad.estudiantes
+        : [];
 
-        if(!actividad || typeof actividad !== "object") return;
-        
-        function normalizarNombreEstudiante(nombre) {
-          return String(nombre || "")
-            .trim()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase();
-        }
+      if(
+        destinatarios.length > 0 &&
+        !destinatarios.some(function(nombre){
+          return normalizarNombreEstudiante(nombre) === nombreActual;
+        })
+      ){
+        return;
+      }
 
-        const destinatarios = Array.isArray(actividad.estudiantes)
-          ? actividad.estudiantes
-          : [];
+      cantidad++;
 
-        const nombreActual = normalizarNombreEstudiante(estudianteActual);
+      const tarjeta = document.createElement("article");
+      tarjeta.className = "digital-notebook-activity";
 
-        // Las actividades nuevas solo aparecen a sus destinatarios.
-        // Las antiguas, sin destinatarios registrados, se mantienen visibles.
-        if (
-          destinatarios.length > 0 &&
-          !destinatarios.some(function (nombre) {
-            return normalizarNombreEstudiante(nombre) === nombreActual;
-          })
-        ) {
-          return;
-        }
+      if(
+        typeof actividad.portada === "string" &&
+        actividad.portada.startsWith("data:image/")
+      ){
+        const imagen = document.createElement("img");
+        imagen.src = actividad.portada;
+        imagen.alt = "";
+        imagen.loading = "lazy";
+        imagen.style.width = "100%";
+        imagen.style.maxHeight = "220px";
+        imagen.style.objectFit = "cover";
+        imagen.style.borderRadius = "12px";
+        tarjeta.appendChild(imagen);
+      }
 
+      const titulo = document.createElement("h3");
+      titulo.textContent = actividad.titulo || "Actividad sin título";
+      tarjeta.appendChild(titulo);
 
-        cantidad++;
+      const instrucciones = document.createElement("p");
+      instrucciones.textContent = actividad.instrucciones || "";
+      tarjeta.appendChild(instrucciones);
 
-        const tarjeta = document.createElement("article");
-        tarjeta.className = "digital-notebook-activity";
+      const enlaceRecurso =
+        actividad.recurso && actividad.recurso.enlace
+          ? String(actividad.recurso.enlace).trim()
+          : "";
 
-        if(
-          typeof actividad.portada === "string" &&
-          actividad.portada.startsWith("data:image/")
-        ){
-          const imagen = document.createElement("img");
-          imagen.src = actividad.portada;
-          imagen.alt = "";
-          imagen.loading = "lazy";
-          imagen.style.width = "100%";
-          imagen.style.maxHeight = "220px";
-          imagen.style.objectFit = "cover";
-          imagen.style.borderRadius = "12px";
-          tarjeta.appendChild(imagen);
-        }
+      if(/^https?:\/\//i.test(enlaceRecurso)){
+        const enlace = document.createElement("a");
+        enlace.href = enlaceRecurso;
+        enlace.target = "_blank";
+        enlace.rel = "noopener noreferrer";
+        enlace.textContent = "Abrir actividad ↗";
+        enlace.className = "digital-notebook-activity-link";
+        tarjeta.appendChild(enlace);
+      }
 
-        const titulo = document.createElement("h3");
-        titulo.textContent = actividad.titulo || "Actividad sin título";
-        tarjeta.appendChild(titulo);
-
-        const instrucciones = document.createElement("p");
-        instrucciones.textContent = actividad.instrucciones || "";
-        tarjeta.appendChild(instrucciones);
-
-        const enlaceRecurso =
-          actividad.recurso && actividad.recurso.enlace
-            ? String(actividad.recurso.enlace).trim()
-            : "";
-
-        if(/^https?:\/\//i.test(enlaceRecurso)){
-
-          const enlace = document.createElement("a");
-          enlace.href = enlaceRecurso;
-          enlace.target = "_blank";
-          enlace.rel = "noopener noreferrer";
-          enlace.textContent = "Abrir actividad ↗";
-          enlace.className = "digital-notebook-activity-link";
-
-          tarjeta.appendChild(enlace);
-        }
-
-        pendientes.appendChild(tarjeta);
-      });
+      pendientes.appendChild(tarjeta);
     });
 
     if(cantidad === 0){
@@ -6646,9 +6664,7 @@ function cargarActividadesPublicadasEstudiante(){
     }
 
     realizadas.textContent =
-      "El registro de actividades realizadas se habilitará en una próxima etapa.";
-
-  }, function(error){
+      "El registro de actividades realizadas se habilitará en una próxima etapa.";  }, function(error){
 
     console.error("Error al cargar las actividades publicadas:", error);
 
