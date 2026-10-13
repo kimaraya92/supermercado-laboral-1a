@@ -12748,7 +12748,16 @@ auth.onAuthStateChanged(function(user){
         }
       });
 
+            const todasTienenOrden = currentPublished.every(function(item){
+        return item.data.orden !== undefined &&
+          item.data.orden !== null &&
+          Number.isFinite(Number(item.data.orden));
+      });
+
       currentPublished.sort(function(a, b){
+        if(todasTienenOrden){
+          return Number(a.data.orden) - Number(b.data.orden);
+        }
         return Number(b.data.publicadoEn || b.data.creadoEn || 0) -
                Number(a.data.publicadoEn || a.data.creadoEn || 0);
       });
