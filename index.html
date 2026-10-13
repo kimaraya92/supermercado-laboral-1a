@@ -12317,7 +12317,44 @@ closeModal();
 
   }
 
-  
+    function movePublished(index, direction){
+    if(savingOrder || !auth.currentUser) return;
+
+    const newIndex = index + direction;
+    if(index < 0 || newIndex < 0 || newIndex >= currentPublished.length) return;
+
+    const reordered = currentPublished.slice();
+    const temp = reordered[index];
+    reordered[index] = reordered[newIndex];
+    reordered[newIndex] = temp;
+
+    const updates = {};
+    reordered.forEach(function(item, position){
+      updates[item.id + "/orden"] = position;
+    });
+
+    savingOrder = true;
+
+    database.ref("actividades/publicadas/" + auth.currentUser.uid)
+      .update(updates)
+      .then(function(){
+        currentPublished = reordered.map(function(item, position){
+          return {
+            id: item.id,
+            data: Object.assign({}, item.data, {orden: position})
+          };
+        });
+        renderDraftsFromCurrent();
+      })
+      .catch(function(error){
+        console.error("No se pudo guardar el orden de las publicadas:", error);
+        alert("No se pudo guardar el nuevo orden. Inténtalo nuevamente.");
+      })
+      .finally(function(){
+        savingOrder = false;
+        renderDraftsFromCurrent();
+      });
+  }
   function renderDraftsFromCurrent(){
     renderDrafts(null, true);
   }
