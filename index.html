@@ -11844,7 +11844,6 @@ auth.onAuthStateChanged(function(user){
   const publishButton = document.getElementById("publishTeacherActivity");
   const titleInput = document.getElementById("newActivityTitle");
   const descriptionInput = document.getElementById("newActivityDescription");
-  const resourceTypeInput = document.getElementById("newActivityResourceType");
   const resourceUrlInput = document.getElementById("newActivityResourceUrl");
   
   const selectAllStudents = document.getElementById("activitySelectAllStudents");
@@ -12179,11 +12178,6 @@ resourceUrlInput.value = "";
 
 if(coverImageInput){
   coverImageInput.value = "";
-}
-
-const resourceFileInput = document.getElementById("newActivityResourceFile");
-if(resourceFileInput){
-  resourceFileInput.value = "";
 }
 
 if(coverImagePreviewUrl){
