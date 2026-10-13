@@ -6614,7 +6614,8 @@ function cargarActividadesPublicadasEstudiante(){
 
       cantidad++;
 
-            const tarjeta = document.createElement("article");
+            
+      const tarjeta = document.createElement("article");
       tarjeta.className = "digital-notebook-card";
 
       if(
@@ -6662,7 +6663,18 @@ function cargarActividadesPublicadasEstudiante(){
       }
 
       tarjeta.appendChild(info);
+
+      const botonFinalizar = document.createElement("button");
+      botonFinalizar.type = "button";
+      botonFinalizar.className = "digital-notebook-action";
+      botonFinalizar.textContent = "Marcar como finalizada";
+      botonFinalizar.addEventListener("click", function(){
+        alert("El registro de actividades finalizadas estará disponible próximamente.");
+      });
+
+      tarjeta.appendChild(botonFinalizar);
       pendientes.appendChild(tarjeta);
+
     });
 
     if(cantidad === 0){
