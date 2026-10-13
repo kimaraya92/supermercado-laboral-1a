@@ -12617,13 +12617,53 @@ closeModal();
           window.editarBorradorDocente(item.id);
         });
 
-        const updatePublishedButton = createElement("button", "", "🚀");
-        updatePublishedButton.title = "Publicada. Edita la actividad para actualizarla.";
+                const updatePublishedButton = createElement("button", "", "🚀");
+        const hasPendingUpdate = data.actualizacionPendiente === true;
+        updatePublishedButton.title = hasPendingUpdate
+          ? "Actualizar actividad publicada"
+          : "Publicada. Edita la actividad para actualizarla.";
         updatePublishedButton.setAttribute(
           "aria-label",
-          "Publicación bloqueada para " + (data.titulo || "actividad")
+          hasPendingUpdate
+            ? "Actualizar " + (data.titulo || "actividad")
+            : "Publicación bloqueada para " + (data.titulo || "actividad")
         );
-        stylePublishedButton(updatePublishedButton, "#328254", true);
+        stylePublishedButton(updatePublishedButton, "#328254", !hasPendingUpdate);
+
+        updatePublishedButton.addEventListener("click", async function(){
+          if (!hasPendingUpdate || !auth.currentUser) return;
+          if (!confirm('¿Actualizar "' + (data.titulo || "esta actividad") + '" con los cambios guardados?')) return;
+
+          updatePublishedButton.disabled = true;
+
+          try {
+            const userId = auth.currentUser.uid;
+            const pendingRef = database.ref(
+              "actividades/edicionesPendientes/" + userId + "/" + item.id
+            );
+            const snapshot = await pendingRef.once("value");
+
+            if (!snapshot.exists()) {
+              throw new Error("No encontramos los cambios pendientes.");
+            }
+
+            const updatedData = snapshot.val();
+            delete updatedData.actualizacionPendiente;
+            updatedData.estado = "publicada";
+            updatedData.publicadoEn = firebase.database.ServerValue.TIMESTAMP;
+
+            const updates = {};
+            updates["actividades/publicadas/" + userId + "/" + item.id] = updatedData;
+            updates["actividades/edicionesPendientes/" + userId + "/" + item.id] = null;
+
+            await database.ref().update(updates);
+            alert("¡Actividad actualizada correctamente! 🚀");
+          } catch (error) {
+            console.error("Error al actualizar la actividad:", error);
+            alert("No se pudo actualizar la actividad. Inténtalo nuevamente.");
+            updatePublishedButton.disabled = false;
+          }
+        });
 
         const deletePublishedButton = createElement("button", "", "🗑️");
         deletePublishedButton.title = "Mover a la papelera";
