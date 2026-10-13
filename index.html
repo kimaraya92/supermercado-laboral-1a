@@ -12465,6 +12465,44 @@ closeModal();
         editButton.addEventListener("click", function(){
           window.editarBorradorDocente(item.id);
         });
+        
+        const publishActivityButton = createElement("button", "", "🚀");
+        publishActivityButton.title = "Publicar actividad";
+        publishActivityButton.setAttribute(
+          "aria-label",
+          "Publicar " + (data.titulo || "actividad")
+        );
+        styleActionButton(publishActivityButton, "#328254");
+
+        publishActivityButton.addEventListener("click", async function(){
+          if(!confirm(
+            '¿Publicar "' + (data.titulo || "esta actividad") + '"?'
+          )) return;
+
+          if(!auth.currentUser) return;
+
+          publishActivityButton.disabled = true;
+
+          try{
+            const userId = auth.currentUser.uid;
+            const updates = {};
+
+            updates["actividades/publicadas/" + userId + "/" + item.id] =
+              Object.assign({}, data, {
+                estado: "publicada",
+                publicadoEn: firebase.database.ServerValue.TIMESTAMP
+              });
+
+            updates["actividades/borradores/" + userId + "/" + item.id] = null;
+
+            await database.ref().update(updates);
+          }catch(error){
+            console.error("Error al publicar la actividad:", error);
+            alert("No se pudo publicar la actividad. Inténtalo nuevamente.");
+            publishActivityButton.disabled = false;
+          }
+        });
+
 
         const deleteButton = createElement("button", "", "🗑️");
         deleteButton.title = "Mover a la papelera";
