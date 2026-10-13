@@ -13281,11 +13281,7 @@ window.editarBorradorDocente = async function(activityId){
 
   pantalla.innerHTML = `
     <div style="max-width:1100px;margin:auto;padding:28px 20px;font-family:inherit;color:#65445a;">
-      <button type="button" id="adminSupermarketBack"
-        style="padding:10px 16px;border:0;border-radius:12px;background:#f2d9e9;color:#65445a;cursor:pointer;">
-        ← Volver a la Administradora
-      </button>
-
+      
       <header style="text-align:center;margin:35px 0;">
         <div style="font-size:42px;">🛒</div>
         <h1 style="margin:8px 0;">Gestión del supermercado</h1>
@@ -13345,19 +13341,6 @@ panelDerecho.appendChild(pantalla);
     boton.classList.add("active");
   });
 
-  document.getElementById("adminSupermarketBack").addEventListener("click", function(){
-    pantalla.classList.add("hidden");
-
-    const main = document.querySelector("#adminHomeScreen .teacher-main");
-
-    main.querySelectorAll(":scope > *")
-      .forEach(function(elemento){
-        elemento.classList.remove("hidden");
-      });
-
-    document.getElementById("teacherActivitiesMenuButton").classList.add("active");
-    boton.classList.remove("active");
-  });
 })();
 </script>
 
