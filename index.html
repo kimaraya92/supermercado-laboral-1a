@@ -13326,15 +13326,46 @@ if(!panelDerecho) return;
 
 panelDerecho.appendChild(pantalla);
 
+  
   boton.addEventListener("click", function(){
-    document.getElementById("adminHomeScreen").classList.add("hidden");
+    const main = document.querySelector("#adminHomeScreen .teacher-main");
+
+    main.querySelectorAll(":scope > *:not(#adminSupermarketScreen)")
+      .forEach(function(elemento){
+        elemento.classList.add("hidden");
+      });
+
     pantalla.classList.remove("hidden");
+
+    document.querySelectorAll("#adminHomeScreen .teacher-menu-item")
+      .forEach(function(elemento){
+        elemento.classList.remove("active");
+      });
+
+    boton.classList.add("active");
   });
 
   document.getElementById("adminSupermarketBack").addEventListener("click", function(){
     pantalla.classList.add("hidden");
-    document.getElementById("adminHomeScreen").classList.remove("hidden");
+
+    const main = document.querySelector("#adminHomeScreen .teacher-main");
+
+    main.querySelectorAll(":scope > *")
+      .forEach(function(elemento){
+        elemento.classList.remove("hidden");
+      });
+
+    document.getElementById("teacherActivitiesMenuButton").classList.add("active");
+    boton.classList.remove("active");
   });
+})();
+</script>
+
+
+</body>
+
+</html>
+
 })();
 </script>
 
