@@ -6555,8 +6555,7 @@ function cargarActividadesPublicadasEstudiante(){
   database.ref("actividades/publicadas").on("value", function(snapshot){
 
     pendientes.replaceChildren();
-    pendientes.replaceChildren();
-
+    
     const actividadesOrdenadas = [];
 
     snapshot.forEach(function(docenteSnapshot){
