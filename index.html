@@ -13343,6 +13343,102 @@ panelDerecho.appendChild(pantalla);
     boton.classList.add("active");
   });
 
+  const botonRuleta = document.getElementById("abrirRuletaRoles");
+
+  if(botonRuleta){
+    botonRuleta.addEventListener("click", function(){
+      const contenido = pantalla.querySelector("div");
+
+      contenido.innerHTML = `
+        <header style="text-align:center;margin:25px 0;">
+          <div style="font-size:42px;">🎡</div>
+          <h1>Ruleta de roles</h1>
+          <p>Escribe los estudiantes presentes y los roles que deseas distribuir.</p>
+        </header>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;">
+          <div style="background:white;padding:22px;border:1px solid #efd5e5;border-radius:18px;">
+            <label for="listaEstudiantes" style="display:block;font-weight:bold;margin-bottom:10px;">Estudiantes presentes</label>
+            <textarea id="listaEstudiantes" rows="9" placeholder="Un estudiante por línea" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #d9bfd0;border-radius:10px;"></textarea>
+          </div>
+
+          <div style="background:white;padding:22px;border:1px solid #efd5e5;border-radius:18px;">
+            <label for="listaRoles" style="display:block;font-weight:bold;margin-bottom:10px;">Roles para distribuir</label>
+            <textarea id="listaRoles" rows="9" placeholder="Un rol por línea. Repite los que quieras asignar más veces." style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #d9bfd0;border-radius:10px;"></textarea>
+          </div>
+        </div>
+
+        <p id="avisoRuleta" role="status" style="margin:20px 0;color:#65445a;font-weight:bold;"></p>
+        <button id="sortearRoles" type="button" disabled style="padding:14px 24px;border:0;border-radius:12px;background:#b9a8b3;color:white;font-weight:bold;cursor:not-allowed;">🎲 Sortear roles</button>
+        <div id="resultadoRuleta" style="margin-top:24px;"></div>
+      `;
+
+      const estudiantes = contenido.querySelector("#listaEstudiantes");
+      const roles = contenido.querySelector("#listaRoles");
+      const aviso = contenido.querySelector("#avisoRuleta");
+      const sortear = contenido.querySelector("#sortearRoles");
+      const resultado = contenido.querySelector("#resultadoRuleta");
+
+      function validar(){
+        const nombres = estudiantes.value.split("\n").map(x => x.trim()).filter(Boolean);
+        const listaRoles = roles.value.split("\n").map(x => x.trim()).filter(Boolean);
+        resultado.innerHTML = "";
+
+        if(!nombres.length || !listaRoles.length){
+          aviso.textContent = "Escribe los estudiantes y los roles antes de continuar.";
+          sortear.disabled = true;
+        } else if(listaRoles.length < nombres.length){
+          aviso.textContent = `Faltan ${nombres.length - listaRoles.length} rol(es). Agrega más para poder sortear.`;
+          sortear.disabled = true;
+        } else {
+          aviso.textContent = `¡Listo! ${nombres.length} estudiantes y ${listaRoles.length} roles ingresados.`;
+          sortear.disabled = false;
+        }
+
+        sortear.style.background = sortear.disabled ? "#b9a8b3" : "#9b6689";
+        sortear.style.cursor = sortear.disabled ? "not-allowed" : "pointer";
+      }
+
+      estudiantes.addEventListener("input", validar);
+      roles.addEventListener("input", validar);
+
+      sortear.addEventListener("click", function(){
+        const nombres = estudiantes.value.split("\n").map(x => x.trim()).filter(Boolean);
+        const listaRoles = roles.value.split("\n").map(x => x.trim()).filter(Boolean);
+
+        if(listaRoles.length < nombres.length || !nombres.length) {
+          validar();
+          return;
+        }
+
+        const mezclados = [...listaRoles].sort(() => Math.random() - 0.5);
+        const asignaciones = nombres.map((nombre, i) => ({
+          nombre,
+          rol: mezclados[i]
+        }));
+
+        resultado.innerHTML = `
+          <h2>🎉 Roles asignados</h2>
+          <div style="display:grid;gap:12px;">
+            ${asignaciones.map(item => `
+              <div style="background:white;border:1px solid #efd5e5;border-radius:12px;padding:16px;">
+                <strong>${item.nombre.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</strong>
+                <span> → ${item.rol.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</span>
+              </div>
+            `).join("")}
+          </div>
+          <button id="repetirSorteo" type="button" style="margin-top:18px;padding:12px 20px;border:0;border-radius:10px;background:#9b6689;color:white;cursor:pointer;">🔄 Sortear nuevamente</button>
+        `;
+
+        resultado.querySelector("#repetirSorteo").addEventListener("click", function(){
+          sortear.click();
+        });
+      });
+
+      validar();
+    });
+  }
+
 })();
 </script>
 
