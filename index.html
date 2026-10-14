@@ -13343,100 +13343,197 @@ panelDerecho.appendChild(pantalla);
     boton.classList.add("active");
   });
 
+  
   const botonRuleta = document.getElementById("abrirRuletaRoles");
 
   if(botonRuleta){
-    botonRuleta.addEventListener("click", function(){
-      const contenido = pantalla.querySelector("div");
+    const contenido = pantalla.querySelector("div");
+    const menuOriginal = contenido.innerHTML;
+
+    function abrirRuleta(){
+      const nombresBase = ["Almendra","Gerardo","Renata","Mauricio","Esteban"];
+      const rolesBase = ["Cliente","Cajero","Reponedor","Inventario","Supervisor"];
 
       contenido.innerHTML = `
-        <header style="text-align:center;margin:25px 0;">
-          <div style="font-size:42px;">🎡</div>
-          <h1>Ruleta de roles</h1>
-          <p>Escribe los estudiantes presentes y los roles que deseas distribuir.</p>
-        </header>
+        <div id="ruletaCompleta" style="position:relative;isolation:isolate;min-height:100vh;padding:20px;box-sizing:border-box;font-family:inherit;color:#55216f;background:#fff0fa url('fondo-ruleta-supermercado.png') center/cover fixed;">
+          <div style="position:absolute;inset:0;background:rgba(255,246,255,.72);z-index:-1;"></div>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;">
-          <div style="background:white;padding:22px;border:1px solid #efd5e5;border-radius:18px;">
-            <label for="listaEstudiantes" style="display:block;font-weight:bold;margin-bottom:10px;">Estudiantes presentes</label>
-            <textarea id="listaEstudiantes" rows="9" placeholder="Un estudiante por línea" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #d9bfd0;border-radius:10px;"></textarea>
-          </div>
+          <button id="volverGestion" type="button" style="border:0;border-radius:24px;padding:12px 18px;background:#fff0ff;color:#602777;font-weight:bold;cursor:pointer;">← Volver a Gestión del supermercado</button>
 
-          <div style="background:white;padding:22px;border:1px solid #efd5e5;border-radius:18px;">
-            <label for="listaRoles" style="display:block;font-weight:bold;margin-bottom:10px;">Roles para distribuir</label>
-            <textarea id="listaRoles" rows="9" placeholder="Un rol por línea. Repite los que quieras asignar más veces." style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #d9bfd0;border-radius:10px;"></textarea>
-          </div>
-        </div>
+          <header style="text-align:center;margin:10px 0 20px;">
+            <h1 style="font-size:clamp(27px,3vw,42px);margin:8px 0;">🎡 Ruleta de roles</h1>
+            <p style="font-size:17px;margin:0;">¡Quién tendrá cada misión hoy!</p>
+          </header>
 
-        <p id="avisoRuleta" role="status" style="margin:20px 0;color:#65445a;font-weight:bold;"></p>
-        <button id="sortearRoles" type="button" disabled style="padding:14px 24px;border:0;border-radius:12px;background:#b9a8b3;color:white;font-weight:bold;cursor:not-allowed;">🎲 Sortear roles</button>
-        <div id="resultadoRuleta" style="margin-top:24px;"></div>
-      `;
-
-      const estudiantes = contenido.querySelector("#listaEstudiantes");
-      const roles = contenido.querySelector("#listaRoles");
-      const aviso = contenido.querySelector("#avisoRuleta");
-      const sortear = contenido.querySelector("#sortearRoles");
-      const resultado = contenido.querySelector("#resultadoRuleta");
-
-      function validar(){
-        const nombres = estudiantes.value.split("\n").map(x => x.trim()).filter(Boolean);
-        const listaRoles = roles.value.split("\n").map(x => x.trim()).filter(Boolean);
-        resultado.innerHTML = "";
-
-        if(!nombres.length || !listaRoles.length){
-          aviso.textContent = "Escribe los estudiantes y los roles antes de continuar.";
-          sortear.disabled = true;
-        } else if(listaRoles.length < nombres.length){
-          aviso.textContent = `Faltan ${nombres.length - listaRoles.length} rol(es). Agrega más para poder sortear.`;
-          sortear.disabled = true;
-        } else {
-          aviso.textContent = `¡Listo! ${nombres.length} estudiantes y ${listaRoles.length} roles ingresados.`;
-          sortear.disabled = false;
-        }
-
-        sortear.style.background = sortear.disabled ? "#b9a8b3" : "#9b6689";
-        sortear.style.cursor = sortear.disabled ? "not-allowed" : "pointer";
-      }
-
-      estudiantes.addEventListener("input", validar);
-      roles.addEventListener("input", validar);
-
-      sortear.addEventListener("click", function(){
-        const nombres = estudiantes.value.split("\n").map(x => x.trim()).filter(Boolean);
-        const listaRoles = roles.value.split("\n").map(x => x.trim()).filter(Boolean);
-
-        if(listaRoles.length < nombres.length || !nombres.length) {
-          validar();
-          return;
-        }
-
-        const mezclados = [...listaRoles].sort(() => Math.random() - 0.5);
-        const asignaciones = nombres.map((nombre, i) => ({
-          nombre,
-          rol: mezclados[i]
-        }));
-
-        resultado.innerHTML = `
-          <h2>🎉 Roles asignados</h2>
-          <div style="display:grid;gap:12px;">
-            ${asignaciones.map(item => `
-              <div style="background:white;border:1px solid #efd5e5;border-radius:12px;padding:16px;">
-                <strong>${item.nombre.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</strong>
-                <span> → ${item.rol.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</span>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:22px;align-items:center;">
+            <section style="text-align:center;min-width:0;">
+              <div style="position:relative;width:min(100%,440px);margin:auto;padding-top:20px;">
+                <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:42px;z-index:2;">🔻</div>
+                <div id="ruletaVisual" style="position:relative;width:100%;aspect-ratio:1;border:8px solid white;border-radius:50%;box-sizing:border-box;overflow:hidden;background:conic-gradient(#f6a7d6 0deg 72deg,#d6b6fa 72deg 144deg,#9dd9f6 144deg 216deg,#ffe18c 216deg 288deg,#a8e7c1 288deg 360deg);box-shadow:0 5px 24px #8750a0;transition:transform 4s cubic-bezier(.12,.72,.08,1);">
+                  <div style="position:absolute;top:8%;left:50%;transform:translateX(-50%);font-size:clamp(13px,1.6vw,19px);font-weight:900;text-align:center;">🛒<br>Cliente</div>
+                  <div style="position:absolute;top:31%;right:4%;font-size:clamp(13px,1.6vw,19px);font-weight:900;text-align:center;">💳<br>Cajero</div>
+                  <div style="position:absolute;bottom:10%;right:10%;font-size:clamp(13px,1.6vw,19px);font-weight:900;text-align:center;">📦<br>Reponedor</div>
+                  <div style="position:absolute;bottom:10%;left:7%;font-size:clamp(13px,1.6vw,19px);font-weight:900;text-align:center;">📋<br>Inventario</div>
+                  <div style="position:absolute;top:31%;left:3%;font-size:clamp(13px,1.6vw,19px);font-weight:900;text-align:center;">⭐<br>Supervisor</div>
+                  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:22%;aspect-ratio:1;border:5px solid white;border-radius:50%;background:#853c91;color:white;display:grid;place-items:center;font-size:30px;">★</div>
+                </div>
               </div>
-            `).join("")}
-          </div>
-          <button id="repetirSorteo" type="button" style="margin-top:18px;padding:12px 20px;border:0;border-radius:10px;background:#9b6689;color:white;cursor:pointer;">🔄 Sortear nuevamente</button>
-        `;
+              <button id="girarRuleta" type="button" style="margin-top:18px;width:min(100%,390px);padding:17px;border:0;border-radius:18px;background:linear-gradient(100deg,#bd35a6,#8036a0);color:white;font-size:19px;font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #59276e;">🎲 ¡GIRAR LA RULETA!</button>
+              <p id="estadoRuleta" role="status" style="font-weight:bold;min-height:24px;"></p>
+            </section>
 
-        resultado.querySelector("#repetirSorteo").addEventListener("click", function(){
-          sortear.click();
-        });
+            <section style="background:rgba(255,250,255,.96);border:2px solid #ecd4f2;border-radius:24px;padding:18px;box-shadow:0 4px 18px #b99acb;">
+              <h2 style="margin:0 0 14px;">👥 Estudiantes presentes <span id="contadorPresentes" style="float:right;background:#f4d6f1;border-radius:20px;padding:4px 12px;">5</span></h2>
+              <div id="listaEstudiantes" style="display:grid;gap:10px;"></div>
+              <button id="ajustarPresentes" type="button" style="margin-top:14px;width:100%;padding:12px;border:0;border-radius:14px;background:#f3d5f2;color:#662879;font-weight:bold;cursor:pointer;">✏️ Ajustar estudiantes presentes</button>
+              <div id="panelAsistencia" class="hidden" style="margin-top:12px;">
+                <div id="checksAsistencia" style="display:grid;gap:8px;"></div>
+                <button id="guardarAsistencia" type="button" style="margin-top:10px;padding:10px 14px;border:0;border-radius:10px;background:#843b96;color:white;cursor:pointer;">Guardar asistencia</button>
+              </div>
+            </section>
+          </div>
+
+          <section id="celebracionRol" style="margin-top:24px;padding:22px;background:rgba(255,247,255,.97);border:2px solid #efc9ed;border-radius:22px;text-align:center;min-height:90px;">
+            <div style="font-size:22px;font-weight:bold;">✨ ¡La aventura comienza! ✨</div>
+            <p>Pulsa «Girar la ruleta» para descubrir el primer rol.</p>
+          </section>
+
+          <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin:18px 0;">
+            <button id="siguienteEstudiante" type="button" disabled style="padding:14px 20px;border:0;border-radius:14px;background:#c9b9c9;color:white;font-weight:bold;cursor:not-allowed;">⏭️ Revelar siguiente estudiante</button>
+            <button id="nuevaRonda" type="button" style="padding:14px 20px;border:2px solid #c97ac9;border-radius:14px;background:#fff0ff;color:#702b83;font-weight:bold;cursor:pointer;">🔄 Nueva ronda</button>
+          </div>
+        </div>`;
+
+      contenido.querySelector("#volverGestion").addEventListener("click",function(){
+        contenido.innerHTML = menuOriginal;
+        conectarBoton();
       });
 
-      validar();
-    });
+      const lista = contenido.querySelector("#listaEstudiantes");
+      const contador = contenido.querySelector("#contadorPresentes");
+      const girar = contenido.querySelector("#girarRuleta");
+      const siguiente = contenido.querySelector("#siguienteEstudiante");
+      const visual = contenido.querySelector("#ruletaVisual");
+      const estado = contenido.querySelector("#estadoRuleta");
+      const celebracion = contenido.querySelector("#celebracionRol");
+      const panel = contenido.querySelector("#panelAsistencia");
+      const checks = contenido.querySelector("#checksAsistencia");
+
+      let presentes = [...nombresBase];
+      let asignaciones = [];
+      let rolesPendientes = [];
+      let girando = false;
+      let esperando = false;
+      let giro = 0;
+
+      function mezclar(arr){
+        const copia = [...arr];
+        for(let i=copia.length-1;i>0;i--){
+          const j=Math.floor(Math.random()*(i+1));
+          [copia[i],copia[j]]=[copia[j],copia[i]];
+        }
+        return copia;
+      }
+
+      function escapar(t){
+        return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+      }
+
+      function pintarLista(){
+        lista.innerHTML = presentes.map(nombre=>{
+          const a=asignaciones.find(x=>x.nombre===nombre);
+          return `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:white;border:1px solid #edd8f1;border-radius:14px;padding:12px;">
+            <strong>${escapar(nombre)}</strong>
+            <span style="font-size:13px;background:${a?"#dff5e5":"#eee6f1"};padding:6px 9px;border-radius:20px;">${a?"✓ "+escapar(a.rol):"● Por sortear"}</span>
+          </div>`;
+        }).join("");
+        contador.textContent=presentes.length+" presentes";
+      }
+
+      function prepararRonda(){
+        asignaciones=[];
+        rolesPendientes=mezclar(rolesBase).slice(0,presentes.length);
+        giro=0;
+        girando=false;
+        esperando=false;
+        visual.style.transition="none";
+        visual.style.transform="rotate(0deg)";
+        void visual.offsetWidth;
+        visual.style.transition="transform 4s cubic-bezier(.12,.72,.08,1)";
+        girar.disabled=presentes.length===0;
+        siguiente.disabled=true;
+        siguiente.style.background="#c9b9c9";
+        estado.textContent="¡Todo listo! Pulsa para comenzar.";
+        celebracion.innerHTML="<div style='font-size:22px;font-weight:bold;'>✨ ¡La aventura comienza! ✨</div><p>Descubriremos un rol a la vez.</p>";
+        pintarLista();
+      }
+
+      function revelar(){
+        const a=asignaciones[asignaciones.length-1];
+        const iconos={"Cliente":"🛒","Cajero":"💳","Reponedor":"📦","Inventario":"📋","Supervisor":"⭐"};
+        celebracion.innerHTML=`<div style="font-size:18px;">🎉 ¡Nueva misión!</div>
+          <div style="font-size:clamp(27px,4vw,42px);font-weight:900;margin:8px 0;color:#77388c;">¡${escapar(a.nombre)} será ${escapar(a.rol)}!</div>
+          <div style="font-size:38px;">${iconos[a.rol]||"🎉"}</div>
+          <p>¡Un aplauso para ${escapar(a.nombre)}!</p>`;
+        siguiente.disabled=asignaciones.length>=presentes.length;
+        siguiente.style.background=siguiente.disabled?"#c9b9c9":"#843b96";
+        siguiente.style.cursor=siguiente.disabled?"not-allowed":"pointer";
+        siguiente.textContent=siguiente.disabled?"🏁 ¡Todos tienen su rol!":"⏭️ Revelar siguiente estudiante";
+        pintarLista();
+      }
+
+      girar.addEventListener("click",function(){
+        if(girando||esperando||!presentes.length||!rolesPendientes.length)return;
+        girando=true;
+        girar.disabled=true;
+        siguiente.disabled=true;
+        estado.textContent="🎡 ¡La ruleta está girando!";
+        const rol=rolesPendientes.pop();
+        const indice=rolesBase.indexOf(rol);
+        giro+=360*5+(360-(indice*72+36));
+        visual.style.transform="rotate("+giro+"deg)";
+        window.setTimeout(function(){
+          const nombre=presentes[asignaciones.length];
+          asignaciones.push({nombre,rol});
+          girando=false;
+          esperando=true;
+          estado.textContent="¡Rol descubierto! Pulsa para revelar el siguiente.";
+          revelar();
+        },4100);
+      });
+
+      siguiente.addEventListener("click",function(){
+        if(!esperando||asignaciones.length>=presentes.length)return;
+        esperando=false;
+        girar.disabled=false;
+        siguiente.disabled=true;
+        siguiente.style.background="#c9b9c9";
+        estado.textContent="¡Vamos con el siguiente estudiante!";
+        celebracion.innerHTML="<div style='font-size:22px;font-weight:bold;'>🎊 ¡Siguiente turno!</div><p>Pulsa «Girar la ruleta» para descubrir el próximo rol.</p>";
+      });
+
+      contenido.querySelector("#ajustarPresentes").addEventListener("click",function(){
+        checks.innerHTML=nombresBase.map(n=>`<label style="background:white;padding:9px;border-radius:10px;"><input type="checkbox" value="${n}" ${presentes.includes(n)?"checked":""}> ${n}</label>`).join("");
+        panel.classList.toggle("hidden");
+      });
+
+      contenido.querySelector("#guardarAsistencia").addEventListener("click",function(){
+        const elegidos=[...checks.querySelectorAll("input:checked")].map(x=>x.value);
+        if(!elegidos.length){estado.textContent="Selecciona al menos un estudiante presente.";return;}
+        presentes=elegidos;
+        panel.classList.add("hidden");
+        prepararRonda();
+      });
+
+      contenido.querySelector("#nuevaRonda").addEventListener("click",prepararRonda);
+      prepararRonda();
+    }
+
+    function conectarBoton(){
+      const b=contenido.querySelector("#abrirRuletaRoles");
+      if(b)b.addEventListener("click",abrirRuleta);
+    }
+    conectarBoton();
   }
 
 })();
