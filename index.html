@@ -13084,6 +13084,8 @@ window.editarBorradorDocente = async function(activityId){
      !header || !summary || !activitySection || !trashSection) return;
 
   function showScreen(screen, activeButton){
+    const botonInicio = main.querySelector(".teacher-home-button");
+if(botonInicio) botonInicio.style.display = screen === "activities" ? "" : "none";
     header.classList.add("hidden");
     summary.classList.add("hidden");
     activitySection.classList.add("hidden");
@@ -13327,6 +13329,8 @@ panelDerecho.appendChild(pantalla);
   
   boton.addEventListener("click", function(){
     const main = document.querySelector("#adminHomeScreen .teacher-main");
+        const botonInicio = main.querySelector(".teacher-home-button");
+    if(botonInicio) botonInicio.style.display = "none";
 
     main.querySelectorAll(":scope > *:not(#adminSupermarketScreen)")
       .forEach(function(elemento){
