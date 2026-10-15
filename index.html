@@ -13082,6 +13082,15 @@ window.editarBorradorDocente = async function(activityId){
 
   if(!main || !activitiesButton || !trashButton ||
      !header || !summary || !activitySection || !trashSection) return;
+    menuButtons.forEach(function(button){
+    button.addEventListener("click", function(){
+      const botonInicio = main.querySelector(".teacher-home-button");
+      if(botonInicio){
+        botonInicio.style.display =
+          button === activitiesButton ? "" : "none";
+      }
+    });
+  });
 
   function showScreen(screen, activeButton){
     const botonInicio = main.querySelector(".teacher-home-button");
