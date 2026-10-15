@@ -13358,9 +13358,7 @@ panelDerecho.appendChild(pantalla);
         <div id="ruletaCompleta" style="position:relative;isolation:isolate;min-height:100vh;padding:20px;box-sizing:border-box;font-family:inherit;color:#55216f;background:#fff0fa url('fondo-ruleta-supermercado.png') center/cover fixed;">
           <div style="position:absolute;inset:0;background:rgba(255,246,255,.72);z-index:-1;"></div>
 
-          <button id="volverGestion" type="button" style="border:0;border-radius:24px;padding:12px 18px;background:#fff0ff;color:#602777;font-weight:bold;cursor:pointer;">← Volver a Gestión del supermercado</button>
-
-          <header style="text-align:center;margin:10px 0 20px;">
+             <header style="text-align:center;margin:10px 0 20px;">
             <h1 style="font-size:clamp(27px,3vw,42px);margin:8px 0;">🎡 Ruleta de roles</h1>
             <p style="font-size:17px;margin:0;">¡Quién tendrá cada misión hoy!</p>
           </header>
@@ -13403,11 +13401,6 @@ panelDerecho.appendChild(pantalla);
             <button id="nuevaRonda" type="button" style="padding:14px 20px;border:2px solid #c97ac9;border-radius:14px;background:#fff0ff;color:#702b83;font-weight:bold;cursor:pointer;">🔄 Nueva ronda</button>
           </div>
         </div>`;
-
-      contenido.querySelector("#volverGestion").addEventListener("click",function(){
-        contenido.innerHTML = menuOriginal;
-        conectarBoton();
-      });
 
       const lista = contenido.querySelector("#listaEstudiantes");
       const contador = contenido.querySelector("#contadorPresentes");
