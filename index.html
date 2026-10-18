@@ -13524,13 +13524,14 @@ panelDerecho.appendChild(pantalla);
           botonNuevaRonda.style.transform = "translateY(5px)";
           botonNuevaRonda.style.boxShadow = "0 2px 0 #76218e,0 4px 8px #d9b4d8";
         });
+        
         botonNuevaRonda.addEventListener("pointerup", () => {
           botonNuevaRonda.style.transform = "";
-          botonNuevaRonda.style.boxShadow = "";
+          botonNuevaRonda.style.boxShadow = "0 7px 0 #76218e,0 10px 16px #d9b4d8";
         });
         botonNuevaRonda.addEventListener("pointerleave", () => {
           botonNuevaRonda.style.transform = "";
-          botonNuevaRonda.style.boxShadow = "";
+          botonNuevaRonda.style.boxShadow = "0 7px 0 #76218e,0 10px 16px #d9b4d8";
         });
 
         tarjetas.querySelectorAll("[data-sortear]").forEach(b =>
