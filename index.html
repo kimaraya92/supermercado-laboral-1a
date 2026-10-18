@@ -13362,178 +13362,230 @@ panelDerecho.appendChild(pantalla);
     const contenido = pantalla.querySelector("div");
     const menuOriginal = contenido.innerHTML;
 
+    
     function abrirRuleta(){
       const nombresBase = ["Almendra","Gerardo","Renata","Mauricio","Esteban"];
-      const rolesBase = ["Cliente","Cajero","Reponedor","Inventario","Supervisor"];
+      const rolesBase = [
+        {nombre:"Cliente",icono:"🛒",color:"#dff7eb"},
+        {nombre:"Cajero",icono:"💳",color:"#eee2ff"},
+        {nombre:"Reponedor",icono:"📦",color:"#fff0cf"},
+        {nombre:"Inventario",icono:"📋",color:"#e0efff"},
+        {nombre:"Supervisor",icono:"⭐",color:"#ffe2f1"}
+      ];
+      const avatares = {
+        "Almendra":"👩🏻‍🦰",
+        "Gerardo":"👦🏻",
+        "Renata":"👩🏻",
+        "Mauricio":"👦🏼",
+        "Esteban":"🤓"
+      };
+      const colores = ["#dff2ff","#fff0c9","#ffd9ed","#d8f7e8","#eadcff"];
 
       contenido.innerHTML = `
-                <div id="ruletaCompleta" style="position:relative;width:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;font-family:inherit;color:#55216f;background:url('fondo-ruleta-supermercado.png') center center / cover no-repeat;">
+        <div style="width:100%;min-height:calc(100dvh - 70px);box-sizing:border-box;padding:14px;font-family:inherit;color:#55216f;background:linear-gradient(135deg,#fff7fc,#f8e4f2);">
+          <header style="height:90px;margin-bottom:16px;border-radius:16px;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(110deg,#f6cce8,#fff3d9,#e5d4ff);border:1px solid #f0cce9;">
+            <div style="font-size:clamp(20px,2.2vw,29px);font-weight:900;">
+              🛒 ¡A trabajar por roles!
+              <div style="font-size:14px;font-weight:600;margin-top:5px;">¿Quién tendrá cada misión hoy?</div>
+            </div>
+          </header>
 
-          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(10px,1.5vw,20px);align-items:center;width:100%;min-height:calc(100dvh - 150px);box-sizing:border-box;padding:clamp(8px,1vw,14px);">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,28%);gap:14px;align-items:start;">
+            <section id="tarjetasEstudiantes" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;min-width:0;"></section>
 
-            <section style="text-align:center;min-width:0;">
-              <div style="position:relative;width:min(100%,350px);margin:auto;padding-top:14px;">
-                <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:34px;z-index:2;">🔻</div>
+            <aside style="min-width:0;">
+              <section style="background:#fffaff;border:1px solid #edc9eb;border-radius:17px;padding:14px;box-shadow:0 3px 12px #d8b5d7;">
+                <button id="alternarRoles" type="button" aria-expanded="false" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;border:0;background:transparent;color:#6f2389;font-weight:900;font-size:16px;padding:4px 0;cursor:pointer;text-align:left;">
+                  <span>📋 Seleccionar roles del día</span>
+                  <span id="flechaRoles">⌄</span>
+                </button>
 
-                <div id="ruletaVisual" style="position:relative;width:100%;aspect-ratio:1;border:7px solid white;border-radius:50%;box-sizing:border-box;overflow:hidden;background:conic-gradient(#f6a7d6 0deg 72deg,#d6b6fa 72deg 144deg,#9dd9f6 144deg 216deg,#ffe18c 216deg 288deg,#a8e7c1 288deg 360deg);box-shadow:0 4px 16px #8750a0;transition:transform 4s cubic-bezier(.12,.72,.08,1);">
-                  <div style="position:absolute;top:8%;left:50%;transform:translateX(-50%);font-size:clamp(12px,1.4vw,17px);font-weight:900;text-align:center;">🛒<br>Cliente</div>
-                  <div style="position:absolute;top:31%;right:4%;font-size:clamp(12px,1.4vw,17px);font-weight:900;text-align:center;">💳<br>Cajero</div>
-                  <div style="position:absolute;bottom:10%;right:8%;font-size:clamp(12px,1.4vw,17px);font-weight:900;text-align:center;">📦<br>Reponedor</div>
-                  <div style="position:absolute;bottom:10%;left:6%;font-size:clamp(12px,1.4vw,17px);font-weight:900;text-align:center;">📋<br>Inventario</div>
-                  <div style="position:absolute;top:31%;left:3%;font-size:clamp(12px,1.4vw,17px);font-weight:900;text-align:center;">⭐<br>Supervisor</div>
-                  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:22%;aspect-ratio:1;border:4px solid white;border-radius:50%;background:#853c91;color:white;display:grid;place-items:center;font-size:26px;">★</div>
+                <div id="desplegableRoles" hidden style="margin-top:12px;">
+                  <p style="font-size:12px;color:#876d91;margin:0 0 8px;">Marca los roles y elige cuántas veces se asignará cada uno.</p>
+                  <div id="opcionesRoles" style="display:grid;gap:7px;"></div>
                 </div>
-              </div>
 
-              <button id="girarRuleta" type="button" style="margin-top:8px;width:min(100%,350px);padding:11px;border:0;border-radius:15px;background:linear-gradient(100deg,#bd35a6,#8036a0);color:white;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 #59276e;">🎲 ¡GIRAR LA RULETA!</button>
-              <p id="estadoRuleta" role="status" style="font-weight:bold;min-height:18px;margin:5px 0 0;"></p>
-            </section>
+                <div id="resumenRoles" style="font-size:12px;color:#826b8d;margin-top:10px;"></div>
+              </section>
 
-            <section style="background:rgba(255,250,255,.96);border:2px solid #ecd4f2;border-radius:18px;padding:12px;box-shadow:0 4px 18px #b99acb;min-width:0;box-sizing:border-box;">
-              <h2 style="margin:0 0 10px;font-size:clamp(17px,1.7vw,23px);">👥 Estudiantes presentes <span id="contadorPresentes" style="float:right;background:#f4d6f1;border-radius:20px;padding:4px 10px;">5</span></h2>
-
-              <div id="listaEstudiantes" style="display:grid;gap:7px;"></div>
-
-              <button id="ajustarPresentes" type="button" style="margin-top:9px;width:100%;padding:9px;border:0;border-radius:12px;background:#f3d5f2;color:#662879;font-weight:bold;cursor:pointer;">✏️ Ajustar estudiantes presentes</button>
-
-              <div id="panelAsistencia" class="hidden" style="margin-top:10px;">
-                <div id="checksAsistencia" style="display:grid;gap:7px;"></div>
-                <button id="guardarAsistencia" type="button" style="margin-top:8px;padding:9px 12px;border:0;border-radius:10px;background:#843b96;color:white;cursor:pointer;">Guardar asistencia</button>
-              </div>
-            </section>
-
-          </div>
-
-          <section id="celebracionRol" style="margin:8px 10px 0;padding:10px;background:rgba(255,247,255,.97);border:2px solid #efc9ed;border-radius:16px;text-align:center;min-height:0;">
-            <div style="font-size:18px;font-weight:bold;">✨ ¡La aventura comienza! ✨</div>
-            <p style="margin:4px 0 0;font-size:14px;">Pulsa «Girar la ruleta» para descubrir el primer rol.</p>
-          </section>
-
-          <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:8px 0;">
-            <button id="siguienteEstudiante" type="button" disabled style="padding:10px 14px;border:0;border-radius:12px;background:#c9b9c9;color:white;font-weight:bold;cursor:not-allowed;">⏭️ Revelar siguiente estudiante</button>
-            <button id="nuevaRonda" type="button" style="padding:10px 14px;border:2px solid #c97ac9;border-radius:12px;background:#fff0ff;color:#702b83;font-weight:bold;cursor:pointer;">🔄 Nueva ronda</button>
+              <button id="nuevaRonda" type="button" style="width:100%;margin-top:12px;padding:13px 8px;border:2px solid #ef168e;border-radius:14px;background:#fffaff;color:#6f2389;font-weight:900;font-size:16px;cursor:pointer;">🔄 Nueva ronda</button>
+              <p id="estadoRuleta" role="status" style="font-weight:bold;font-size:13px;line-height:1.4;color:#71378a;margin:10px 2px;"></p>
+            </aside>
           </div>
         </div>`;
-         
-      const lista = contenido.querySelector("#listaEstudiantes");
-      const contador = contenido.querySelector("#contadorPresentes");
-      const girar = contenido.querySelector("#girarRuleta");
-      const siguiente = contenido.querySelector("#siguienteEstudiante");
-      const visual = contenido.querySelector("#ruletaVisual");
+
+      const tarjetas = contenido.querySelector("#tarjetasEstudiantes");
+      const opcionesRoles = contenido.querySelector("#opcionesRoles");
+      const desplegableRoles = contenido.querySelector("#desplegableRoles");
+      const alternarRoles = contenido.querySelector("#alternarRoles");
+      const flechaRoles = contenido.querySelector("#flechaRoles");
+      const resumenRoles = contenido.querySelector("#resumenRoles");
       const estado = contenido.querySelector("#estadoRuleta");
-      const celebracion = contenido.querySelector("#celebracionRol");
-      const panel = contenido.querySelector("#panelAsistencia");
-      const checks = contenido.querySelector("#checksAsistencia");
 
-      let presentes = [...nombresBase];
-      let asignaciones = [];
-      let rolesPendientes = [];
-      let girando = false;
-      let esperando = false;
-      let giro = 0;
-
-      function mezclar(arr){
-        const copia = [...arr];
-        for(let i=copia.length-1;i>0;i--){
-          const j=Math.floor(Math.random()*(i+1));
-          [copia[i],copia[j]]=[copia[j],copia[i]];
-        }
-        return copia;
-      }
+      const asignaciones = {};
+      const ausentes = new Set();
+      const seleccionRoles = {};
+      rolesBase.forEach(r => seleccionRoles[r.nombre] = {activo:true,cantidad:1});
+      let bloqueado = false;
 
       function escapar(t){
-        return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+        return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
       }
 
-      function pintarLista(){
-        lista.innerHTML = presentes.map(nombre=>{
-          const a=asignaciones.find(x=>x.nombre===nombre);
-          return `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:white;border:1px solid #edd8f1;border-radius:14px;padding:12px;">
-            <strong>${escapar(nombre)}</strong>
-            <span style="font-size:13px;background:${a?"#dff5e5":"#eee6f1"};padding:6px 9px;border-radius:20px;">${a?"✓ "+escapar(a.rol):"● Por sortear"}</span>
-          </div>`;
+      function rolesDisponibles(){
+        const usados = {};
+        Object.values(asignaciones).forEach(rol => usados[rol] = (usados[rol] || 0) + 1);
+        return rolesBase.filter(r =>
+          seleccionRoles[r.nombre].activo &&
+          (usados[r.nombre] || 0) < seleccionRoles[r.nombre].cantidad
+        );
+      }
+
+      function actualizarResumen(){
+        const total = rolesBase.reduce((s,r) =>
+          s + (seleccionRoles[r.nombre].activo ? seleccionRoles[r.nombre].cantidad : 0), 0);
+        const presentes = nombresBase.filter(n => !ausentes.has(n)).length;
+        resumenRoles.textContent = total + " asignaciones configuradas · " + presentes + " estudiantes presentes";
+      }
+
+      function pintarRoles(){
+        opcionesRoles.innerHTML = rolesBase.map(r => `
+          <div style="display:grid;grid-template-columns:auto minmax(0,1fr) 64px;align-items:center;gap:7px;padding:8px;border-radius:10px;background:${r.color};">
+            <input type="checkbox" data-rol="${r.nombre}" ${seleccionRoles[r.nombre].activo ? "checked" : ""} aria-label="Activar ${r.nombre}" style="width:18px;height:18px;accent-color:#bd168d;">
+            <label style="font-weight:800;font-size:13px;">${r.icono} ${r.nombre}</label>
+            <input type="number" min="1" max="20" value="${seleccionRoles[r.nombre].cantidad}" data-cantidad="${r.nombre}" aria-label="Cantidad de ${r.nombre}" style="width:100%;min-width:0;box-sizing:border-box;border:1px solid #dfc3e4;border-radius:8px;padding:6px;background:white;">
+          </div>`).join("");
+
+        opcionesRoles.querySelectorAll("[data-rol]").forEach(input =>
+          input.addEventListener("change", () => {
+            seleccionRoles[input.dataset.rol].activo = input.checked;
+            pintarTarjetas();
+            actualizarResumen();
+          })
+        );
+
+        opcionesRoles.querySelectorAll("[data-cantidad]").forEach(input =>
+          input.addEventListener("change", () => {
+            const rol = input.dataset.cantidad;
+            seleccionRoles[rol].cantidad = Math.max(1,Math.min(20,Number(input.value) || 1));
+            input.value = seleccionRoles[rol].cantidad;
+            pintarTarjetas();
+            actualizarResumen();
+          })
+        );
+
+        actualizarResumen();
+      }
+
+      function rolInfo(nombre){
+        const r = rolesBase.find(x => x.nombre === nombre);
+        return r ? r.icono + " " + escapar(nombre).toUpperCase() : escapar(nombre);
+      }
+
+      function pintarTarjetas(){
+        tarjetas.innerHTML = nombresBase.map((nombre,i) => {
+          const ausente = ausentes.has(nombre);
+          const rol = asignaciones[nombre];
+
+          return `
+            <article style="display:grid;grid-template-columns:minmax(75px,42%) minmax(0,1fr);align-items:center;gap:10px;padding:12px;background:${ausente ? "#f0edf1" : "rgba(255,255,255,.92)"};border:1px solid ${rol ? "#b8e5ca" : "#f0d8ee"};border-radius:17px;min-width:0;box-shadow:0 3px 10px #e9d2e7;opacity:${ausente ? ".65" : "1"};">
+              <div style="text-align:center;min-width:0;">
+                <div style="width:min(100%,125px);aspect-ratio:1;margin:auto;border-radius:50%;display:grid;place-items:center;background:${colores[i]};font-size:clamp(43px,5vw,72px);">${avatares[nombre]}</div>
+                <div style="font-weight:900;font-size:clamp(14px,1.5vw,20px);color:#25132e;margin-top:5px;overflow-wrap:anywhere;">${escapar(nombre)}</div>
+              </div>
+
+              <div style="display:grid;gap:7px;min-width:0;">
+                <button type="button" data-sortear="${escapar(nombre)}" ${ausente || bloqueado || !!rol || !rolesDisponibles().length ? "disabled" : ""} style="width:100%;padding:11px 3px;border:0;border-radius:11px;background:${ausente || rol ? "#cfc4d3" : "linear-gradient(100deg,#bb35a9,#80349b)"};color:white;font-weight:900;font-size:clamp(12px,1.1vw,15px);cursor:pointer;">🎲 Sortear</button>
+
+                <button type="button" data-ausente="${escapar(nombre)}" ${bloqueado ? "disabled" : ""} style="width:100%;padding:9px 3px;border:1px solid #f5b9df;border-radius:11px;background:${ausente ? "#eee5f0" : "#ffe5f4"};color:#b30b78;font-weight:800;font-size:clamp(10px,1vw,13px);cursor:pointer;">${ausente ? "↩ Marcar presente" : "✖ Marcar ausente"}</button>
+
+                <div data-resultado="${escapar(nombre)}" style="min-height:34px;display:flex;align-items:center;justify-content:center;text-align:center;padding:5px 3px;border:1px ${rol ? "solid" : "dashed"} ${rol ? "#b8e5ca" : "#d9cbdc"};border-radius:10px;background:${rol ? "#ddf7e8" : "#fffaff"};color:${rol ? "#286846" : "#9b8ca2"};font-weight:900;font-size:clamp(11px,1.1vw,15px);">${rol ? rolInfo(rol) : ausente ? "ESTUDIANTE AUSENTE" : "Rol por asignar"}</div>
+              </div>
+            </article>`;
         }).join("");
-        contador.textContent=presentes.length+" presentes";
+
+        tarjetas.querySelectorAll("[data-sortear]").forEach(b =>
+          b.addEventListener("click", () => sortear(b.dataset.sortear))
+        );
+
+        tarjetas.querySelectorAll("[data-ausente]").forEach(b =>
+          b.addEventListener("click", () => {
+            const nombre = b.dataset.ausente;
+            if (ausentes.has(nombre)) {
+              ausentes.delete(nombre);
+              estado.textContent = nombre + " vuelve a participar.";
+            } else {
+              ausentes.add(nombre);
+              delete asignaciones[nombre];
+              estado.textContent = nombre + " quedó fuera del sorteo por ausencia.";
+            }
+            pintarTarjetas();
+            actualizarResumen();
+          })
+        );
       }
 
-      function prepararRonda(){
-        asignaciones=[];
-        rolesPendientes=mezclar(rolesBase).slice(0,presentes.length);
-        giro=0;
-        girando=false;
-        esperando=false;
-        visual.style.transition="none";
-        visual.style.transform="rotate(0deg)";
-        void visual.offsetWidth;
-        visual.style.transition="transform 4s cubic-bezier(.12,.72,.08,1)";
-        girar.disabled=presentes.length===0;
-        siguiente.disabled=true;
-        siguiente.style.background="#c9b9c9";
-        estado.textContent="";
-        celebracion.innerHTML="<div style='font-size:22px;font-weight:bold;'>✨ ¡La aventura comienza! ✨</div><p>Descubriremos un rol a la vez.</p>";
-        pintarLista();
+      function sortear(nombre){
+        if (bloqueado || ausentes.has(nombre) || asignaciones[nombre]) return;
+
+        const disponibles = rolesDisponibles();
+        if (!disponibles.length) {
+          estado.textContent = "No quedan asignaciones disponibles. Revisa los roles y sus cantidades.";
+          return;
+        }
+
+        const resultado = tarjetas.querySelector('[data-resultado="' + CSS.escape(nombre) + '"]');
+        if (!resultado) return;
+
+        bloqueado = true;
+        pintarTarjetas();
+        let vueltas = 0;
+
+        const animacion = window.setInterval(() => {
+          const muestra = disponibles[vueltas % disponibles.length];
+          resultado.textContent = muestra.icono + " " + muestra.nombre.toUpperCase();
+          resultado.style.background = muestra.color;
+          vueltas++;
+        },100);
+
+        window.setTimeout(() => {
+          window.clearInterval(animacion);
+          const lista = rolesDisponibles();
+          if (!lista.length) {
+            bloqueado = false;
+            pintarTarjetas();
+            estado.textContent = "No quedan roles disponibles.";
+            return;
+          }
+
+          const elegido = lista[Math.floor(Math.random() * lista.length)];
+          asignaciones[nombre] = elegido.nombre;
+          bloqueado = false;
+          estado.textContent = "🎉 ¡" + nombre + " tiene el rol de " + elegido.nombre + "!";
+          pintarTarjetas();
+          actualizarResumen();
+        },1400);
       }
 
-      function revelar(){
-        const a=asignaciones[asignaciones.length-1];
-        const iconos={"Cliente":"🛒","Cajero":"💳","Reponedor":"📦","Inventario":"📋","Supervisor":"⭐"};
-        celebracion.innerHTML=`<div style="font-size:18px;">🎉 ¡Nueva misión!</div>
-          <div style="font-size:clamp(27px,4vw,42px);font-weight:900;margin:8px 0;color:#77388c;">¡${escapar(a.nombre)} será ${escapar(a.rol)}!</div>
-          <div style="font-size:38px;">${iconos[a.rol]||"🎉"}</div>
-          <p>¡Un aplauso para ${escapar(a.nombre)}!</p>`;
-        siguiente.disabled=asignaciones.length>=presentes.length;
-        siguiente.style.background=siguiente.disabled?"#c9b9c9":"#843b96";
-        siguiente.style.cursor=siguiente.disabled?"not-allowed":"pointer";
-        siguiente.textContent=siguiente.disabled?"🏁 ¡Todos tienen su rol!":"⏭️ Revelar siguiente estudiante";
-        pintarLista();
-      }
-
-      girar.addEventListener("click",function(){
-        if(girando||esperando||!presentes.length||!rolesPendientes.length)return;
-        girando=true;
-        girar.disabled=true;
-        siguiente.disabled=true;
-        estado.textContent="🎡 ¡La ruleta está girando!";
-        const rol=rolesPendientes.pop();
-        const indice=rolesBase.indexOf(rol);
-        giro=Math.ceil(giro/360)*360+360*5+(360-(indice*72));
-        visual.style.transform="rotate("+giro+"deg)";
-        window.setTimeout(function(){
-          const nombre=presentes[asignaciones.length];
-          asignaciones.push({nombre,rol});
-          girando=false;
-          esperando=true;
-          estado.textContent="¡Rol descubierto! Pulsa para revelar el siguiente.";
-          revelar();
-        },4100);
+      alternarRoles.addEventListener("click",() => {
+        const abierto = !desplegableRoles.hidden;
+        desplegableRoles.hidden = abierto;
+        alternarRoles.setAttribute("aria-expanded",String(!abierto));
+        flechaRoles.textContent = abierto ? "⌄" : "⌃";
       });
 
-      siguiente.addEventListener("click",function(){
-        if(!esperando||asignaciones.length>=presentes.length)return;
-        esperando=false;
-        girar.disabled=false;
-        siguiente.disabled=true;
-        siguiente.style.background="#c9b9c9";
-        estado.textContent="¡Vamos con el siguiente estudiante!";
-        celebracion.innerHTML="<div style='font-size:22px;font-weight:bold;'>🎊 ¡Siguiente turno!</div><p>Pulsa «Girar la ruleta» para descubrir el próximo rol.</p>";
+      contenido.querySelector("#nuevaRonda").addEventListener("click",() => {
+        Object.keys(asignaciones).forEach(nombre => delete asignaciones[nombre]);
+        bloqueado = false;
+        estado.textContent = "Nueva ronda lista. Se conservan la asistencia y los roles configurados.";
+        pintarTarjetas();
+        actualizarResumen();
       });
 
-      contenido.querySelector("#ajustarPresentes").addEventListener("click",function(){
-        checks.innerHTML=nombresBase.map(n=>`<label style="background:white;padding:9px;border-radius:10px;"><input type="checkbox" value="${n}" ${presentes.includes(n)?"checked":""}> ${n}</label>`).join("");
-        panel.classList.toggle("hidden");
-      });
-
-      contenido.querySelector("#guardarAsistencia").addEventListener("click",function(){
-        const elegidos=[...checks.querySelectorAll("input:checked")].map(x=>x.value);
-        if(!elegidos.length){estado.textContent="Selecciona al menos un estudiante presente.";return;}
-        presentes=elegidos;
-        panel.classList.add("hidden");
-        prepararRonda();
-      });
-
-      contenido.querySelector("#nuevaRonda").addEventListener("click",prepararRonda);
-      prepararRonda();
+      pintarRoles();
+      pintarTarjetas();
     }
+
 
     function conectarBoton(){
       const b=contenido.querySelector("#abrirRuletaRoles");
