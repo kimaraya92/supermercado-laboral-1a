@@ -13400,15 +13400,17 @@ panelDerecho.appendChild(pantalla);
 
             <aside style="min-width:0;">
               <section style="background:#fffaff;border:1px solid #edc9eb;border-radius:17px;padding:14px;box-shadow:0 3px 12px #d8b5d7;">
-                <button id="alternarRoles" type="button" aria-expanded="false" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;border:0;background:transparent;color:#6f2389;font-weight:900;font-size:16px;padding:4px 0;cursor:pointer;text-align:left;">
-                  <span>📋 Seleccionar roles del día</span>
-                  <span id="flechaRoles">⌄</span>
-                </button>
+                <div style="font-weight:900;font-size:16px;color:#6f2389;padding:4px 0 12px;">
+                  📋 Seleccionar roles del día
+                </div>
 
-                <div id="desplegableRoles" hidden style="margin-top:12px;">
+                <div id="desplegableRoles" style="margin-top:0;">
                   <p style="font-size:12px;color:#876d91;margin:0 0 8px;">Marca los roles y elige cuántas veces se asignará cada uno.</p>
                   <div id="opcionesRoles" style="display:grid;gap:7px;"></div>
                 </div>
+
+                <div id="resumenRoles" style="font-size:12px;color:#826b8d;margin-top:10px;"></div>
+
 
                 <div id="resumenRoles" style="font-size:12px;color:#826b8d;margin-top:10px;"></div>
               </section>
@@ -13620,16 +13622,6 @@ panelDerecho.appendChild(pantalla);
 
         animarPaso();
       }
-
-
-      alternarRoles.addEventListener("click",() => {
-        const abierto = !desplegableRoles.hidden;
-        desplegableRoles.hidden = abierto;
-        alternarRoles.setAttribute("aria-expanded",String(!abierto));
-        flechaRoles.textContent = abierto ? "⌄" : "⌃";
-      });
-
-      
         
       tarjetas.addEventListener("click", evento => {
         if (!evento.target.closest("#nuevaRonda")) return;
