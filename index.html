@@ -13538,7 +13538,9 @@ panelDerecho.appendChild(pantalla);
         if (!resultado) return;
 
         bloqueado = true;
-        pintarTarjetas();
+        tarjetas.querySelectorAll("button").forEach(b => {
+  b.disabled = true;
+});
         let vueltas = 0;
 
         const animacion = window.setInterval(() => {
