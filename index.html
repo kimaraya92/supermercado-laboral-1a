@@ -13496,7 +13496,7 @@ panelDerecho.appendChild(pantalla);
         estado.textContent="🎡 ¡La ruleta está girando!";
         const rol=rolesPendientes.pop();
         const indice=rolesBase.indexOf(rol);
-        giro+=360*5+(360-(indice*72+36));
+        giro+=360*5+(360-(indice*72));
         visual.style.transform="rotate("+giro+"deg)";
         window.setTimeout(function(){
           const nombre=presentes[asignaciones.length];
