@@ -13629,8 +13629,10 @@ panelDerecho.appendChild(pantalla);
       });
 
       
-            tarjetas.addEventListener("click", evento => {
+        
+      tarjetas.addEventListener("click", evento => {
         if (!evento.target.closest("#nuevaRonda")) return;
+
         Object.keys(asignaciones).forEach(nombre => delete asignaciones[nombre]);
         ausentes.clear();
 
@@ -13645,6 +13647,7 @@ panelDerecho.appendChild(pantalla);
         estado.textContent = "Nueva ronda lista. Todos los estudiantes están presentes y los roles volvieron a su configuración inicial.";
         actualizarResumen();
       });
+
 
 
       pintarRoles();
