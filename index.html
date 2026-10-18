@@ -13525,6 +13525,7 @@ panelDerecho.appendChild(pantalla);
         );
       }
 
+      
       function sortear(nombre){
         if (bloqueado || ausentes.has(nombre) || asignaciones[nombre]) return;
 
@@ -13534,25 +13535,41 @@ panelDerecho.appendChild(pantalla);
           return;
         }
 
-        const resultado = tarjetas.querySelector('[data-resultado="' + CSS.escape(nombre) + '"]');
+        const resultado = tarjetas.querySelector(
+          '[data-resultado="' + CSS.escape(nombre) + '"]'
+        );
         if (!resultado) return;
 
         bloqueado = true;
         tarjetas.querySelectorAll("button").forEach(b => {
-  b.disabled = true;
-});
+          b.disabled = true;
+        });
+
+        resultado.style.transition = "transform .12s ease, box-shadow .12s ease";
+        resultado.style.transform = "scale(1.06)";
+        resultado.style.boxShadow = "0 0 14px #d65bbd";
+
         let vueltas = 0;
+        const totalVueltas = 14;
 
-        const animacion = window.setInterval(() => {
+        function animarPaso(){
           const muestra = disponibles[vueltas % disponibles.length];
-          resultado.textContent = muestra.icono + " " + muestra.nombre.toUpperCase();
-          resultado.style.background = muestra.color;
-          vueltas++;
-        },100);
 
-        window.setTimeout(() => {
-          window.clearInterval(animacion);
+          resultado.textContent =
+            muestra.icono + " " + muestra.nombre.toUpperCase();
+          resultado.style.background = muestra.color;
+          resultado.style.transform =
+            vueltas % 2 === 0 ? "scale(1.06)" : "scale(0.97)";
+
+          vueltas++;
+
+          if (vueltas < totalVueltas) {
+            window.setTimeout(animarPaso, 100 + vueltas * 5);
+            return;
+          }
+
           const lista = rolesDisponibles();
+
           if (!lista.length) {
             bloqueado = false;
             pintarTarjetas();
@@ -13563,11 +13580,17 @@ panelDerecho.appendChild(pantalla);
           const elegido = lista[Math.floor(Math.random() * lista.length)];
           asignaciones[nombre] = elegido.nombre;
           bloqueado = false;
-          estado.textContent = "🎉 ¡" + nombre + " tiene el rol de " + elegido.nombre + "!";
+
+          estado.textContent =
+            "🎉 ¡" + nombre + " tiene el rol de " + elegido.nombre + "!";
+
           pintarTarjetas();
           actualizarResumen();
-        },1400);
+        }
+
+        animarPaso();
       }
+
 
       alternarRoles.addEventListener("click",() => {
         const abierto = !desplegableRoles.hidden;
