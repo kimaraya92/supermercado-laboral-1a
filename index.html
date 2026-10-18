@@ -13629,7 +13629,8 @@ panelDerecho.appendChild(pantalla);
       });
 
       
-      contenido.querySelector("#nuevaRonda").addEventListener("click",() => {
+            tarjetas.addEventListener("click", evento => {
+        if (!evento.target.closest("#nuevaRonda")) return;
         Object.keys(asignaciones).forEach(nombre => delete asignaciones[nombre]);
         ausentes.clear();
 
