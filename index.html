@@ -13553,7 +13553,7 @@ panelDerecho.appendChild(pantalla);
         const totalVueltas = 14;
 
         function animarPaso(){
-          const muestra = disponibles[vueltas % disponibles.length];
+          const muestra = rolesBase[vueltas % rolesBase.length];
 
           resultado.textContent =
             muestra.icono + " " + muestra.nombre.toUpperCase();
