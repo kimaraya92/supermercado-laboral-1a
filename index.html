@@ -13576,13 +13576,23 @@ panelDerecho.appendChild(pantalla);
         flechaRoles.textContent = abierto ? "⌄" : "⌃";
       });
 
+      
       contenido.querySelector("#nuevaRonda").addEventListener("click",() => {
         Object.keys(asignaciones).forEach(nombre => delete asignaciones[nombre]);
+        ausentes.clear();
+
+        rolesBase.forEach(r => {
+          seleccionRoles[r.nombre].activo = true;
+          seleccionRoles[r.nombre].cantidad = 1;
+        });
+
         bloqueado = false;
-        estado.textContent = "Nueva ronda lista. Se conservan la asistencia y los roles configurados.";
+        pintarRoles();
         pintarTarjetas();
+        estado.textContent = "Nueva ronda lista. Todos los estudiantes están presentes y los roles volvieron a su configuración inicial.";
         actualizarResumen();
       });
+
 
       pintarRoles();
       pintarTarjetas();
