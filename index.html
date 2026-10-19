@@ -3633,7 +3633,38 @@ aspect-ratio:auto;
 .activity-status-filters .activity-status-filter:hover {
   background: #fff0f7;
 }
+/* Banner de la pantalla Supermercado */
+#adminSupermarketScreen .supermarket-banner-header {
+  width: 100%;
+  margin: 0 0 22px !important;
+  padding: 12px 0 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+#adminSupermarketScreen .supermarket-banner-image {
+  display: block;
+  width: 100%;
+  max-width: 1050px;
+  height: auto;
+  max-height: 260px;
+  object-fit: contain;
+  object-position: center;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+@media (max-width: 600px) {
+  #adminSupermarketScreen .supermarket-banner-image {
+    max-height: 190px;
+  }
+}
 </style>
 
 </head>
@@ -13310,9 +13341,12 @@ if(botonInicio) botonInicio.style.display = screen === "activities" ? "" : "none
   pantalla.innerHTML = `
     <div style="width:100%;max-width:none;margin:0;padding:0;font-family:inherit;color:#65445a;box-sizing:border-box;">
       
-      <header style="text-align:center;margin:35px 0;">
-        <div style="font-size:42px;">🛒</div>
-        <p>Administra los recursos y las experiencias de aprendizaje.</p>
+            <header class="supermarket-banner-header">
+        <img
+          src="banner-supermercado.png"
+          alt="Gestión del supermercado"
+          class="supermarket-banner-image"
+        >
       </header>
 
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
