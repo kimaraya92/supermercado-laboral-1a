@@ -9176,6 +9176,13 @@ function checkPayment(){
       .getElementById("changeAutomaticBox")
       .classList
       .remove("hidden");
+   
+    const botonPago = document.querySelector(
+  ".payment-actions button"
+);
+
+botonPago.textContent = "🧾 ENTREGAR BOLETA";
+botonPago.onclick = entregarBoleta;
 
   }
 
@@ -9213,7 +9220,17 @@ function checkPayment(){
     "payment-message success";
 
 }
+function entregarBoleta(){
 
+  document
+    .getElementById("paymentModal")
+    .classList.add("hidden");
+
+  document
+    .getElementById("receiptPrintArea")
+    .classList.remove("hidden");
+
+}
 function mostrarDesgloseVuelto(monto){
 
   const contenedor =
