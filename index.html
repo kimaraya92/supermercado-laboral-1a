@@ -13466,12 +13466,14 @@ panelDerecho.appendChild(pantalla);
   
   boton.addEventListener("click", function(){
     const main = document.querySelector("#adminHomeScreen .teacher-main");
+   
     const contenidoActual = pantalla.querySelector("div");
 
-if(contenidoActual &&
-   !contenidoActual.querySelector("#abrirRuletaRoles")){
-  contenidoActual.innerHTML = menuOriginal;
-  conectarBoton();
+    if(contenidoActual &&
+       !contenidoActual.querySelector("#abrirRuletaRoles")){
+      botonRuletaPendiente = true;
+    }
+
 }
         const botonInicio = main.querySelector(".teacher-home-button");
     if(botonInicio) botonInicio.style.display = "none";
