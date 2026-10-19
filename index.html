@@ -7328,6 +7328,17 @@ function leerFuncionesInventario(){
 
   window.rolSeleccionado =
     rol;
+      const imagenFunciones = document.querySelector("#roleScreen img");
+
+  if (imagenFunciones) {
+    imagenFunciones.src = rol === "Supervisor de sala"
+      ? "funciones-supervisor.png"
+      : "funciones-cajero2.png";
+
+    imagenFunciones.alt = rol === "Supervisor de sala"
+      ? "Funciones del supervisor de sala"
+      : "Funciones del rol seleccionado";
+  }
   if(rol === "Cliente"){
 
   abrirCliente();
