@@ -13486,24 +13486,7 @@ panelDerecho.appendChild(pantalla);
     boton.classList.add("active");
   });
 
-    if(botonInicio) botonInicio.style.display = "none";
-
-    main.querySelectorAll(":scope > *:not(#adminSupermarketScreen)")
-      .forEach(function(elemento){
-        elemento.classList.add("hidden");
-      });
-
-    pantalla.classList.remove("hidden");
-
-    document.querySelectorAll("#adminHomeScreen .teacher-menu-item")
-      .forEach(function(elemento){
-        elemento.classList.remove("active");
-      });
-
-    boton.classList.add("active");
-  });
-
-  
+      
   const botonRuleta = document.getElementById("abrirRuletaRoles");
 
   if(botonRuleta){
