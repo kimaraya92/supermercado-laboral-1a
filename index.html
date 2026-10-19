@@ -4537,6 +4537,94 @@ max-width:1110px;
   </div>
 
 </section>
+  
+<!-- ==============================
+     PAUTA DE SUPERVISIÓN
+============================== -->
+<section id="supervisorFormScreen" class="hidden" style="
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  overflow:auto;
+  background:#f4f7fb;
+  padding:clamp(12px,3vw,30px);
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+  color:#26364a;
+">
+  <div style="max-width:1000px;margin:0 auto;">
+
+    <header style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:18px;">
+      <div>
+        <p style="margin:0 0 5px;color:#64748b;font-weight:700;font-size:12px;">SUPERMERCADO LABORAL 1A</p>
+        <h1 style="margin:0;font-size:clamp(25px,4vw,34px);color:#24456b;">Pauta de supervisión</h1>
+        <p style="margin:7px 0 0;color:#526174;">Registra y revisa el funcionamiento del supermercado.</p>
+      </div>
+      <button type="button" onclick="volverFuncionesSupervisor()" style="min-height:46px;padding:10px 16px;border:0;border-radius:13px;background:white;color:#24456b;font-weight:700;cursor:pointer;">
+        ← Volver a funciones
+      </button>
+    </header>
+
+    <div id="supervisorSaveStatus" role="status" aria-live="polite" style="padding:12px 14px;border-radius:12px;background:#eaf4ff;color:#28527a;margin-bottom:16px;">
+      Completa los datos de inicio de la jornada.
+    </div>
+
+    <form id="supervisorForm" onsubmit="guardarPautaSupervisor(event)" style="display:grid;gap:16px;">
+
+      <section style="background:white;border-radius:18px;padding:clamp(16px,3vw,24px);">
+        <h2 style="margin:0 0 16px;font-size:21px;">🗓️ Inicio de jornada</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;">
+          <label style="display:grid;gap:7px;font-weight:700;">Fecha
+            <input id="supervisorFecha" name="fecha" type="date" required style="box-sizing:border-box;width:100%;min-height:48px;padding:10px;border:1px solid #cbd5e1;border-radius:10px;font:inherit;">
+          </label>
+          <label style="display:grid;gap:7px;font-weight:700;">Nombre del supervisor
+            <input id="supervisorNombre" name="supervisor" type="text" placeholder="Escribe tu nombre" required style="box-sizing:border-box;width:100%;min-height:48px;padding:10px;border:1px solid #cbd5e1;border-radius:10px;font:inherit;">
+          </label>
+          <label style="display:grid;gap:7px;font-weight:700;">Hora de inicio
+            <input id="supervisorHoraInicio" name="horaInicio" type="time" required style="box-sizing:border-box;width:100%;min-height:48px;padding:10px;border:1px solid #cbd5e1;border-radius:10px;font:inherit;">
+          </label>
+        </div>
+      </section>
+
+      <section style="background:white;border-radius:18px;padding:clamp(16px,3vw,24px);">
+        <h2 style="margin:0 0 8px;font-size:21px;">👥 Asistencia del equipo</h2>
+        <p style="margin:0 0 14px;color:#64748b;">Registra a cada integrante y sus horarios previstos y reales.</p>
+        <div id="supervisorPersonalRows" style="display:grid;gap:10px;"></div>
+        <button type="button" onclick="agregarFilaPersonalSupervisor()" style="margin-top:12px;min-height:46px;padding:10px 15px;border:0;border-radius:12px;background:#e7f1ff;color:#24456b;font-weight:700;cursor:pointer;">
+          ＋ Agregar integrante
+        </button>
+      </section>
+
+      <section style="background:white;border-radius:18px;padding:clamp(16px,3vw,24px);">
+        <h2 style="margin:0 0 8px;font-size:21px;">🔎 Inspección de sala</h2>
+        <p style="margin:0 0 14px;color:#64748b;">Marca cada punto durante el recorrido por el supermercado.</p>
+        <div id="supervisorChecklist" style="display:grid;gap:12px;"></div>
+        <label style="display:grid;gap:7px;margin-top:16px;font-weight:700;">Observaciones generales
+          <textarea id="supervisorObservaciones" name="observaciones" rows="3" placeholder="Anota situaciones que deban revisarse…" style="box-sizing:border-box;width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font:inherit;resize:vertical;"></textarea>
+        </label>
+      </section>
+
+      <section style="background:white;border-radius:18px;padding:clamp(16px,3vw,24px);">
+        <h2 style="margin:0 0 8px;font-size:21px;">💵 Caja y ventas</h2>
+        <p style="margin:0 0 14px;color:#64748b;">Registra el monto inicial de la caja.</p>
+        <label style="display:grid;gap:7px;font-weight:700;max-width:420px;">Monto inicial de caja ($)
+          <input id="supervisorMontoInicial" name="montoInicial" type="number" min="0" step="1" inputmode="numeric" placeholder="Ej.: 10000" style="box-sizing:border-box;width:100%;min-height:48px;padding:10px;border:1px solid #cbd5e1;border-radius:10px;font:inherit;">
+        </label>
+      </section>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end;padding-bottom:24px;">
+        <button type="button" onclick="guardarPautaSupervisor()" style="min-height:50px;padding:12px 20px;border:0;border-radius:13px;background:#2d6a8a;color:white;font-weight:700;font-size:16px;cursor:pointer;">
+          💾 Guardar registro
+        </button>
+        <button type="button" onclick="finalizarJornadaSupervisor()" style="min-height:50px;padding:12px 20px;border:0;border-radius:13px;background:#e5b94f;color:#26364a;font-weight:800;font-size:16px;cursor:pointer;">
+          Finalizar jornada
+        </button>
+      </div>
+
+    </form>
+  </div>
+</section>
+
 <!-- ==============================
      PANTALLA CLIENTE
 ============================== -->
