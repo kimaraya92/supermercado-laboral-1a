@@ -13372,12 +13372,12 @@ panelDerecho.appendChild(pantalla);
         {nombre:"Inventario",icono:"📋",color:"#e0efff"},
         {nombre:"Supervisor",icono:"⭐",color:"#ffe2f1"}
       ];
-      const avatares = {
-        "Almendra":"👩🏻‍🦰",
-        "Gerardo":"👦🏻",
-        "Renata":"👩🏻",
-        "Mauricio":"👦🏼",
-        "Esteban":"🤓"
+            const avatares = {
+        "Almendra":"almendra.png",
+        "Gerardo":"gerardo.png",
+        "Renata":"renata.png",
+        "Mauricio":"mauricio.png",
+        "Esteban":"esteban.png"
       };
       const colores = ["#dff2ff","#fff0c9","#ffd9ed","#d8f7e8","#eadcff"];
 
@@ -13496,7 +13496,7 @@ panelDerecho.appendChild(pantalla);
           return `
             <article style="display:grid;grid-template-columns:minmax(75px,42%) minmax(0,1fr);align-items:center;gap:10px;padding:12px;background:${ausente ? "#f0edf1" : "rgba(255,255,255,.92)"};border:1px solid ${rol ? "#b8e5ca" : "#f0d8ee"};border-radius:17px;min-width:0;box-shadow:0 3px 10px #e9d2e7;opacity:${ausente ? ".65" : "1"};">
               <div style="text-align:center;min-width:0;">
-                <div style="width:min(100%,125px);aspect-ratio:1;margin:auto;border-radius:50%;display:grid;place-items:center;background:${colores[i]};font-size:clamp(43px,5vw,72px);">${avatares[nombre]}</div>
+                <div style="width:min(100%,125px);aspect-ratio:1;margin:auto;border-radius:50%;display:grid;place-items:center;background:${colores[i]};overflow:hidden;"><img src="${avatares[nombre]}" alt="Caricatura de ${nombre}" style="width:100%;height:100%;object-fit:contain;display:block;"></div>
                 <div style="font-weight:900;font-size:clamp(14px,1.5vw,20px);color:#25132e;margin-top:5px;overflow-wrap:anywhere;">${escapar(nombre)}</div>
               </div>
 
