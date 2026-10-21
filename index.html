@@ -4544,7 +4544,45 @@ style="
   </div>
 
 </section>
-  
+<!-- PANTALLA INDEPENDIENTE DEL SUPERVISOR -->
+<section id="supervisorRoleScreen" class="hidden" style="
+  position:fixed;
+  inset:0;
+  z-index:9998;
+  overflow:auto;
+  background:url('supermercado-fondo.png') center/cover fixed;
+  text-align:center;
+  padding:12px;
+">
+  <img
+    src="funciones-supervisor.png"
+    alt="Funciones del supervisor de sala"
+    style="
+      display:block;
+      width:auto;
+      max-width:100%;
+      height:auto;
+      max-height:calc(100vh - 170px);
+      object-fit:contain;
+      margin:0 auto;
+    "
+  >
+
+  <button type="button" onclick="leerFunciones()"
+    style="width:auto;padding:12px 22px;">
+    🔊 ESCUCHAR MIS FUNCIONES
+  </button>
+
+  <button type="button" onclick="continuarRol()"
+    style="display:block;width:auto;margin:10px auto;padding:14px 28px;background:#24456b;color:white;">
+    INICIAR LA JORNADA
+  </button>
+
+  <button type="button" onclick="volverSeleccionRoles()"
+    style="width:auto;padding:10px 20px;">
+    ← VOLVER
+  </button>
+</section>  
 <!-- ==============================
      PAUTA DE SUPERVISIÓN
 ============================== -->
