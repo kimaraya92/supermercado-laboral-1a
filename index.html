@@ -4454,74 +4454,79 @@ object-fit:cover;
         margin:0 auto;
       "
     >
+<!-- BOTÓN VOLVER -->
+<button
+  type="button"
+  onclick="volverSeleccionRoles()"
+  style="
+    position:absolute;
+    top:18px;
+    left:18px;
+    z-index:10;
+    padding:12px 22px;
+    border:3px solid #ffffff;
+    border-radius:16px;
+    background:#0755b8;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    box-shadow:0 4px 8px #0005;
+    cursor:pointer;
+  "
+>⬅ VOLVER</button>
 
+<!-- BOTÓN ESCUCHAR / DETENER -->
+<button
+  id="btnEscucharCajero"
+  type="button"
+  onclick="
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      this.innerHTML='🔊 ESCUCHAR FUNCIONES';
+      this.style.background='#0755b8';
+    } else {
+      leerFunciones();
+      this.innerHTML='⏹ DETENER LECTURA';
+      this.style.background='#b83232';
+    }
+  "
+  style="
+    position:absolute;
+    bottom:24px;
+    left:24px;
+    z-index:10;
+    padding:14px 20px;
+    border:3px solid white;
+    border-radius:16px;
+    background:#0755b8;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    box-shadow:0 4px 8px #0005;
+    cursor:pointer;
+  "
+>🔊 ESCUCHAR FUNCIONES</button>
 
-
-    <!-- BOTÓN INVISIBLE VOLVER -->
-
-    <button
-      type="button"
-      onclick="volverSeleccionRoles()"
-      aria-label="Volver"
-      style="
-        position:absolute;
-        top:8%;
-        left:7%;
-        width:12%;
-        height:8%;
-        opacity:0;
-        cursor:pointer;
-        border:none;
-        background:transparent;
-        margin:0;
-      "
-    >
-    </button>
-
-
-    <!-- BOTÓN INVISIBLE ESCUCHAR -->
-
-    <button
-      type="button"
-      onclick="leerFunciones()"
-      aria-label="Escuchar mis funciones"
-      style="
-        position:absolute;
-        left:43%;
-        top:80%;
-        width:27%;
-        height:16%;
-        opacity:0;
-        cursor:pointer;
-        border:none;
-        background:transparent;
-        margin:0;
-      "
-    >
-    </button>
-
-
-    <!-- BOTÓN INVISIBLE CONTINUAR -->
-
-    <button
-      type="button"
-      onclick="continuarRol()"
-      aria-label="Iniciar la jornada"
-      style="
-        position:absolute;
-        left:18%;
-        top:86%;
-        width:64%;
-        height:10%;
-        display:none;
-        cursor:pointer;
-        border:none;
-        background:transparent;
-        margin:0;
-      "
-    >
-    </button>
-
+<!-- BOTÓN INICIAR JORNADA -->
+<button
+  type="button"
+  onclick="continuarRol()"
+  style="
+    position:absolute;
+    bottom:24px;
+    right:24px;
+    z-index:10;
+    padding:16px 26px;
+    border:3px solid white;
+    border-radius:16px;
+    background:#168447;
+    color:white;
+    font-size:19px;
+    font-weight:bold;
+    box-shadow:0 4px 8px #0005;
+    cursor:pointer;
+  "
+>▶ INICIAR JORNADA</button>
 
     <!-- ELEMENTOS QUE NECESITA EL JAVASCRIPT -->
 
