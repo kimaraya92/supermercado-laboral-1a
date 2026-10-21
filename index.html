@@ -7583,6 +7583,61 @@ function continuarRol(){
 
   registrarPantalla("homeScreen");
 }
+  
+function abrirAperturaCaja(){
+  const modal = document.getElementById("aperturaCajaModal");
+  if(!modal) return;
+
+  document.querySelectorAll(".cantidadApertura").forEach(input => {
+    input.value = 0;
+  });
+
+  actualizarTotalAperturaCaja();
+  modal.classList.remove("hidden");
+}
+
+function cerrarAperturaCaja(){
+  document.getElementById("aperturaCajaModal")
+    .classList.add("hidden");
+}
+
+function actualizarTotalAperturaCaja(){
+  let total = 0;
+
+  document.querySelectorAll(".cantidadApertura").forEach(input => {
+    const cantidad = Math.max(0, Math.floor(Number(input.value) || 0));
+    input.value = cantidad;
+    total += cantidad * Number(input.dataset.valor);
+  });
+
+  document.getElementById("totalApertura").textContent =
+    "$" + total.toLocaleString("es-CL");
+}
+
+function confirmarAperturaCaja(){
+  actualizarTotalAperturaCaja();
+
+  const totalTexto = document.getElementById("totalApertura")
+    .textContent.replace(/\D/g, "");
+  const total = Number(totalTexto);
+
+  if(total <= 0){
+    alert("Debes ingresar el dinero inicial de la caja.");
+    return;
+  }
+
+  window.dineroInicialCaja = total;
+
+  window.desgloseInicialCaja = {};
+  document.querySelectorAll(".cantidadApertura").forEach(input => {
+    window.desgloseInicialCaja[input.dataset.valor] =
+      Number(input.value) || 0;
+  });
+
+  cerrarAperturaCaja();
+  abrirVenta();
+}
+
 function abrirInventarioInicio(){
 
   hideAllScreens();
