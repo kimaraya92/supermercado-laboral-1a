@@ -7552,38 +7552,26 @@ if(rol === "Encargado/a de inventario"){
 }
 
 
+
 function continuarRol(){
-
-  const rol =
-    window.rolSeleccionado;
-
+  const rol = window.rolSeleccionado;
 
   if(rol === "Cajero/a"){
-
-    abrirVenta();
-
+    abrirAperturaCaja();
     return;
-
   }
 
   if(rol === "Encargado/a de inventario"){
+    abrirInventarioInicio();
+    return;
+  }
 
-  abrirInventarioInicio();
+  if(rol === "Cliente"){
+    abrirListaCompras();
+    return;
+  }
 
-  return;
-
-}
-
-if(rol === "Cliente"){
-
-  abrirListaCompras();
-
-  return;
-}
-  alert(
-    "Esta función será habilitada en el siguiente paso."
-  );
-
+  alert("Esta función será habilitada en el siguiente paso.");
 }
   function volverSeleccionRoles(){
   hideAllScreens();
