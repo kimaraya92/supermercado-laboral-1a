@@ -6999,12 +6999,79 @@ function cargarActividadesPublicadasEstudiante(){
 
       tarjeta.appendChild(info);
 
+      
       const botonFinalizar = document.createElement("button");
       botonFinalizar.type = "button";
       botonFinalizar.className = "digital-notebook-action";
       botonFinalizar.textContent = "Marcar como finalizada";
-      botonFinalizar.addEventListener("click", function(){
-        alert("El registro de actividades finalizadas estará disponible próximamente.");
+
+      botonFinalizar.addEventListener("click", async function(){
+
+        if(botonFinalizar.disabled) return;
+
+        const nombreEstudiante = String(estudianteActual || "").trim();
+        const rut = String(rutEstudianteActual || "").trim();
+
+        if(!nombreEstudiante || !rut){
+          alert("No se pudo identificar al estudiante.");
+          return;
+        }
+
+        const claveEstudiante = rut.replace(/[^a-zA-Z0-9_-]/g, "_");
+
+        const registro = {
+          actividadId: item.id,
+          tituloActividad: actividad.titulo || "Actividad sin título",
+          nombreEstudiante: nombreEstudiante,
+          rutEstudiante: rut,
+          estado: "pendiente_revision",
+          finalizadaEn: firebase.database.ServerValue.TIMESTAMP,
+          comentario: "",
+          evaluacion: ""
+        };
+
+        botonFinalizar.disabled = true;
+        botonFinalizar.textContent = "Guardando...";
+
+        try{
+
+          await database
+            .ref("actividadesFinalizadas/" + claveEstudiante + "/" + item.id)
+            .set(registro);
+
+          botonFinalizar.remove();
+
+          if(
+            realizadas.textContent.includes(
+              "El registro de actividades realizadas"
+            )
+          ){
+            realizadas.replaceChildren();
+          }
+
+          const fechaEntrega = document.createElement("p");
+          fechaEntrega.textContent = "Enviada para revisión.";
+          fechaEntrega.style.color = "#237A45";
+          info.appendChild(fechaEntrega);
+
+          realizadas.appendChild(tarjeta);
+
+          alert("¡Actividad enviada para revisión!");
+
+        }catch(error){
+
+          console.error("Error al guardar la actividad:", error);
+
+          alert(
+            "No se pudo guardar la actividad. " +
+            "Revisa la conexión y los permisos de Firebase."
+          );
+
+          botonFinalizar.disabled = false;
+          botonFinalizar.textContent = "Marcar como finalizada";
+
+        }
+
       });
 
       tarjeta.appendChild(botonFinalizar);
