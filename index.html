@@ -14305,13 +14305,15 @@ panelDerecho.appendChild(pantalla);
 titulo.textContent = "👩‍🎓 " + nombre;
 
       const resumen = document.createElement("p");
-      resumen.textContent =
-        pendientes + " por revisar · " +
-        revisadas + " revisadas o devueltas";
+resumen.className = "teacher-student-stats";
+resumen.textContent =
+  pendientes + " por revisar · " +
+  revisadas + " revisadas o devueltas";
+
 
       const boton = document.createElement("button");
       boton.type = "button";
-      boton.className = "teacher-menu-item";
+      boton.className = "teacher-student-button";
       boton.textContent = "Ver entregas";
       boton.addEventListener("click", function(){
         alert("La ficha individual de " + nombre +
