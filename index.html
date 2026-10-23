@@ -3181,7 +3181,7 @@ aspect-ratio:auto;
 }
 
 .teacher-summary-card{
-  padding:22px;
+  padding:12px;
   border-radius:19px;
   border:1px solid #f0e4ef;
   box-shadow:0 5px 16px #76506a0a;
@@ -3200,7 +3200,7 @@ aspect-ratio:auto;
 }
 
 .teacher-summary-card span{
-  font-size:24px;
+  font-size:18px;
 }
 
 .teacher-summary-card p{
@@ -3211,7 +3211,7 @@ aspect-ratio:auto;
 
 .teacher-summary-card strong{
   color:#75506f;
-  font-size:30px;
+  font-size:24px;
 }
 
 .teacher-activities{
@@ -4272,6 +4272,7 @@ aspect-ratio:auto;
     </div>
   </div>
 
+  
   <div class="teacher-summary">
     <article class="teacher-summary-card purple">
       <span>📝</span>
@@ -4279,12 +4280,19 @@ aspect-ratio:auto;
       <strong id="teacherDetailPendingCount">0</strong>
     </article>
 
-    <article class="teacher-summary-card pink">
+    <article class="teacher-summary-card">
       <span>🌸</span>
-      <p>Revisadas o devueltas</p>
+      <p>Revisadas</p>
       <strong id="teacherDetailReviewedCount">0</strong>
     </article>
+
+    <article class="teacher-summary-card pink">
+      <span>↩️</span>
+      <p>Devueltas</p>
+      <strong id="teacherDetailReturnedCount">0</strong>
+    </article>
   </div>
+
 
   <h3>Actividades entregadas</h3>
   <div id="teacherStudentDeliveries" class="teacher-activity-list"></div>
