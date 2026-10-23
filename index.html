@@ -14613,6 +14613,72 @@ resumen.textContent =
     });
   }
 
+    const modalRevision = document.getElementById("teacherReviewModal");
+  const comentarioRevision = document.getElementById("teacherReviewComment");
+
+  document.getElementById("teacherReviewClose").addEventListener("click", function(){
+    modalRevision.classList.add("hidden");
+    comentarioRevision.value = "";
+  });
+
+  modalRevision.addEventListener("click", function(event){
+    if(event.target === modalRevision){
+      modalRevision.classList.add("hidden");
+      comentarioRevision.value = "";
+    }
+  });
+
+  async function guardarRevision(nuevoEstado){
+    const nombre = modalRevision.dataset.estudiante;
+    const actividadId = modalRevision.dataset.actividadId;
+    const comentario = comentarioRevision.value.trim();
+
+    if(!nombre || !actividadId){
+      alert("No se pudo identificar la entrega. Cierra la ventana e inténtalo nuevamente.");
+      return;
+    }
+
+    const claveEstudiante = nombre.trim().toLowerCase();
+
+    const botonDevolver = document.getElementById("teacherReviewReturn");
+    const botonRevisada = document.getElementById("teacherReviewApprove");
+
+    botonDevolver.disabled = true;
+    botonRevisada.disabled = true;
+
+    try{
+      const referencia = database.ref(
+        "actividadesFinalizadas/" + claveEstudiante + "/" + actividadId
+      );
+
+      await referencia.update({
+        estado: nuevoEstado,
+        comentario: comentario,
+        revisadaEn: firebase.database.ServerValue.TIMESTAMP
+      });
+
+      modalRevision.classList.add("hidden");
+      comentarioRevision.value = "";
+      alert(nuevoEstado === "revisada"
+        ? "Actividad marcada como revisada."
+        : "Actividad devuelta para corregir.");
+    }catch(error){
+      console.error("Error al guardar la revisión:", error);
+      alert("No se pudo guardar el cambio. Revisa la conexión e inténtalo nuevamente.");
+    }finally{
+      botonDevolver.disabled = false;
+      botonRevisada.disabled = false;
+    }
+  }
+
+  document.getElementById("teacherReviewReturn").addEventListener("click", function(){
+    guardarRevision("devuelta");
+  });
+
+  document.getElementById("teacherReviewApprove").addEventListener("click", function(){
+    guardarRevision("revisada");
+  });
+
   document.addEventListener("teacherOpenStudentDetail", function(event){
     estudianteSeleccionado = event.detail && event.detail.nombre
       ? event.detail.nombre
