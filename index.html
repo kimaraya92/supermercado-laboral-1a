@@ -13705,6 +13705,7 @@ if(botonInicio) botonInicio.style.display = screen === "activities" ? "" : "none
     activitySection.classList.add("hidden");
     trashSection.classList.add("hidden");
         studentsSection.classList.add("hidden");
+    studentDetailSection.classList.add("hidden");
 
     if(planner) planner.classList.add("hidden");
 
@@ -13714,15 +13715,15 @@ if(botonInicio) botonInicio.style.display = screen === "activities" ? "" : "none
       activitySection.classList.remove("hidden");
         }else if(screen === "trash"){
       trashSection.classList.remove("hidden");
-   }else if(screen === "students"){
-  studentsSection.classList.remove("hidden");
-}else if(screen === "studentDetail"){
-  studentDetailSection.classList.remove("hidden");
-}
-
+  
+    }else if(screen === "students"){
+      studentsSection.classList.remove("hidden");
+    }else if(screen === "studentDetail"){
+      studentDetailSection.classList.remove("hidden");
     }else if(screen === "planner" && planner){
       planner.classList.remove("hidden");
     }
+
 
     menuButtons.forEach(function(button){
       button.classList.remove("active");
