@@ -14587,7 +14587,7 @@ resumen.textContent =
           (registro.estado || "Sin estado");
       }
 
-      tarjeta.append(titulo, fecha, estado);
+            tarjeta.append(titulo, fecha, estado);
 
       if(registro.comentario){
         const comentario = document.createElement("p");
@@ -14595,6 +14595,19 @@ resumen.textContent =
         comentario.textContent = "💬 Comentario: " + registro.comentario;
         tarjeta.appendChild(comentario);
       }
+
+      tarjeta.addEventListener("click", function(){
+        const modal = document.getElementById("teacherReviewModal");
+        document.getElementById("teacherReviewTitle").textContent =
+          registro.tituloActividad || "Revisar actividad";
+        document.getElementById("teacherReviewStudent").textContent =
+          "Estudiante: " + (registro.nombreEstudiante || estudianteSeleccionado);
+        document.getElementById("teacherReviewComment").value =
+          registro.comentario || "";
+        modal.dataset.estudiante = registro.nombreEstudiante || estudianteSeleccionado;
+        modal.dataset.actividadId = registro.actividadId || "";
+        modal.classList.remove("hidden");
+      });
 
       lista.appendChild(tarjeta);
     });
