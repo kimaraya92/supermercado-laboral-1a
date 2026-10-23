@@ -4219,6 +4219,43 @@ aspect-ratio:auto;
   <h3>Mi curso</h3>
   <div id="teacherStudentList" class="teacher-activity-list"></div>
 </section>
+      
+<section id="teacherStudentDetailSection" class="teacher-activities hidden">
+  <div class="teacher-section-heading">
+    <div>
+      <button type="button" id="teacherStudentBackButton"
+        class="teacher-student-button">
+        ← Volver a estudiantes
+      </button>
+      <h2 id="teacherStudentDetailTitle">👩‍🎓 Ficha del estudiante</h2>
+      <p>Revisa las actividades y entrega retroalimentación.</p>
+    </div>
+  </div>
+
+  <div class="teacher-summary">
+    <article class="teacher-summary-card purple">
+      <span>📝</span>
+      <p>Por revisar</p>
+      <strong id="teacherDetailPendingCount">0</strong>
+    </article>
+
+    <article class="teacher-summary-card pink">
+      <span>🌸</span>
+      <p>Revisadas o devueltas</p>
+      <strong id="teacherDetailReviewedCount">0</strong>
+    </article>
+  </div>
+
+  <h3>Actividades entregadas</h3>
+  <div id="teacherStudentDeliveries" class="teacher-activity-list"></div>
+
+  <div id="teacherStudentDeliveriesEmpty" class="teacher-empty-state">
+    <span>📚</span>
+    <h3>Aún no hay entregas</h3>
+    <p>Cuando el estudiante finalice una actividad, aparecerá aquí.</p>
+  </div>
+</section>
+
 <section id="teacherActivityCreator" class="teacher-activity-modal hidden">
   <div class="teacher-activity-modal-content">
     <button
