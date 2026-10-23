@@ -13674,6 +13674,7 @@ window.editarBorradorDocente = async function(activityId){
   const trashButton = document.getElementById("teacherTrashMenuButton");
   const studentsButton = document.getElementById("teacherStudentsMenuButton");
 const studentsSection = document.getElementById("teacherStudentsSection");
+  const studentDetailSection = document.getElementById("teacherStudentDetailSection");
   const header = main && main.querySelector(".teacher-header");
   const summary = main && main.querySelector(".teacher-summary");
   const activitySection = main && main.querySelector("#teacherActivityList")
@@ -13713,8 +13714,12 @@ if(botonInicio) botonInicio.style.display = screen === "activities" ? "" : "none
       activitySection.classList.remove("hidden");
         }else if(screen === "trash"){
       trashSection.classList.remove("hidden");
-    }else if(screen === "students"){
-      studentsSection.classList.remove("hidden");
+   }else if(screen === "students"){
+  studentsSection.classList.remove("hidden");
+}else if(screen === "studentDetail"){
+  studentDetailSection.classList.remove("hidden");
+}
+
     }else if(screen === "planner" && planner){
       planner.classList.remove("hidden");
     }
