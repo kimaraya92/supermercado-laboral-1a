@@ -4119,7 +4119,33 @@ aspect-ratio:auto;
           <p>Las actividades que muevas aquí aparecerán en esta sección.</p>
         </div>
       </section>
+<section id="teacherStudentsSection" class="teacher-activities hidden">
+  <div class="teacher-section-heading">
+    <div>
+      <h2>👩‍🎓 Estudiantes</h2>
+      <p>Seguimiento del aprendizaje y las entregas.</p>
+    </div>
+  </div>
 
+  <div class="teacher-summary">
+    <article class="teacher-summary-card">
+      <span>📄</span>
+      <p>Por revisar</p>
+      <strong id="teacherStudentPendingCount">0</strong>
+      <small>Entregas recibidas</small>
+    </article>
+
+    <article class="teacher-summary-card">
+      <span>🌸</span>
+      <p>Revisadas</p>
+      <strong id="teacherStudentReviewedCount">0</strong>
+      <small>Con devolución docente</small>
+    </article>
+  </div>
+
+  <h3>Mi curso</h3>
+  <div id="teacherStudentList" class="teacher-activity-list"></div>
+</section>
 <section id="teacherActivityCreator" class="teacher-activity-modal hidden">
   <div class="teacher-activity-modal-content">
     <button
