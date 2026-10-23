@@ -6803,6 +6803,13 @@ let currentWorker = {
 
 let estudianteActual = "";
 let rutEstudianteActual = "";
+  
+function normalizarRut(rut){
+  return String(rut || "")
+    .replace(/[^0-9kK]/g, "")
+    .toUpperCase();
+}
+
 function normalizarNombreEstudiante(nombre){
 
   return String(nombre || "")
@@ -6862,7 +6869,7 @@ function ingresarEstudiante(){
   }
 
     estudianteActual = nombre;
-  rutEstudianteActual = rut;
+  rutEstudianteActual = normalizarRut(rut);
 
   abrirPortalEstudiante();
 }
@@ -7066,7 +7073,7 @@ function cargarActividadesPublicadasEstudiante(){
           return;
         }
 
-        const claveEstudiante = rut.replace(/[^a-zA-Z0-9_-]/g, "_");
+        const claveEstudiante = normalizarRut(rut);
 
         const registro = {
           actividadId: item.id,
