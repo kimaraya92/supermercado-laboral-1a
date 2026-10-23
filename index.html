@@ -14172,6 +14172,113 @@ panelDerecho.appendChild(pantalla);
 })();
 </script>
 
+<script>
+(function(){
+  const lista = document.getElementById("teacherStudentList");
+  const pendientesTotal = document.getElementById("teacherStudentPendingCount");
+  const revisadasTotal = document.getElementById("teacherStudentReviewedCount");
+
+  if(!lista || !pendientesTotal || !revisadasTotal || !window.database){
+    console.warn("No se pudo iniciar el seguimiento de estudiantes.");
+    return;
+  }
+
+  const estudiantes = [
+    "Esteban",
+    "Almendra",
+    "Renata",
+    "Gerardo",
+    "Mauricio"
+  ];
+
+  function normalizarNombre(nombre){
+    return String(nombre || "")
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function crearTarjetas(registros){
+    lista.replaceChildren();
+
+    let totalPendientes = 0;
+    let totalRevisadas = 0;
+
+    estudiantes.forEach(function(nombre){
+      const entregas = registros.filter(function(registro){
+        return normalizarNombre(registro.nombreEstudiante) ===
+          normalizarNombre(nombre);
+      });
+
+      const pendientes = entregas.filter(function(registro){
+        return registro.estado === "pendiente_revision";
+      }).length;
+
+      const revisadas = entregas.filter(function(registro){
+        return registro.estado === "revisada" ||
+          registro.estado === "devuelta";
+      }).length;
+
+      totalPendientes += pendientes;
+      totalRevisadas += revisadas;
+
+      const tarjeta = document.createElement("article");
+      tarjeta.className = "teacher-activity-card";
+      tarjeta.style.cursor = "pointer";
+
+      const titulo = document.createElement("h3");
+      titulo.textContent = "👩‍🎓 " + nombre;
+
+      const resumen = document.createElement("p");
+      resumen.textContent =
+        pendientes + " por revisar · " +
+        revisadas + " revisadas o devueltas";
+
+      const boton = document.createElement("button");
+      boton.type = "button";
+      boton.className = "teacher-menu-item";
+      boton.textContent = "Ver entregas";
+      boton.addEventListener("click", function(){
+        alert("La ficha individual de " + nombre +
+          " la construiremos en el siguiente paso.");
+      });
+
+      tarjeta.append(titulo, resumen, boton);
+
+      tarjeta.addEventListener("click", function(event){
+        if(event.target.closest("button")) return;
+        boton.click();
+      });
+
+      lista.appendChild(tarjeta);
+    });
+
+    pendientesTotal.textContent = totalPendientes;
+    revisadasTotal.textContent = totalRevisadas;
+  }
+
+  window.database.ref("actividadesFinalizadas").on("value", function(snapshot){
+    const registros = [];
+
+    snapshot.forEach(function(estudianteSnapshot){
+      estudianteSnapshot.forEach(function(entregaSnapshot){
+        const entrega = entregaSnapshot.val();
+
+        if(entrega && typeof entrega === "object"){
+          registros.push(entrega);
+        }
+      });
+    });
+
+    crearTarjetas(registros);
+  }, function(error){
+    console.error("Error al cargar las entregas:", error);
+    lista.textContent = "No se pudieron cargar las entregas.";
+  });
+})();
+</script>
+
 
 </body>
 
