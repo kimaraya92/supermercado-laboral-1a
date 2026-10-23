@@ -14456,6 +14456,139 @@ resumen.textContent =
 </script>
 
 
+<script>
+(function(){
+  const lista = document.getElementById("teacherStudentDeliveries");
+  const mensajeVacio = document.getElementById("teacherStudentDeliveriesEmpty");
+  const pendientesTexto = document.getElementById("teacherDetailPendingCount");
+  const revisadasTexto = document.getElementById("teacherDetailReviewedCount");
+
+  if(!lista || !mensajeVacio || !pendientesTexto || !revisadasTexto) return;
+
+  let registros = [];
+  let estudianteSeleccionado = "";
+
+  function normalizarNombre(nombre){
+    return String(nombre || "")
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function mostrarFecha(valor){
+    if(!valor) return "Fecha no disponible";
+
+    const fecha = new Date(valor);
+    if(Number.isNaN(fecha.getTime())) return "Fecha no disponible";
+
+    return fecha.toLocaleString("es-CL", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  function dibujarEntregas(){
+    lista.replaceChildren();
+
+    const entregas = registros.filter(function(registro){
+      return normalizarNombre(registro.nombreEstudiante) ===
+        normalizarNombre(estudianteSeleccionado);
+    });
+
+    const pendientes = entregas.filter(function(registro){
+      return registro.estado === "pendiente_revision";
+    }).length;
+
+    const revisadas = entregas.filter(function(registro){
+      return registro.estado === "revisada" ||
+        registro.estado === "devuelta";
+    }).length;
+
+    pendientesTexto.textContent = pendientes;
+    revisadasTexto.textContent = revisadas;
+    mensajeVacio.classList.toggle("hidden", entregas.length > 0);
+
+    entregas.sort(function(a, b){
+      return Number(b.finalizadaEn || 0) - Number(a.finalizadaEn || 0);
+    });
+
+    entregas.forEach(function(registro){
+      const tarjeta = document.createElement("article");
+      tarjeta.className = "teacher-student-card";
+
+      const titulo = document.createElement("h3");
+      titulo.className = "teacher-student-name";
+      titulo.textContent = "📝 " +
+        (registro.tituloActividad || "Actividad sin título");
+
+      const fecha = document.createElement("p");
+      fecha.className = "teacher-student-stats";
+      fecha.textContent = "📅 Entregada: " +
+        mostrarFecha(registro.finalizadaEn);
+
+      const estado = document.createElement("p");
+      estado.className = "teacher-student-stats";
+
+      if(registro.estado === "pendiente_revision"){
+        estado.textContent = "🟣 Estado: Por revisar";
+      }else if(registro.estado === "revisada"){
+        estado.textContent = "✅ Estado: Revisada";
+      }else if(registro.estado === "devuelta"){
+        estado.textContent = "🔄 Estado: Devuelta para corregir";
+      }else{
+        estado.textContent = "📌 Estado: " +
+          (registro.estado || "Sin estado");
+      }
+
+      tarjeta.append(titulo, fecha, estado);
+
+      if(registro.comentario){
+        const comentario = document.createElement("p");
+        comentario.className = "teacher-student-stats";
+        comentario.textContent = "💬 Comentario: " + registro.comentario;
+        tarjeta.appendChild(comentario);
+      }
+
+      lista.appendChild(tarjeta);
+    });
+  }
+
+  document.addEventListener("teacherOpenStudentDetail", function(event){
+    estudianteSeleccionado = event.detail && event.detail.nombre
+      ? event.detail.nombre
+      : "";
+
+    dibujarEntregas();
+  });
+
+  database.ref("actividadesFinalizadas").on("value", function(snapshot){
+    registros = [];
+
+    snapshot.forEach(function(estudianteSnapshot){
+      estudianteSnapshot.forEach(function(entregaSnapshot){
+        const entrega = entregaSnapshot.val();
+
+        if(entrega && typeof entrega === "object"){
+          registros.push(entrega);
+        }
+      });
+    });
+
+    dibujarEntregas();
+  }, function(error){
+    console.error("Error al cargar las entregas individuales:", error);
+    lista.textContent = "No se pudieron cargar las entregas. Intenta recargar la página.";
+    mensajeVacio.classList.add("hidden");
+  });
+})();
+</script>
+</body>
+</html>
+
 </body>
 
 </html>
