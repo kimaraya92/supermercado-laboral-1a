@@ -14178,7 +14178,7 @@ panelDerecho.appendChild(pantalla);
   const pendientesTotal = document.getElementById("teacherStudentPendingCount");
   const revisadasTotal = document.getElementById("teacherStudentReviewedCount");
 
-  if(!lista || !pendientesTotal || !revisadasTotal || !window.database){
+  if(!lista || !pendientesTotal || !revisadasTotal){
     console.warn("No se pudo iniciar el seguimiento de estudiantes.");
     return;
   }
@@ -14258,7 +14258,7 @@ panelDerecho.appendChild(pantalla);
     revisadasTotal.textContent = totalRevisadas;
   }
 
-  window.database.ref("actividadesFinalizadas").on("value", function(snapshot){
+  database.ref("actividadesFinalizadas").on("value", function(snapshot){
     const registros = [];
 
     snapshot.forEach(function(estudianteSnapshot){
