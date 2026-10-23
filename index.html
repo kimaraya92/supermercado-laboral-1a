@@ -14604,7 +14604,8 @@ resumen.textContent =
           "Estudiante: " + (registro.nombreEstudiante || estudianteSeleccionado);
         document.getElementById("teacherReviewComment").value =
           registro.comentario || "";
-        modal.dataset.estudiante = registro.nombreEstudiante || estudianteSeleccionado;
+                modal.dataset.estudiante = registro.nombreEstudiante || estudianteSeleccionado;
+        modal.dataset.rut = registro.rutEstudiante || "";
         modal.dataset.actividadId = registro.actividadId || "";
         modal.classList.remove("hidden");
       });
