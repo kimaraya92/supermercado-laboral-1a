@@ -14510,10 +14510,10 @@ resumen.textContent =
   const lista = document.getElementById("teacherStudentDeliveries");
   const mensajeVacio = document.getElementById("teacherStudentDeliveriesEmpty");
   const pendientesTexto = document.getElementById("teacherDetailPendingCount");
-  const revisadasTexto = document.getElementById("teacherDetailReviewedCount");
+const revisadasTexto = document.getElementById("teacherDetailReviewedCount");
+const devueltasTexto = document.getElementById("teacherDetailReturnedCount");
 
-  if(!lista || !mensajeVacio || !pendientesTexto || !revisadasTexto) return;
-
+if(!lista || !mensajeVacio || !pendientesTexto || !revisadasTexto || !devueltasTexto) return;
   let registros = [];
   let estudianteSeleccionado = "";
 
