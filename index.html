@@ -3292,6 +3292,79 @@ aspect-ratio:auto;
   background:#ffffff;
   box-shadow:0 4px 14px #76506a0a;
 }
+  
+/* Tarjetas de seguimiento de estudiantes */
+.teacher-student-card {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) minmax(180px, 1.4fr) auto;
+  align-items: center;
+  gap: 20px;
+  min-height: 86px;
+  padding: 18px 22px;
+  border: 1px solid #f0e1ed;
+  border-radius: 18px;
+  background: linear-gradient(110deg, #fffafd, #ffffff);
+  box-shadow: 0 3px 12px rgba(118, 80, 106, 0.06);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.teacher-student-card:hover {
+  border-color: #d9b6d2;
+  box-shadow: 0 6px 18px rgba(118, 80, 106, 0.10);
+}
+
+.teacher-student-name {
+  margin: 0;
+  color: #684765;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.teacher-student-stats {
+  margin: 0;
+  color: #776879;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.teacher-student-card .teacher-student-button {
+  padding: 10px 17px;
+  border: 1px solid #e4c9df;
+  border-radius: 12px;
+  background: #fff0f8;
+  color: #754d70;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.teacher-student-card .teacher-student-button:hover {
+  background: #f8e2f1;
+}
+
+@media (max-width: 700px) {
+  .teacher-student-card {
+    grid-template-columns: 1fr auto;
+    gap: 10px 14px;
+    padding: 15px;
+  }
+
+  .teacher-student-name {
+    font-size: 16px;
+  }
+
+  .teacher-student-stats {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .teacher-student-card .teacher-student-button {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 9px 12px;
+  }
+}
+
 
 .teacher-activity-cover{
   width:100px;
@@ -14224,11 +14297,12 @@ panelDerecho.appendChild(pantalla);
       totalRevisadas += revisadas;
 
       const tarjeta = document.createElement("article");
-      tarjeta.className = "teacher-activity-card";
+      tarjeta.className = "teacher-student-card";
       tarjeta.style.cursor = "pointer";
 
       const titulo = document.createElement("h3");
-      titulo.textContent = "👩‍🎓 " + nombre;
+      titulo.className = "teacher-student-name";
+titulo.textContent = "👩‍🎓 " + nombre;
 
       const resumen = document.createElement("p");
       resumen.textContent =
