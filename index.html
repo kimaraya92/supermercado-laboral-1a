@@ -13732,6 +13732,22 @@ if(botonInicio) botonInicio.style.display = screen === "activities" ? "" : "none
     if(activeButton) activeButton.classList.add("active");
   }
 
+  document.addEventListener("teacherOpenStudentDetail", function(event){
+    const nombre = event.detail && event.detail.nombre;
+    const titulo = document.getElementById("teacherStudentDetailTitle");
+
+    if(titulo && nombre){
+      titulo.textContent = "👩‍🎓 " + nombre;
+    }
+
+    showScreen("studentDetail", studentsButton);
+  });
+
+  document.getElementById("teacherStudentBackButton")
+    .addEventListener("click", function(){
+      showScreen("students", studentsButton);
+    });
+
   activitiesButton.addEventListener("click", function(){
     showScreen("activities", activitiesButton);
   });
