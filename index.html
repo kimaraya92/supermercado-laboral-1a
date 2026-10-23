@@ -14557,9 +14557,11 @@ resumen.textContent =
       return Number(b.finalizadaEn || 0) - Number(a.finalizadaEn || 0);
     });
 
-    entregas.forEach(function(registro){
+        entregas.forEach(function(registro){
       const tarjeta = document.createElement("article");
       tarjeta.className = "teacher-student-card";
+      tarjeta.style.cursor = "pointer";
+      tarjeta.title = "Haz clic para revisar esta actividad";
 
       const titulo = document.createElement("h3");
       titulo.className = "teacher-student-name";
