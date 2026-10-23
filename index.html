@@ -14552,14 +14552,17 @@ if(!lista || !mensajeVacio || !pendientesTexto || !revisadasTexto || !devueltasT
       return registro.estado === "pendiente_revision";
     }).length;
 
-    const revisadas = entregas.filter(function(registro){
-      return registro.estado === "revisada" ||
-        registro.estado === "devuelta";
+        const revisadas = entregas.filter(function(registro){
+      return registro.estado === "revisada";
+    }).length;
+
+    const devueltas = entregas.filter(function(registro){
+      return registro.estado === "devuelta";
     }).length;
 
     pendientesTexto.textContent = pendientes;
     revisadasTexto.textContent = revisadas;
-    mensajeVacio.classList.toggle("hidden", entregas.length > 0);
+    devueltasTexto.textContent = devueltas;    mensajeVacio.classList.toggle("hidden", entregas.length > 0);
 
     entregas.sort(function(a, b){
       return Number(b.finalizadaEn || 0) - Number(a.finalizadaEn || 0);
