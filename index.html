@@ -14375,9 +14375,10 @@ resumen.textContent =
       boton.className = "teacher-student-button";
       boton.textContent = "Ver entregas";
       boton.addEventListener("click", function(){
-        alert("La ficha individual de " + nombre +
-          " la construiremos en el siguiente paso.");
-      });
+  document.dispatchEvent(new CustomEvent("teacherOpenStudentDetail", {
+    detail: { nombre: nombre }
+  }));
+});
 
       tarjeta.append(titulo, resumen, boton);
 
