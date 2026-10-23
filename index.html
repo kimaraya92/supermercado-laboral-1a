@@ -14634,12 +14634,11 @@ resumen.textContent =
     const actividadId = modalRevision.dataset.actividadId;
     const comentario = comentarioRevision.value.trim();
 
-    if(!nombre || !actividadId){
+        if(!nombre || !modalRevision.dataset.rut || !actividadId){
       alert("No se pudo identificar la entrega. Cierra la ventana e inténtalo nuevamente.");
       return;
     }
-
-    const claveEstudiante = nombre.trim().toLowerCase();
+        const claveEstudiante = normalizarRut(modalRevision.dataset.rut);
 
     const botonDevolver = document.getElementById("teacherReviewReturn");
     const botonRevisada = document.getElementById("teacherReviewApprove");
