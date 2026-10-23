@@ -13616,7 +13616,9 @@ if(botonInicio) botonInicio.style.display = screen === "activities" ? "" : "none
   trashButton.addEventListener("click", function(){
     showScreen("trash", trashButton);
   });
-
+  studentsButton.addEventListener("click", function(){
+    showScreen("students", studentsButton);
+  });
   document.addEventListener("teacherOpenPlannerScreen", function(){
     showScreen("planner", null);
   });
