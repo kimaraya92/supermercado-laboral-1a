@@ -4296,6 +4296,47 @@ aspect-ratio:auto;
   </div>
 </section>
 
+      <!-- Ventana emergente para revisar una actividad -->
+<div id="teacherReviewModal" class="teacher-activity-modal hidden">
+  <div class="teacher-activity-modal-content">
+    <button
+      type="button"
+      id="teacherReviewClose"
+      aria-label="Cerrar ventana"
+      style="position:absolute;top:12px;right:16px;width:42px;padding:6px;font-size:24px;background:transparent;border:0;color:#9b4b83;"
+    >×</button>
+
+    <h2 id="teacherReviewTitle">Revisar actividad</h2>
+
+    <p id="teacherReviewStudent"></p>
+
+    <label for="teacherReviewComment">
+      Comentario (opcional)
+    </label>
+
+    <textarea
+      id="teacherReviewComment"
+      rows="4"
+      placeholder="Escribe aquí tus observaciones..."
+      style="width:100%;padding:12px;border:1px solid #e5cce1;border-radius:12px;resize:vertical;"
+    ></textarea>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">
+      <button
+        type="button"
+        id="teacherReviewReturn"
+        style="flex:1;background:#fbe3ed;color:#a82d68;border:1px solid #f0c4d9;"
+      >Devolver actividad</button>
+
+      <button
+        type="button"
+        id="teacherReviewApprove"
+        style="flex:1;background:#dff3e6;color:#287747;border:1px solid #b8dfc5;"
+      >Revisada</button>
+    </div>
+  </div>
+</div>
+
 <section id="teacherActivityCreator" class="teacher-activity-modal hidden">
   <div class="teacher-activity-modal-content">
     <button
