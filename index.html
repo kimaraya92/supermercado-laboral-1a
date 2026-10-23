@@ -14560,9 +14560,11 @@ if(!lista || !mensajeVacio || !pendientesTexto || !revisadasTexto || !devueltasT
       return registro.estado === "devuelta";
     }).length;
 
-    pendientesTexto.textContent = pendientes;
+        pendientesTexto.textContent = pendientes;
     revisadasTexto.textContent = revisadas;
-    devueltasTexto.textContent = devueltas;    mensajeVacio.classList.toggle("hidden", entregas.length > 0);
+    devueltasTexto.textContent = devueltas;
+
+    mensajeVacio.classList.toggle("hidden", entregas.length > 0);
 
     entregas.sort(function(a, b){
       return Number(b.finalizadaEn || 0) - Number(a.finalizadaEn || 0);
