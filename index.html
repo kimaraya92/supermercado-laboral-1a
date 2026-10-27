@@ -3898,15 +3898,15 @@ aspect-ratio:auto;
       class="portal-login-image"
     >
 
-    <!-- =========================
-         INGRESO ESTUDIANTE
-    ========================== -->
+    
+    <!-- INGRESO ESTUDIANTE -->
 
     <input
       id="studentNameInput"
       class="portal-map-input portal-map-student-name"
       type="text"
       autocomplete="off"
+      placeholder="Nombre"
       aria-label="Nombre del estudiante"
     >
 
@@ -3915,6 +3915,7 @@ aspect-ratio:auto;
       class="portal-map-input portal-map-student-rut"
       type="text"
       autocomplete="off"
+      placeholder="RUT"
       aria-label="RUT del estudiante"
       onkeydown="if(event.key==='Enter') ingresarEstudiante()"
     >
@@ -3924,33 +3925,37 @@ aspect-ratio:auto;
       class="portal-map-button portal-map-student-login"
       onclick="ingresarEstudiante()"
       aria-label="Ingresar estudiante"
-    ></button>
+    >Ingresar　›</button>
 
+    <!-- INGRESO ADMINISTRADORA -->
 
-    <!-- =========================
-         INGRESO ADMINISTRADORA
-    ========================== -->
+    <input
+      id="adminEmailInput"
+      class="portal-map-input portal-map-admin-email"
+      type="email"
+      autocomplete="username"
+      placeholder="Correo electrónico"
+      aria-label="Correo electrónico de la administradora"
+      onkeydown="if(event.key==='Enter') document.getElementById('adminPasswordInput').focus()"
+    >
 
     <input
       id="adminPasswordInput"
       class="portal-map-input portal-map-admin-password"
       type="password"
-      autocomplete="off"
-      aria-label="Clave de administradora"
+      autocomplete="current-password"
+      placeholder="Contraseña"
+      aria-label="Contraseña de la administradora"
       onkeydown="if(event.key==='Enter') ingresarAdministradora()"
     >
-    <button
-      type="button"
-      class="portal-map-button portal-map-password-toggle"
-      onclick="toggleAdminPassword()"
-      aria-label="Mostrar u ocultar clave"
-    ></button>
+
     <button
       type="button"
       class="portal-map-button portal-map-admin-login"
       onclick="ingresarAdministradora()"
       aria-label="Ingresar administradora"
-    ></button>
+    >Ingresar　›</button>
+
 
   </div>
 
