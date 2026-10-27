@@ -6862,26 +6862,37 @@ const auth =
 const storage =
   firebase.storage();
 
-auth.signInAnonymously()
-  .then(function(){
 
-    console.log(
-      "✓ Usuario anónimo autenticado."
-    );
+if(!auth.currentUser){
 
-  })
-  .catch(function(error){
+  auth.signInAnonymously()
+    .then(function(){
 
-    console.error(
-      "Error de autenticación:",
-      error
-    );
+      console.log(
+        "✓ Usuario anónimo autenticado."
+      );
 
-    alert(
-      "No se pudo conectar con el inventario compartido."
-    );
+    })
+    .catch(function(error){
 
-  });
+      console.error(
+        "Error de autenticación:",
+        error
+      );
+
+      alert(
+        "No se pudo conectar con el inventario compartido."
+      );
+
+    });
+
+}else{
+
+  console.log(
+    "✓ Sesión de Firebase ya activa."
+  );
+
+}
 </script>
 
 
