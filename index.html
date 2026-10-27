@@ -12927,7 +12927,7 @@ const selectedStudents = Array.from(
 
     try{
       
-const userId = auth.currentUser.uid;
+const userId = ACTIVITIES_OWNER_ID;
 const editingId = modal.dataset.editingActivityId || "";
 const coverImageData = await getCoverImageData();
 
@@ -13358,7 +13358,7 @@ closeModal();
           publishActivityButton.disabled = true;
 
           try{
-            const userId = auth.currentUser.uid;
+            const userId = ACTIVITIES_OWNER_ID;
             const updates = {};
 
             updates["actividades/publicadas/" + userId + "/" + item.id] =
@@ -13397,7 +13397,7 @@ closeModal();
           deleteButton.disabled = true;
 
           try{
-            const userId = auth.currentUser.uid;
+            const userId = ACTIVITIES_OWNER_ID;
             const updates = {};
 
             updates["actividades/papelera/" + userId + "/" + item.id] =
@@ -13502,7 +13502,7 @@ closeModal();
           updatePublishedButton.disabled = true;
 
           try {
-            const userId = auth.currentUser.uid;
+            const userId = ACTIVITIES_OWNER_ID;
             const pendingRef = database.ref(
               "actividades/edicionesPendientes/" + userId + "/" + item.id
             );
@@ -13549,7 +13549,7 @@ closeModal();
           deletePublishedButton.disabled = true;
 
           try{
-            const userId = auth.currentUser.uid;
+            const userId = ACTIVITIES_OWNER_ID;
             const updates = {};
 
             updates["actividades/papelera/" + userId + "/" + item.id] =
@@ -13678,7 +13678,7 @@ window.editarBorradorDocente = async function(activityId){
   }
 
   try{
-    const userId = auth.currentUser.uid;
+    const userId = ACTIVITIES_OWNER_ID;
     
     let snapshot = await database
       .ref("actividades/borradores/" + userId + "/" + activityId)
@@ -13967,7 +13967,7 @@ if(botonInicio) botonInicio.style.display = screen === "activities" ? "" : "none
           const restoredData = Object.assign({}, data);
           delete restoredData.eliminadoEn;
 
-          const userId = auth.currentUser.uid;
+          const userId = ACTIVITIES_OWNER_ID;
           const updates = {};
           updates["actividades/borradores/" + userId + "/" + child.key] = restoredData;
           updates["actividades/papelera/" + userId + "/" + child.key] = null;
