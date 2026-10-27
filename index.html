@@ -7337,17 +7337,59 @@ function abrirBancaEstudiante(){
   alert("🏦 Aquí estará la banca en línea.");
 
 }
-function ingresarAdministradora(){
 
-  const clave =
-    document.getElementById("adminPasswordInput").value;
+async function ingresarAdministradora(){
 
-  if(clave !== "1A2026"){
-    alert("❌ Clave incorrecta.");
+  const email = document
+    .getElementById("adminEmailInput")
+    .value
+    .trim();
+
+  const password = document
+    .getElementById("adminPasswordInput")
+    .value;
+
+  if(!email || !password){
+    alert("Por favor, ingresa tu correo electrónico y contraseña.");
     return;
   }
 
-  abrirAdministradora();
+  const boton = document.querySelector(".portal-map-admin-login");
+
+  if(boton){
+    boton.disabled = true;
+    boton.textContent = "Ingresando...";
+  }
+
+  try{
+
+    await auth.signInWithEmailAndPassword(email, password);
+
+    abrirAdministradora();
+
+  }catch(error){
+
+    console.error("Error de inicio de sesión docente:", error);
+
+    if(error.code === "auth/invalid-credential" ||
+       error.code === "auth/wrong-password" ||
+       error.code === "auth/user-not-found"){
+      alert("El correo electrónico o la contraseña son incorrectos.");
+    }else if(error.code === "auth/too-many-requests"){
+      alert("Hubo demasiados intentos. Espera un momento e inténtalo nuevamente.");
+    }else{
+      alert("No se pudo iniciar sesión. Revisa tu conexión e inténtalo nuevamente.");
+    }
+
+  }finally{
+
+    if(boton){
+      boton.disabled = false;
+      boton.textContent = "Ingresar　›";
+    }
+
+  }
+
 }
 function toggleAdminPassword(){
 
