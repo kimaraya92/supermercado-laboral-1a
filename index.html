@@ -3946,7 +3946,12 @@ aspect-ratio:auto;
       aria-label="Contraseña de la administradora"
       onkeydown="if(event.key==='Enter') ingresarAdministradora()"
     >
-
+<button
+  type="button"
+  class="portal-map-password-toggle"
+  onclick="alternarVisibilidadContrasena()"
+  aria-label="Mostrar u ocultar contraseña"
+>👁️</button>
     <button
       type="button"
       class="portal-map-button portal-map-admin-login"
