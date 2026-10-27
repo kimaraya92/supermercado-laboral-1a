@@ -13122,7 +13122,7 @@ closeModal();
 
     savingOrder = true;
 
-    database.ref("actividades/borradores/" + auth.currentUser.uid)
+    database.ref("actividades/borradores/" + ACTIVITIES_OWNER_ID)
       .update(updates)
       .then(function(){
         currentDrafts = reordered.map(function(item, position){
@@ -13163,7 +13163,7 @@ closeModal();
 
     savingOrder = true;
 
-    database.ref("actividades/publicadas/" + auth.currentUser.uid)
+    database.ref("actividades/publicadas/" + ACTIVITIES_OWNER_ID)
       .update(updates)
       .then(function(){
         currentPublished = reordered.map(function(item, position){
@@ -13617,7 +13617,7 @@ auth.onAuthStateChanged(function(user){
   draftsListenerAttached = true;
 
   // Cargar los borradores del docente.
-  database.ref("actividades/borradores/" + user.uid).on(
+  database.ref("actividades/borradores/" + ACTIVITIES_OWNER_ID).on(
     "value",
     function(snapshot){
       renderDrafts(snapshot, false);
@@ -13631,7 +13631,7 @@ auth.onAuthStateChanged(function(user){
   );
 
   // Cargar las actividades publicadas del docente.
-  database.ref("actividades/publicadas/" + user.uid).on(
+  database.ref("actividades/publicadas/" + ACTIVITIES_OWNER_ID).on(
     "value",
     function(snapshot){
       currentPublished = [];
@@ -13990,7 +13990,7 @@ if(botonInicio) botonInicio.style.display = screen === "activities" ? "" : "none
         deleteButton.disabled = true;
         try{
           await database.ref(
-            "actividades/papelera/" + auth.currentUser.uid + "/" + child.key
+            "actividades/papelera/" + ACTIVITIES_OWNER_ID + "/" + child.key
           ).remove();
         }catch(error){
           console.error("Error al eliminar definitivamente:", error);
@@ -14011,7 +14011,7 @@ if(botonInicio) botonInicio.style.display = screen === "activities" ? "" : "none
     if(!user || listenerAttached) return;
     listenerAttached = true;
 
-    database.ref("actividades/papelera/" + user.uid).on(
+    database.ref("actividades/papelera/" + ACTIVITIES_OWNER_ID).on(
       "value",
       renderTrash,
       function(error){
