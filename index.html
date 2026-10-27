@@ -2088,124 +2088,132 @@ body.printing-shopping-list #receiptPrintArea{
   object-fit:fill;
 }
 
-/* CAMPOS INVISIBLES SOBRE LA IMAGEN */
 
-.portal-map-input{
-  position:absolute;
-  box-sizing:border-box;
-  z-index:10;
+/* CONTROLES DEL PORTAL DE ACCESO */
 
-  background:transparent;
-  border:none;
-  outline:none;
-  box-shadow:none;
-
-  color:#3d3d3d;
-  font-size:clamp(12px, 1.35vw, 22px);
-  font-weight:600;
-
-  padding:0 4% 0 18%;
-  margin:0;
+.portal-map-input {
+  position: absolute;
+  box-sizing: border-box;
+  z-index: 10;
+  height: 6.5%;
+  padding: 0 14px;
+  margin: 0;
+  border: 2px solid #e7dff5;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #3d3450;
+  font-family: inherit;
+  font-size: clamp(12px, 1.05vw, 17px);
+  font-weight: 500;
+  line-height: normal;
+  outline: none;
+  box-shadow: 0 3px 8px rgba(60, 40, 80, 0.08);
 }
 
-.portal-map-input::placeholder{
-  color:transparent;
+.portal-map-input::placeholder {
+  color: #88818f;
+  opacity: 1;
 }
 
-.portal-map-input:focus{
-  background:rgba(255,255,255,.06);
-  border:none;
-  outline:none;
-  box-shadow:none;
+.portal-map-input:focus {
+  border-color: #9b83d0;
+  box-shadow: 0 0 0 3px rgba(155, 131, 208, 0.16);
 }
 
-/* NOMBRE */
+/* ESTUDIANTE: NOMBRE Y RUT */
 
-/* NOMBRE */
-
-.portal-map-student-name{
-  left:33.2%;
-  top:60.5%;
-  width:17.0%;
-  height:6.5%;
-  padding:0;
-  text-align:left;
-}
-  
-/* RUT */
-
-.portal-map-student-rut{
- left:31.6%;
-  top:66.9%;
-  width:19.0%;
-  height:6.6%;
-  padding:0;
-  text-align:left;
-}
-  
-/* BOTÓN INGRESAR ESTUDIANTE */
-
-.portal-map-student-login{
-  position:absolute;
-  left:25.7%;
-  top:73.7%;
-  width:20.9%;
-  height:7.1%;
+.portal-map-student-name {
+  left: 27%;
+  top: 60.5%;
+  width: 22%;
 }
 
-/* CLAVE ADMINISTRADORA */
-
-.portal-map-admin-password{
- left:60.0%;
-  top:63.2%;
-  width:27.4%;
-  height:8.2%;
-  padding:0;
-  text-align:left;
-  direction:ltr;
-}
-  
-/* BOTÓN INGRESAR ADMINISTRADORA */
-
-.portal-map-admin-login{
-  position:absolute;
-  left:53.3%;
-  top:72.5%;
-  width:21.6%;
-  height:8.0%;
+.portal-map-student-rut {
+  left: 27%;
+  top: 67%;
+  width: 22%;
 }
 
-/* BOTONES INVISIBLES */
+/* ESTUDIANTE: BOTÓN MORADO */
 
-.portal-map-button{
-  position:absolute;
-  z-index:10;
-
-  background:transparent;
-  border:none;
-  outline:none;
-  box-shadow:none;
-
-  padding:0;
-  margin:0;
-
-  cursor:pointer;
+.portal-map-student-login {
+  left: 27%;
+  top: 74%;
+  width: 22%;
+  height: 7%;
 }
 
-.portal-map-button:hover{
-  background:rgba(255,255,255,.04);
+/* ADMINISTRADORA: CORREO Y CONTRASEÑA */
+
+.portal-map-admin-email {
+  left: 57%;
+  top: 59.5%;
+  width: 30%;
 }
 
-.portal-map-button:focus{
-  outline:none;
-  box-shadow:none;
+.portal-map-admin-password {
+  left: 57%;
+  top: 66.5%;
+  width: 30%;
 }
-  .portal-map-password-toggle{
-  left:72.5%;
-  top:63.5%;
-  width:4.5%;
-  height:8%;
-  z-index:20;
+
+/* BOTONES REALES, REDONDEADOS Y PASTEL */
+
+.portal-map-button {
+  position: absolute;
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0 12px;
+  margin: 0;
+  border: none;
+  border-radius: 999px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: clamp(13px, 1.1vw, 18px);
+  font-weight: 700;
+  line-height: normal;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(60, 40, 80, 0.16);
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+.portal-map-button:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.portal-map-button:active {
+  transform: translateY(1px);
+}
+
+.portal-map-button:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
+/* INGRESAR ESTUDIANTE */
+
+.portal-map-student-login {
+  background: #7661ad;
+}
+
+/* INGRESAR ADMINISTRADORA */
+
+.portal-map-admin-login {
+  left: 57%;
+  top: 74%;
+  width: 30%;
+  height: 8%;
+  background: #d94f70;
+}
+
+/* OCULTAR EL ANTIGUO BOTÓN DE MOSTRAR CLAVE */
+
+.portal-map-password-toggle {
+  display: none;
 }
   /* ==============================
    PORTAL DEL ESTUDIANTE
