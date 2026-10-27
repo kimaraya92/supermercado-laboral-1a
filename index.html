@@ -2172,6 +2172,42 @@ body.printing-shopping-list #receiptPrintArea{
   background: linear-gradient(135deg, #df5c7a, #ce4265);
 }
 
+/* ESTILO GENERAL DE LOS BOTONES DE INGRESO */
+
+.portal-map-button {
+  position: absolute;
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0 10px;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: clamp(12px, 1vw, 16px);
+  font-weight: 600;
+  line-height: normal;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(60, 40, 80, 0.13);
+  transition: filter 0.18s ease, transform 0.18s ease;
+}
+
+.portal-map-button:hover {
+  filter: brightness(1.05);
+}
+
+.portal-map-button:active {
+  transform: scale(0.98);
+}
+
+.portal-map-button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
 /* OCULTAR BOTÓN ANTIGUO DE MOSTRAR CONTRASEÑA */
 
 .portal-map-password-toggle {
