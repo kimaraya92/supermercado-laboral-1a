@@ -3402,6 +3402,108 @@ aspect-ratio:auto;
   }
 }
 
+/* Corrección visual del buscador y panel de filtros */
+.activity-tools {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.activity-tools input[type="search"] {
+  display: block;
+  flex: 1 1 auto;
+  width: 0;
+  min-width: 0;
+  height: 48px;
+  box-sizing: border-box;
+}
+
+.activity-tools #toggleActivityFilters {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 125px;
+  height: 48px;
+  white-space: nowrap;
+}
+
+.activity-filters-panel {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.activity-student-chips {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 9px;
+}
+
+.activity-filters-panel .activity-student-chip {
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 7px;
+  width: auto;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.activity-filters-panel .activity-area-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 24px;
+  width: 100%;
+}
+
+.activity-filters-panel .activity-area-options label {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.activity-filters-panel input[type="checkbox"] {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+.activity-filter-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.activity-filter-actions button {
+  min-width: 0;
+}
+
+@media (max-width: 600px) {
+  .activity-filters-panel .activity-area-options {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-filters-heading {
+    align-items: flex-start;
+  }
+}
+
 .teacher-section-heading h2{
   margin:0 0 8px;
   color:#754568;
