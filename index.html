@@ -4194,14 +4194,88 @@ aspect-ratio:auto;
 
       
       <section class="teacher-activities">
+        
         <div class="teacher-section-heading">
           <div>
             <h2>Mis actividades 💕</h2>
             <p>Organiza y prepara las experiencias de aprendizaje.</p>
           </div>
-          <input type="search" placeholder="Buscar actividad..."
-            aria-label="Buscar actividad">
         </div>
+
+        <div class="activity-tools">
+          <input
+            id="teacherActivitySearch"
+            type="search"
+            placeholder="Buscar actividad..."
+            aria-label="Buscar actividad"
+          >
+
+          <button
+            type="button"
+            id="toggleActivityFilters"
+            class="activity-tools-button"
+            aria-expanded="false"
+            aria-controls="activityFiltersPanel"
+          >
+            ☷ Filtros
+          </button>
+        </div>
+
+        <section id="activityFiltersPanel" class="activity-filters-panel" hidden>
+          <div class="activity-filters-heading">
+            <h3>Filtrar actividades</h3>
+            <span id="activeActivityFiltersCount">0 filtros activos</span>
+          </div>
+
+          <div class="activity-filter-group">
+            <p>ESTUDIANTES</p>
+            <div class="activity-student-chips">
+              <label class="activity-student-chip">
+                <input type="checkbox" id="filterAllStudents" value="todos" checked>
+                Todos
+              </label>
+              <label class="activity-student-chip">
+                <input type="checkbox" class="activity-filter-student" value="Esteban">
+                Esteban
+              </label>
+              <label class="activity-student-chip">
+                <input type="checkbox" class="activity-filter-student" value="Almendra">
+                Almendra
+              </label>
+              <label class="activity-student-chip">
+                <input type="checkbox" class="activity-filter-student" value="Renata">
+                Renata
+              </label>
+              <label class="activity-student-chip">
+                <input type="checkbox" class="activity-filter-student" value="Gerardo">
+                Gerardo
+              </label>
+              <label class="activity-student-chip">
+                <input type="checkbox" class="activity-filter-student" value="Mauricio">
+                Mauricio
+              </label>
+            </div>
+          </div>
+
+          <div class="activity-filter-group">
+            <p>ASIGNATURAS Y ÁREAS</p>
+            <div class="activity-area-options">
+              <label><input type="checkbox" class="activity-filter-area" value="Cálculo"> Cálculo</label>
+              <label><input type="checkbox" class="activity-filter-area" value="Lectura y escritura"> Lectura y escritura</label>
+              <label><input type="checkbox" class="activity-filter-area" value="Vocacional cocina"> Vocacional cocina</label>
+              <label><input type="checkbox" class="activity-filter-area" value="Vocacional manualidades"> Vocacional manualidades</label>
+              <label><input type="checkbox" class="activity-filter-area" value="Social (AVD)"> Social (AVD)</label>
+              <label><input type="checkbox" class="activity-filter-area" value="Tiempo Libre"> Tiempo Libre</label>
+              <label><input type="checkbox" class="activity-filter-area" value="Enriquecimiento del currículum"> Enriquecimiento del currículum</label>
+            </div>
+          </div>
+
+          <div class="activity-filter-actions">
+            <button type="button" id="clearActivityFilters">Limpiar</button>
+            <button type="button" id="applyActivityFilters">Aplicar filtros</button>
+          </div>
+        </section>
+
 
         
           <div id="activityStatusFilters" class="activity-status-filters">
