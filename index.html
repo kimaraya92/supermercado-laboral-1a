@@ -14803,10 +14803,7 @@ if(!lista || !mensajeVacio || !pendientesTexto || !revisadasTexto || !devueltasT
       return;
     }
 
-    const nombre = normalizar(estudianteSeleccionado);
-
-    
-    const nombre = normalizar(estudianteSeleccionado);
+   const nombre = normalizar(estudianteSeleccionado);
 
     const asignadas = actividades.filter(function(item){
       const destinatarios = Array.isArray(item.data.estudiantes)
