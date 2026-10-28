@@ -14805,6 +14805,9 @@ if(!lista || !mensajeVacio || !pendientesTexto || !revisadasTexto || !devueltasT
 
     const nombre = normalizar(estudianteSeleccionado);
 
+    
+    const nombre = normalizar(estudianteSeleccionado);
+
     const asignadas = actividades.filter(function(item){
       const destinatarios = Array.isArray(item.data.estudiantes)
         ? item.data.estudiantes
@@ -14816,14 +14819,52 @@ if(!lista || !mensajeVacio || !pendientesTexto || !revisadasTexto || !devueltasT
         });
     });
 
-    mensajeVacio.classList.toggle("hidden", asignadas.length > 0);
-
-    asignadas.forEach(function(item){
-      const entrega = entregas.find(function(registro){
-        return normalizar(registro.nombreEstudiante) === nombre &&
-          String(registro.actividadId || "") === String(item.id);
+    const entregasEstudiante = entregas
+      .filter(function(registro){
+        return normalizar(registro.nombreEstudiante) === nombre;
+      })
+      .sort(function(a, b){
+        return Number(b.finalizadaEn || 0) - Number(a.finalizadaEn || 0);
       });
 
+    const paraMostrar = asignadas.map(function(item){
+      const tituloActividad = item.data.titulo || item.data.nombre || "";
+
+      const entrega = entregasEstudiante.find(function(registro){
+        return (
+          (registro.actividadId &&
+            String(registro.actividadId) === String(item.id)) ||
+          (tituloActividad &&
+            normalizar(registro.tituloActividad) === normalizar(tituloActividad))
+        );
+      });
+
+      return { id: item.id, data: item.data, entrega: entrega || null };
+    });
+
+    entregasEstudiante.forEach(function(registro){
+      const yaExiste = paraMostrar.some(function(item){
+        return (
+          (registro.actividadId &&
+            String(registro.actividadId) === String(item.id)) ||
+          (registro.tituloActividad &&
+            normalizar(registro.tituloActividad) ===
+              normalizar(item.data.titulo || item.data.nombre || ""))
+        );
+      });
+
+      if(!yaExiste){
+        paraMostrar.push({
+          id: registro.actividadId || "",
+          data: { titulo: registro.tituloActividad || "Actividad sin título" },
+          entrega: registro
+        });
+      }
+    });
+
+    mensajeVacio.classList.toggle("hidden", paraMostrar.length > 0);
+
+    paraMostrar.forEach(function(item){
       const tarjeta = document.createElement("article");
       tarjeta.className = "teacher-student-card";
 
@@ -14835,18 +14876,20 @@ if(!lista || !mensajeVacio || !pendientesTexto || !revisadasTexto || !devueltasT
       const estado = document.createElement("p");
       estado.className = "teacher-student-stats";
 
-      if(!entrega){
+      if(!item.entrega){
         estado.textContent = "🟣 Estado: Pendiente de entrega";
+      }else if(item.entrega.estado === "revisada"){
+        estado.textContent = "✅ Estado: Entregada · Revisada";
+      }else if(item.entrega.estado === "devuelta"){
+        estado.textContent = "🔄 Estado: Entregada · Devuelta para corregir";
       }else{
-        estado.textContent = "✅ Entregada" +
-          (entrega.estado === "revisada" ? " · Revisada" :
-           entrega.estado === "devuelta" ? " · Devuelta para corregir" :
-           " · Por revisar");
+        estado.textContent = "🟣 Estado: Entregada · Por revisar";
       }
 
       tarjeta.append(titulo, estado);
       lista.appendChild(tarjeta);
     });
+
   }
 
   document.addEventListener("teacherOpenStudentDetail", function(event){
