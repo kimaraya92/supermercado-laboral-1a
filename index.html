@@ -13589,15 +13589,60 @@ closeModal();
       return Object.assign({}, item, {tipo: "publicada"});
     });
 
+    
     let visibleItems = [];
 
-    if(currentFilter === "borradores"){
+    if (currentFilter === "borradores") {
       visibleItems = drafts;
-    }else if(currentFilter === "publicadas"){
+    } else if (currentFilter === "publicadas") {
       visibleItems = published;
-    }else{
+    } else {
       visibleItems = drafts.concat(published);
     }
+
+    // Aplicar búsqueda por título, instrucciones y área.
+    const searchText = activitySearch
+      ? activitySearch.value.trim().toLocaleLowerCase("es")
+      : "";
+
+    visibleItems = visibleItems.filter(function (item) {
+      const data = item.data;
+      const searchableText = [
+        data.titulo || "",
+        data.instrucciones || "",
+        data.area || ""
+      ].join(" ").toLocaleLowerCase("es");
+
+      if (searchText && !searchableText.includes(searchText)) {
+        return false;
+      }
+
+      // Si se eligieron estudiantes, mostrar actividades asignadas
+      // a cualquiera de esos estudiantes.
+      if (appliedStudents.length > 0) {
+        const assignedStudents = Array.isArray(data.estudiantes)
+          ? data.estudiantes
+          : [];
+
+        const hasSelectedStudent = assignedStudents.some(function (name) {
+          return appliedStudents.some(function (selectedName) {
+            return name.trim().toLocaleLowerCase("es") ===
+              selectedName.toLocaleLowerCase("es");
+          });
+        });
+
+        if (!hasSelectedStudent) return false;
+      }
+
+      // Si se eligieron áreas, mostrar actividades de cualquiera
+      // de las áreas seleccionadas.
+      if (appliedAreas.length > 0 && !appliedAreas.includes(data.area || "")) {
+        return false;
+      }
+
+      return true;
+    });
+
 
     activityList.replaceChildren();
 
