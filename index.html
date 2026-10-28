@@ -12767,18 +12767,7 @@ auth.onAuthStateChanged(function(user){
     });
   }
 
-  if (studentsSearch) {
-    studentsSearch.addEventListener("input", function () {
-      const search = studentsSearch.value.trim().toLocaleLowerCase("es");
-
-      studentOptions.forEach(function (checkbox) {
-        const label = checkbox.closest("label");
-        const name = checkbox.value.toLocaleLowerCase("es");
-        label.hidden = !name.includes(search);
-      });
-    });
-  }
-
+  
   studentOptions.forEach(function (checkbox) {
     checkbox.addEventListener("change", updateStudentsSummary);
   });
