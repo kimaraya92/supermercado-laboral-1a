@@ -13353,6 +13353,117 @@ closeModal();
       });
     });
   }
+  
+  // Controles del buscador y del panel de filtros.
+  const activitySearch = document.getElementById("teacherActivitySearch");
+  const toggleFiltersButton = document.getElementById("toggleActivityFilters");
+  const filtersPanel = document.getElementById("activityFiltersPanel");
+  const allStudentsCheckbox = document.getElementById("filterAllStudents");
+  const studentFilterCheckboxes = Array.from(
+    document.querySelectorAll(".activity-filter-student")
+  );
+  const areaFilterCheckboxes = Array.from(
+    document.querySelectorAll(".activity-filter-area")
+  );
+  const clearFiltersButton = document.getElementById("clearActivityFilters");
+  const applyFiltersButton = document.getElementById("applyActivityFilters");
+  const activeFiltersCount = document.getElementById("activeActivityFiltersCount");
+
+  let appliedStudents = [];
+  let appliedAreas = [];
+
+  if (toggleFiltersButton && filtersPanel) {
+    toggleFiltersButton.addEventListener("click", function () {
+      const opening = filtersPanel.hidden;
+      filtersPanel.hidden = !opening;
+      toggleFiltersButton.setAttribute("aria-expanded", String(opening));
+    });
+  }
+
+  if (allStudentsCheckbox) {
+    allStudentsCheckbox.addEventListener("change", function () {
+      if (allStudentsCheckbox.checked) {
+        studentFilterCheckboxes.forEach(function (checkbox) {
+          checkbox.checked = false;
+        });
+      }
+    });
+  }
+
+  studentFilterCheckboxes.forEach(function (checkbox) {
+    checkbox.addEventListener("change", function () {
+      if (checkbox.checked && allStudentsCheckbox) {
+        allStudentsCheckbox.checked = false;
+      }
+
+      if (
+        allStudentsCheckbox &&
+        !studentFilterCheckboxes.some(function (item) {
+          return item.checked;
+        })
+      ) {
+        allStudentsCheckbox.checked = true;
+      }
+    });
+  });
+
+  if (applyFiltersButton) {
+    applyFiltersButton.addEventListener("click", function () {
+      appliedStudents = studentFilterCheckboxes
+        .filter(function (checkbox) {
+          return checkbox.checked;
+        })
+        .map(function (checkbox) {
+          return checkbox.value;
+        });
+
+      appliedAreas = areaFilterCheckboxes
+        .filter(function (checkbox) {
+          return checkbox.checked;
+        })
+        .map(function (checkbox) {
+          return checkbox.value;
+        });
+
+      if (activeFiltersCount) {
+        const total = appliedStudents.length + appliedAreas.length;
+        activeFiltersCount.textContent =
+          total + (total === 1 ? " filtro activo" : " filtros activos");
+      }
+
+      renderDraftsFromCurrent();
+    });
+  }
+
+  if (clearFiltersButton) {
+    clearFiltersButton.addEventListener("click", function () {
+      studentFilterCheckboxes.forEach(function (checkbox) {
+        checkbox.checked = false;
+      });
+
+      areaFilterCheckboxes.forEach(function (checkbox) {
+        checkbox.checked = false;
+      });
+
+      if (allStudentsCheckbox) allStudentsCheckbox.checked = true;
+      if (activitySearch) activitySearch.value = "";
+
+      appliedStudents = [];
+      appliedAreas = [];
+
+      if (activeFiltersCount) {
+        activeFiltersCount.textContent = "0 filtros activos";
+      }
+
+      renderDraftsFromCurrent();
+    });
+  }
+
+  if (activitySearch) {
+    activitySearch.addEventListener("input", function () {
+      renderDraftsFromCurrent();
+    });
+  }
 
   function createElement(tag, className, text){
     const element = document.createElement(tag);
