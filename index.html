@@ -14776,6 +14776,118 @@ if(!lista || !mensajeVacio || !pendientesTexto || !revisadasTexto || !devueltasT
 })();
 </script>
 
+<script>
+(function(){
+  const lista = document.getElementById("teacherStudentAssignedActivities");
+  const mensajeVacio = document.getElementById("teacherStudentAssignedEmpty");
+
+  if(!lista || !mensajeVacio) return;
+
+  let estudianteSeleccionado = "";
+  let actividades = [];
+  let entregas = [];
+
+  function normalizar(nombre){
+    return String(nombre || "")
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function dibujar(){
+    lista.replaceChildren();
+
+    if(!estudianteSeleccionado){
+      mensajeVacio.classList.remove("hidden");
+      return;
+    }
+
+    const nombre = normalizar(estudianteSeleccionado);
+
+    const asignadas = actividades.filter(function(item){
+      const destinatarios = Array.isArray(item.data.estudiantes)
+        ? item.data.estudiantes
+        : [];
+
+      return destinatarios.length === 0 ||
+        destinatarios.some(function(destinatario){
+          return normalizar(destinatario) === nombre;
+        });
+    });
+
+    mensajeVacio.classList.toggle("hidden", asignadas.length > 0);
+
+    asignadas.forEach(function(item){
+      const entrega = entregas.find(function(registro){
+        return normalizar(registro.nombreEstudiante) === nombre &&
+          String(registro.actividadId || "") === String(item.id);
+      });
+
+      const tarjeta = document.createElement("article");
+      tarjeta.className = "teacher-student-card";
+
+      const titulo = document.createElement("h3");
+      titulo.className = "teacher-student-name";
+      titulo.textContent = "📋 " +
+        (item.data.titulo || item.data.nombre || "Actividad sin título");
+
+      const estado = document.createElement("p");
+      estado.className = "teacher-student-stats";
+
+      if(!entrega){
+        estado.textContent = "🟣 Estado: Pendiente de entrega";
+      }else{
+        estado.textContent = "✅ Entregada" +
+          (entrega.estado === "revisada" ? " · Revisada" :
+           entrega.estado === "devuelta" ? " · Devuelta para corregir" :
+           " · Por revisar");
+      }
+
+      tarjeta.append(titulo, estado);
+      lista.appendChild(tarjeta);
+    });
+  }
+
+  document.addEventListener("teacherOpenStudentDetail", function(event){
+    estudianteSeleccionado = event.detail && event.detail.nombre
+      ? event.detail.nombre
+      : "";
+    dibujar();
+  });
+
+  database.ref("actividades/publicadas/" + ACTIVITIES_OWNER_ID).on("value", function(snapshot){
+    actividades = [];
+    snapshot.forEach(function(child){
+      const data = child.val();
+      if(data && typeof data === "object"){
+        actividades.push({id: child.key, data: data});
+      }
+    });
+    dibujar();
+  }, function(error){
+    console.error("Error al cargar actividades asignadas:", error);
+    lista.textContent = "No se pudieron cargar las actividades asignadas.";
+    mensajeVacio.classList.add("hidden");
+  });
+
+  database.ref("actividadesFinalizadas").on("value", function(snapshot){
+    entregas = [];
+    snapshot.forEach(function(estudianteSnapshot){
+      estudianteSnapshot.forEach(function(entregaSnapshot){
+        const registro = entregaSnapshot.val();
+        if(registro && typeof registro === "object"){
+          entregas.push(registro);
+        }
+      });
+    });
+    dibujar();
+  }, function(error){
+    console.error("Error al consultar entregas:", error);
+  });
+})();
+</script>
+
 </body>
 
 </html>
