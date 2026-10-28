@@ -3475,6 +3475,23 @@ aspect-ratio:auto;
   font-weight:700;
 }
 
+.teacher-activity-area {
+  display: table;
+  margin: 4px 0 8px;
+  padding: 4px 9px;
+  border-radius: 20px;
+  background: #eee3ff;
+  color: #7550b5;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.teacher-activity-publication-date {
+  margin: 0 0 8px;
+  color: #8f7d90;
+  font-size: 12px;
+}
+
 .teacher-activity-move{
   display:flex;
   flex-direction:column;
@@ -13280,17 +13297,41 @@ closeModal();
 
       const info = createElement("div", "teacher-activity-info");
 
-      info.appendChild(createElement(
-        "span",
-        "teacher-activity-status",
-        isDraft ? "Borrador" : "🚀 Publicada"
-      ));
-
+      
       info.appendChild(createElement(
         "h3",
         "",
         data.titulo || "Actividad sin título"
       ));
+
+      // Mostrar el área o asignatura debajo del título.
+      if (data.area && data.area.trim()) {
+        const areaBadge = createElement(
+          "span",
+          "teacher-activity-area",
+          data.area
+        );
+        info.appendChild(areaBadge);
+      }
+
+      // Mostrar la fecha solamente en las actividades publicadas.
+      if (!isDraft && data.publicadoEn) {
+        const fechaPublicacion = new Date(Number(data.publicadoEn));
+
+        if (!Number.isNaN(fechaPublicacion.getTime())) {
+          const fechaTexto = fechaPublicacion.toLocaleDateString("es-CL", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+          });
+
+          info.appendChild(createElement(
+            "p",
+            "teacher-activity-publication-date",
+            "📅 Publicada el " + fechaTexto
+          ));
+        }
+      }
 
       info.appendChild(createElement("p", "", data.instrucciones || ""));
 
