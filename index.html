@@ -15117,6 +15117,7 @@ function abrirMisiones(){
     });
   }
 
+  
   function renderizarMisiones(){
     if(!misionesLocales.length){
       lista.innerHTML = `
@@ -15129,6 +15130,18 @@ function abrirMisiones(){
     }
 
     lista.innerHTML = misionesLocales.map(function(m){
+      const estado = m.estado || "borrador";
+      const estilosEstado = {
+        borrador: "background:#eee5f5;color:#65445a;",
+        enviada: "background:#d9f5e5;color:#187647;",
+        trabajada: "background:#dcecff;color:#2764b0;"
+      };
+      const nombreEstado = {
+        borrador: "Borrador",
+        enviada: "Enviada",
+        trabajada: "Trabajada"
+      };
+
       return `
         <article style="padding:18px;background:white;border:1px solid #efd5e5;border-radius:16px;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
@@ -15136,25 +15149,93 @@ function abrirMisiones(){
               <h3 style="margin:0 0 7px;font-size:18px;">${escaparMision(m.nombre)}</h3>
               <p style="margin:0 0 10px;color:#876d91;font-size:13px;">Rol: ${escaparMision(m.rol)} · Fecha: ${m.fecha ? escaparMision(m.fecha) : "Sin fecha asignada"}</p>
             </div>
-            <span style="padding:6px 10px;border-radius:20px;background:#eee5f5;color:#65445a;font-size:12px;font-weight:800;">Borrador</span>
+            <span style="padding:6px 10px;border-radius:20px;font-size:12px;font-weight:800;${estilosEstado[estado] || estilosEstado.borrador}">${nombreEstado[estado] || "Borrador"}</span>
           </div>
+
           <p style="margin:0 0 16px;white-space:pre-wrap;line-height:1.5;">${escaparMision(m.descripcion)}</p>
-          <button type="button" data-editar-mision="${m.id}" style="padding:9px 14px;border:1px solid #e8c8df;border-radius:9px;background:white;color:#65445a;font-weight:700;cursor:pointer;">Editar</button>
+
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            ${estado === "borrador" ? `
+              <button type="button" data-editar-mision="${m.id}" style="flex:1;min-width:110px;padding:10px 14px;border:1px solid #e8c8df;border-radius:9px;background:white;color:#65445a;font-weight:700;cursor:pointer;">Editar</button>
+              <button type="button" data-enviar-mision="${m.id}" style="flex:1;min-width:140px;padding:10px 14px;border:1px solid #65445a;border-radius:9px;background:#65445a;color:white;font-weight:700;cursor:pointer;">Enviar misión</button>
+              <button type="button" data-eliminar-mision="${m.id}" style="padding:10px 14px;border:1px solid #e7b8b8;border-radius:9px;background:white;color:#a33;font-weight:700;cursor:pointer;">Eliminar</button>
+            ` : `
+              <button type="button" data-eliminar-mision="${m.id}" style="padding:10px 14px;border:1px solid #e7b8b8;border-radius:9px;background:white;color:#a33;font-weight:700;cursor:pointer;">Eliminar</button>
+            `}
+          </div>
         </article>`;
     }).join("");
 
     lista.querySelectorAll("[data-editar-mision]").forEach(function(b){
       b.addEventListener("click",function(){
         const m = misionesLocales.find(x => x.id === b.dataset.editarMision);
-        if(!m) return;
+        if(!m || (m.estado && m.estado !== "borrador")) return;
+
         idEditando = m.id;
         contenido.querySelector("#tituloFormularioMision").textContent = "Editar misión";
         contenido.querySelector("#rolMision").value = m.rol;
-        contenido.querySelector("#fechaMision").value = m.fecha;
+        contenido.querySelector("#fechaMision").value = m.fecha || "";
         contenido.querySelector("#nombreMision").value = m.nombre;
         contenido.querySelector("#descripcionMision").value = m.descripcion;
         formulario.style.display = "block";
         formulario.scrollIntoView({behavior:"smooth",block:"start"});
+      });
+    });
+
+    lista.querySelectorAll("[data-enviar-mision]").forEach(function(b){
+      b.addEventListener("click",async function(){
+        const m = misionesLocales.find(x => x.id === b.dataset.enviarMision);
+        if(!m || (m.estado && m.estado !== "borrador")) return;
+
+        if(!confirm('¿Quieres enviar la misión "' + m.nombre + '"?')) return;
+
+        b.disabled = true;
+        b.textContent = "Enviando...";
+
+        try {
+          await database.ref("misiones/" + m.id).update({
+            estado: "enviada",
+            enviadaEn: new Date().toISOString()
+          });
+
+          const snapshot = await database.ref("misiones").once("value");
+          const registros = snapshot.val() || {};
+          misionesLocales = Object.entries(registros).map(function([id, mision]){
+            return {...mision, id};
+          }).reverse();
+
+          mensaje.textContent = "Misión marcada como enviada.";
+          renderizarMisiones();
+        } catch(error) {
+          console.error("Error al enviar la misión:", error);
+          mensaje.textContent = "No se pudo enviar la misión. Revisa la conexión.";
+          b.disabled = false;
+          b.textContent = "Enviar misión";
+        }
+      });
+    });
+
+    lista.querySelectorAll("[data-eliminar-mision]").forEach(function(b){
+      b.addEventListener("click",async function(){
+        const m = misionesLocales.find(x => x.id === b.dataset.eliminarMision);
+        if(!m) return;
+
+        if(!confirm('¿Eliminar la misión "' + m.nombre + '"? Esta acción no se puede deshacer.')) return;
+
+        b.disabled = true;
+        b.textContent = "Eliminando...";
+
+        try {
+          await database.ref("misiones/" + m.id).remove();
+          misionesLocales = misionesLocales.filter(x => x.id !== m.id);
+          mensaje.textContent = "Misión eliminada.";
+          renderizarMisiones();
+        } catch(error) {
+          console.error("Error al eliminar la misión:", error);
+          mensaje.textContent = "No se pudo eliminar. Revisa la conexión.";
+          b.disabled = false;
+          b.textContent = "Eliminar";
+        }
       });
     });
   }
