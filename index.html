@@ -14941,12 +14941,235 @@ panelDerecho.appendChild(pantalla);
     }
 
 
-    function conectarBoton(){
-      const b=contenido.querySelector("#abrirRuletaRoles");
-      if(b)b.addEventListener("click",abrirRuleta);
-    }
-   
+    
+function conectarBoton(){
+  const b = contenido.querySelector("#abrirRuletaRoles");
+  if(b) b.addEventListener("click", abrirRuleta);
+}
+
+let productosMaestros = {};
+let vistaMaestra = "miniaturas";
+let busquedaMaestra = "";
+let filtroImagenMaestra = "todos";
+let listenerMaestroActivo = false;
+
+function escaparMaestro(valor){
+  return String(valor ?? "").replace(/[&<>"']/g, function(c){
+    return {
+      "&":"&amp;","<":"&lt;",">":"&gt;",
+      '"':"&quot;","'":"&#39;"
+    }[c];
+  });
+}
+
+function abrirInventarioMaestro(){
+  contenido.innerHTML = `
+    <section style="min-height:100vh;padding:24px;box-sizing:border-box;background:#fff8fc;color:#65445a;">
+      <button id="volverInventarioMaestro" type="button" style="padding:10px 16px;border:1px solid #e8c8df;border-radius:10px;background:white;color:#65445a;cursor:pointer;">← Volver al supermercado</button>
+      <h1 style="margin:22px 0 6px;">📦 Inventario maestro</h1>
+      <p style="margin:0 0 20px;color:#876d91;">Administra los productos compartidos con el inventario de los estudiantes.</p>
+
+      <input id="buscarMaestro" type="search" placeholder="Buscar producto, marca o código..." style="width:100%;max-width:600px;box-sizing:border-box;padding:13px;border:1px solid #e4c8df;border-radius:12px;font-size:16px;">
+
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;">
+        <button type="button" data-vista-maestra="miniaturas">▦ Miniaturas</button>
+        <button type="button" data-vista-maestra="listado">☷ Listado</button>
+        <button type="button" data-vista-maestra="detalles">☰ Detalles</button>
+        <select id="filtroImagenMaestro" aria-label="Filtrar por imagen" style="padding:9px;border:1px solid #e4c8df;border-radius:9px;">
+          <option value="todos">Todos los productos</option>
+          <option value="con">Con imagen</option>
+          <option value="sin">Sin imagen</option>
+        </select>
+      </div>
+
+      <p id="contadorMaestro" style="font-weight:700;"></p>
+      <div id="listaInventarioMaestro" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;"></div>
+      <p style="font-size:12px;color:#876d91;margin-top:18px;">Los cambios guardados se sincronizan con el inventario compartido.</p>
+    </section>
+  `;
+
+  contenido.querySelector("#volverInventarioMaestro").addEventListener("click",function(){
+    contenido.innerHTML = menuOriginal;
     conectarBoton();
+    conectarBotonInventario();
+  });
+
+  contenido.querySelector("#buscarMaestro").value = busquedaMaestra;
+  contenido.querySelector("#buscarMaestro").addEventListener("input",function(){
+    busquedaMaestra = this.value;
+    pintarInventarioMaestro();
+  });
+
+  contenido.querySelector("#filtroImagenMaestro").value = filtroImagenMaestra;
+  contenido.querySelector("#filtroImagenMaestro").addEventListener("change",function(){
+    filtroImagenMaestra = this.value;
+    pintarInventarioMaestro();
+  });
+
+  contenido.querySelectorAll("[data-vista-maestra]").forEach(function(b){
+    b.addEventListener("click",function(){
+      vistaMaestra = this.dataset.vistaMaestra;
+      pintarInventarioMaestro();
+    });
+  });
+
+  contenido.querySelector("#listaInventarioMaestro").addEventListener("click",function(event){
+    const botonEditar = event.target.closest("[data-editar-maestro]");
+    if(botonEditar) editarProductoMaestro(botonEditar.dataset.editarMaestro);
+  });
+
+  if(!listenerMaestroActivo){
+    listenerMaestroActivo = true;
+    database.ref("productos").on("value",function(snapshot){
+      productosMaestros = snapshot.val() || {};
+      pintarInventarioMaestro();
+    },function(error){
+      console.error("Error al cargar el inventario maestro:",error);
+      const lista = contenido.querySelector("#listaInventarioMaestro");
+      if(lista) lista.innerHTML = "<p>No se pudo cargar el inventario. Revisa la conexión.</p>";
+    });
+  } else {
+    pintarInventarioMaestro();
+  }
+}
+
+function pintarInventarioMaestro(){
+  const lista = contenido.querySelector("#listaInventarioMaestro");
+  if(!lista) return;
+
+  const filtro = busquedaMaestra.trim().toLocaleLowerCase("es");
+
+  const entradas = Object.entries(productosMaestros).filter(function(par){
+    const codigo = par[0];
+    const p = par[1] || {};
+    const texto = [codigo,p.product,p.brand,p.content].join(" ").toLocaleLowerCase("es");
+
+    if(filtro && !texto.includes(filtro)) return false;
+    if(filtroImagenMaestra === "con" && !p.image) return false;
+    if(filtroImagenMaestra === "sin" && p.image) return false;
+    return true;
+  }).sort(function(a,b){
+    return String(a[1]?.product || "").localeCompare(String(b[1]?.product || ""),"es");
+  });
+
+  contenido.querySelector("#contadorMaestro").textContent =
+    entradas.length + (entradas.length === 1 ? " producto" : " productos");
+
+  contenido.querySelectorAll("[data-vista-maestra]").forEach(function(b){
+    b.style.background = b.dataset.vistaMaestra === vistaMaestra ? "#ead7f5" : "#fff";
+    b.style.border = "1px solid #e4c8df";
+    b.style.borderRadius = "9px";
+    b.style.padding = "10px 13px";
+    b.style.cursor = "pointer";
+  });
+
+  if(!entradas.length){
+    lista.innerHTML = '<p>No se encontraron productos.</p>';
+    return;
+  }
+
+  if(vistaMaestra === "listado"){
+    lista.style.display = "block";
+    lista.innerHTML = `
+      <div style="overflow-x:auto;background:white;border-radius:12px;">
+        <table style="width:100%;border-collapse:collapse;text-align:left;">
+          <thead><tr>
+            <th style="padding:12px;">Producto</th>
+            <th style="padding:12px;">Código</th>
+            <th style="padding:12px;">Marca</th>
+            <th style="padding:12px;">Precio</th>
+            <th style="padding:12px;">Acción</th>
+          </tr></thead>
+          <tbody>${entradas.map(function([codigo,p]){
+            return `<tr style="border-top:1px solid #f0e0ed;">
+              <td style="padding:12px;">${escaparMaestro(p.product || "Sin nombre")}</td>
+              <td style="padding:12px;">${escaparMaestro(codigo)}</td>
+              <td style="padding:12px;">${escaparMaestro(p.brand || "—")}</td>
+              <td style="padding:12px;">$${Number(p.price || 0).toLocaleString("es-CL")}</td>
+              <td style="padding:12px;"><button type="button" data-editar-maestro="${escaparMaestro(codigo)}">✏️ Editar</button></td>
+            </tr>`;
+          }).join("")}</tbody>
+        </table>
+      </div>`;
+    return;
+  }
+
+  lista.style.display = "grid";
+  lista.style.gridTemplateColumns = vistaMaestra === "detalles"
+    ? "1fr" : "repeat(auto-fill,minmax(210px,1fr))";
+
+  lista.innerHTML = entradas.map(function([codigo,p]){
+    const imagen = p.image
+      ? `<img src="${escaparMaestro(p.image)}" alt="" style="width:100%;height:145px;object-fit:contain;background:white;border-radius:10px;">`
+      : `<div style="height:145px;display:grid;place-items:center;background:#f8edf6;border-radius:10px;font-size:44px;">📦</div>`;
+
+    return `<article style="display:grid;grid-template-columns:${vistaMaestra === "detalles" ? "150px minmax(0,1fr)" : "1fr"};gap:12px;padding:14px;background:white;border:1px solid #efd5e5;border-radius:14px;min-width:0;">
+      ${imagen}
+      <div style="min-width:0;overflow-wrap:anywhere;">
+        <h3 style="margin:4px 0 8px;">${escaparMaestro(p.product || "Sin nombre")}</h3>
+        <p style="margin:4px 0;">Marca: ${escaparMaestro(p.brand || "—")}</p>
+        <p style="margin:4px 0;">Contenido: ${escaparMaestro(p.content || "—")}</p>
+        <p style="margin:4px 0;">Código: ${escaparMaestro(codigo)}</p>
+        <p style="font-size:20px;font-weight:800;margin:10px 0;">$${Number(p.price || 0).toLocaleString("es-CL")}</p>
+        <button type="button" data-editar-maestro="${escaparMaestro(codigo)}" style="padding:10px 14px;border:0;border-radius:9px;background:#ead7f5;color:#65445a;font-weight:700;cursor:pointer;">✏️ Editar producto</button>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+function editarProductoMaestro(codigo){
+  const producto = productosMaestros[codigo];
+  if(!producto) return;
+
+  const nombre = prompt("Nombre del producto:",producto.product || "");
+  if(nombre === null) return;
+
+  const marca = prompt("Marca:",producto.brand || "");
+  if(marca === null) return;
+
+  const contenidoProducto = prompt("Contenido o formato:",producto.content || "");
+  if(contenidoProducto === null) return;
+
+  const precioTexto = prompt("Precio en pesos, solo números:",String(producto.price ?? 0));
+  if(precioTexto === null) return;
+
+  const precio = Number(precioTexto.trim());
+  if(!Number.isFinite(precio) || precio < 0){
+    alert("Ingresa un precio válido, sin puntos ni símbolos.");
+    return;
+  }
+
+  const imagen = prompt("URL de la imagen (deja vacío si no tiene):",producto.image || "");
+  if(imagen === null) return;
+
+  if(!confirm("¿Guardar los cambios de " + nombre.trim() + "? Se actualizará el inventario compartido.")) return;
+
+  const actualizado = {
+    ...producto,
+    product: nombre.trim(),
+    brand: marca.trim(),
+    content: contenidoProducto.trim(),
+    price: precio,
+    image: imagen.trim()
+  };
+
+  database.ref("productos/" + codigo).update(actualizado)
+    .then(function(){
+      alert("Producto actualizado correctamente.");
+    })
+    .catch(function(error){
+      console.error(error);
+      alert("No se pudo guardar el producto. Revisa la conexión e inténtalo nuevamente.");
+    });
+}
+
+function conectarBotonInventario(){
+  const b = contenido.querySelector("#abrirInventarioMaestro");
+  if(b) b.addEventListener("click",abrirInventarioMaestro);
+}
+
+conectarBoton();
+conectarBotonInventario();
 
   boton.addEventListener("click", function(){
     if(!contenido.querySelector("#abrirRuletaRoles")){
