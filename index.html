@@ -6359,13 +6359,20 @@ onclick="
   
   <div id="tarjetaMisionCliente"
     style="position:relative;top:auto;z-index:2;width:calc(100% - 32px);max-width:1000px;box-sizing:border-box;margin:0 auto 18px;padding:16px 20px;background:#fff;border:1px solid #e5c9f0;border-radius:16px;box-shadow:0 4px 14px rgba(70,40,80,.10);">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+    
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
       <span style="font-size:24px;">🗺️</span>
       <strong style="font-size:18px;color:#65445a;">TU MISIÓN</strong>
+      <button id="escucharMisionCliente" type="button" onclick="leerMisionCliente()"
+        style="margin-left:auto;width:auto;min-height:0;padding:7px 12px;border:1px solid #d9c3ee;border-radius:20px;background:#f3e8fa;color:#65445a;font-size:13px;font-weight:700;cursor:pointer;">
+        🔊 Escuchar misión
+      </button>
       <button id="alternarMisionCliente" type="button"
-        style="margin-left:auto;width:auto;min-height:0;padding:6px 10px;border:1px solid #e8c8df;border-radius:20px;background:#fff8fc;color:#65445a;font-size:12px;cursor:pointer;">
+        style="width:auto;min-height:0;padding:7px 12px;border:1px solid #e8c8df;border-radius:20px;background:#fff8fc;color:#65445a;font-size:12px;cursor:pointer;">
         Contraer
       </button>
+    </div>
+
     </div>
     <div id="contenidoMisionCliente">
       <p style="margin:0;color:#876d91;">Buscando tu misión...</p>
@@ -8511,6 +8518,47 @@ function abrirVenta(){
 
   registrarPantalla("saleScreen");
 
+}
+
+function leerMisionCliente(){
+  const contenido = document.getElementById("contenidoMisionCliente");
+  const boton = document.getElementById("escucharMisionCliente");
+
+  if(!contenido || !("speechSynthesis" in window)){
+    alert("La lectura de audio no está disponible en este dispositivo.");
+    return;
+  }
+
+  if(window.speechSynthesis.speaking){
+    window.speechSynthesis.cancel();
+    boton.textContent = "🔊 Escuchar misión";
+    return;
+  }
+
+  const titulo = contenido.querySelector("h3");
+  const descripcion = contenido.querySelector("p");
+
+  if(!titulo || !descripcion || titulo.textContent === "Buscando tu misión..."){
+    alert("Todavía no hay una misión disponible para escuchar.");
+    return;
+  }
+
+  const texto = titulo.textContent + ". " + descripcion.textContent;
+  const lectura = new SpeechSynthesisUtterance(texto);
+  lectura.lang = "es-CL";
+  lectura.rate = 0.9;
+
+  lectura.onend = function(){
+    boton.textContent = "🔊 Escuchar misión";
+  };
+
+  lectura.onerror = function(){
+    boton.textContent = "🔊 Escuchar misión";
+  };
+
+  boton.textContent = "⏹ Detener audio";
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(lectura);
 }
 
 
