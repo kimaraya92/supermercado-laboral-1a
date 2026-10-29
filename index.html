@@ -15036,13 +15036,71 @@ function editarProductoMaestro(codigo){
     });
 }
 
+
 function conectarBotonInventario(){
   const b = contenido.querySelector("#abrirInventarioMaestro");
   if(b) b.addEventListener("click",abrirInventarioMaestro);
 }
 
+function abrirMisiones(){
+  contenido.innerHTML = `
+    <section style="min-height:100vh;padding:24px;box-sizing:border-box;background:#fff8fc;color:#65445a;font-family:inherit;">
+
+      <button id="volverMisiones" type="button"
+        style="padding:10px 16px;border:1px solid #e8c8df;border-radius:10px;background:white;color:#65445a;cursor:pointer;">
+        ← Volver al supermercado
+      </button>
+
+      <header style="display:flex;align-items:center;gap:14px;margin:24px 0 20px;">
+        <div style="width:52px;height:52px;display:grid;place-items:center;background:#ead7f5;border-radius:14px;font-size:28px;">
+          🗺️
+        </div>
+        <div>
+          <h1 style="margin:0 0 5px;font-size:clamp(24px,3vw,32px);">Gestión de misiones</h1>
+          <p style="margin:0;color:#876d91;">Crea, organiza y publica desafíos para los estudiantes.</p>
+        </div>
+      </header>
+
+      <button id="crearMision" type="button"
+        style="width:100%;max-width:260px;padding:15px 20px;border:1px solid #efd5e5;border-radius:14px;background:#fff;color:#65445a;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px #dca4ca18;">
+        ＋ Crear misión
+      </button>
+
+      <section style="margin-top:28px;">
+        <h2 style="margin:0 0 16px;font-size:21px;">Listado de misiones</h2>
+
+        <div id="listaMisiones" style="display:grid;gap:14px;">
+          <div style="padding:28px 18px;border:1px dashed #e5c9df;border-radius:16px;background:#fff;text-align:center;">
+            <div style="font-size:32px;margin-bottom:8px;">📋</div>
+            <p style="margin:0 0 5px;font-weight:800;">Todavía no hay misiones</p>
+            <p style="margin:0;color:#876d91;font-size:14px;">Cuando crees y guardes una misión, aparecerá aquí.</p>
+          </div>
+        </div>
+      </section>
+    </section>
+  `;
+
+  contenido.querySelector("#volverMisiones").addEventListener("click",function(){
+    contenido.innerHTML = menuOriginal;
+    conectarBoton();
+    conectarBotonInventario();
+    conectarBotonMisiones();
+  });
+
+  contenido.querySelector("#crearMision").addEventListener("click",function(){
+    alert("En el siguiente paso agregaremos el formulario para crear y guardar misiones.");
+  });
+}
+
+function conectarBotonMisiones(){
+  const b = contenido.querySelector("#abrirMisiones");
+  if(b) b.addEventListener("click",abrirMisiones);
+}
+
 conectarBoton();
 conectarBotonInventario();
+conectarBotonMisiones();
+
 
   
 boton.addEventListener("click", function(){
