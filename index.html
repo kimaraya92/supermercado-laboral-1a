@@ -6346,6 +6346,21 @@ onclick="
   </div>
 
 
+  <div id="tarjetaMisionCliente"
+    style="position:sticky;top:8px;z-index:20;margin:0 0 18px;padding:16px 20px;background:#fff;border:2px solid #e5c9f0;border-radius:16px;box-shadow:0 4px 14px rgba(70,40,80,.15);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <span style="font-size:24px;">🗺️</span>
+      <strong style="font-size:18px;color:#65445a;">TU MISIÓN</strong>
+      <button id="alternarMisionCliente" type="button"
+        style="margin-left:auto;width:auto;min-height:0;padding:6px 10px;border:1px solid #e8c8df;border-radius:20px;background:#fff8fc;color:#65445a;font-size:12px;cursor:pointer;">
+        Contraer
+      </button>
+    </div>
+    <div id="contenidoMisionCliente">
+      <p style="margin:0;color:#876d91;">Buscando tu misión...</p>
+    </div>
+  </div>
+
   <div class="card">
 
     <h3>
@@ -8487,8 +8502,66 @@ function abrirVenta(){
 
 }
 
-function abrirListaCompras(){
 
+function cargarMisionCliente(){
+  const tarjeta = document.getElementById("tarjetaMisionCliente");
+  const contenidoMision = document.getElementById("contenidoMisionCliente");
+  const botonContraer = document.getElementById("alternarMisionCliente");
+
+  if(!tarjeta || !contenidoMision) return;
+
+  contenidoMision.innerHTML = "<p style='margin:0;color:#876d91;'>Buscando tu misión...</p>";
+
+  if(botonContraer){
+    botonContraer.onclick = function(){
+      const contraida = contenidoMision.style.display === "none";
+      contenidoMision.style.display = contraida ? "block" : "none";
+      botonContraer.textContent = contraida ? "Contraer" : "Mostrar";
+    };
+  }
+
+  database.ref("misiones").once("value")
+    .then(function(snapshot){
+      const registros = snapshot.val() || {};
+
+      const publicadas = Object.entries(registros)
+        .map(function([id, m]){ return {...m, id}; })
+        .filter(function(m){
+          return m.rol === "CLIENTE" && m.estado === "enviada";
+        })
+        .sort(function(a,b){
+          return String(b.enviadaEn || b.creadoEn || "")
+            .localeCompare(String(a.enviadaEn || a.creadoEn || ""));
+        });
+
+      if(!publicadas.length){
+        contenidoMision.innerHTML =
+          "<p style='margin:0;color:#876d91;'>Por ahora no tienes una misión asignada. Espera las indicaciones de tu profesora.</p>";
+        return;
+      }
+
+      const m = publicadas[0];
+
+      function escaparTexto(texto){
+        return String(texto ?? "").replace(/[&<>"']/g,function(c){
+          return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+        });
+      }
+
+      contenidoMision.innerHTML = `
+        <h3 style="margin:0 0 8px;color:#65445a;font-size:19px;">${escaparTexto(m.nombre)}</h3>
+        <p style="margin:0;color:#382d3b;line-height:1.5;white-space:pre-wrap;">${escaparTexto(m.descripcion)}</p>
+        ${m.fecha ? `<p style="margin:8px 0 0;color:#876d91;font-size:12px;">Fecha: ${escaparTexto(m.fecha)}</p>` : ""}
+      `;
+    })
+    .catch(function(error){
+      console.error("Error al cargar la misión del cliente:", error);
+      contenidoMision.innerHTML =
+        "<p style='margin:0;color:#a33;'>No se pudo cargar la misión. Avisa a tu profesora.</p>";
+    });
+}
+
+function abrirListaCompras(){
   hideAllScreens();
 
   document
@@ -8496,9 +8569,10 @@ function abrirListaCompras(){
     .classList
     .remove("hidden");
 
+  cargarMisionCliente();
   registrarPantalla("shoppingListScreen");
-
 }
+
   function abrirConsejosCompra(){
 
   document
