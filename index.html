@@ -15154,14 +15154,17 @@ function abrirMisiones(){
 
           <p style="margin:0 0 16px;white-space:pre-wrap;line-height:1.5;">${escaparMision(m.descripcion)}</p>
 
-          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
             ${estado === "borrador" ? `
-              <button type="button" data-editar-mision="${m.id}" style="flex:1;min-width:110px;padding:10px 14px;border:1px solid #e8c8df;border-radius:9px;background:white;color:#65445a;font-weight:700;cursor:pointer;">Editar</button>
-              <button type="button" data-enviar-mision="${m.id}" style="flex:1;min-width:140px;padding:10px 14px;border:1px solid #65445a;border-radius:9px;background:#65445a;color:white;font-weight:700;cursor:pointer;">Enviar misión</button>
-              <button type="button" data-eliminar-mision="${m.id}" style="padding:10px 14px;border:1px solid #e7b8b8;border-radius:9px;background:white;color:#a33;font-weight:700;cursor:pointer;">Eliminar</button>
+              <button type="button" data-editar-mision="${m.id}" style="width:auto;min-height:0;padding:7px 14px;border:1px solid #e8c8df;border-radius:20px;background:#fff;color:#65445a;font-size:13px;font-weight:700;cursor:pointer;">✏️ Editar</button>
+              <button type="button" data-enviar-mision="${m.id}" style="width:auto;min-height:0;padding:7px 14px;border:1px solid #65445a;border-radius:20px;background:#65445a;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">↗ Enviar misión</button>
+              <button type="button" data-eliminar-mision="${m.id}" style="width:auto;min-height:0;padding:7px 14px;border:1px solid #edc5c5;border-radius:20px;background:#fff7f7;color:#a33;font-size:13px;font-weight:700;cursor:pointer;">🗑 Eliminar</button>
             ` : `
-              <button type="button" data-eliminar-mision="${m.id}" style="padding:10px 14px;border:1px solid #e7b8b8;border-radius:9px;background:white;color:#a33;font-weight:700;cursor:pointer;">Eliminar</button>
+              <button type="button" data-eliminar-mision="${m.id}" style="width:auto;min-height:0;padding:7px 14px;border:1px solid #edc5c5;border-radius:20px;background:#fff7f7;color:#a33;font-size:13px;font-weight:700;cursor:pointer;">🗑 Eliminar</button>
             `}
+          </div>
+
           </div>
         </article>`;
     }).join("");
