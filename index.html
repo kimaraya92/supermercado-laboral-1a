@@ -15174,34 +15174,60 @@ function abrirMisiones(){
     idEditando = null;
   });
 
-  form.addEventListener("submit",function(e){
+  
+  form.addEventListener("submit", async function(e){
     e.preventDefault();
 
     const datos = {
-      id: idEditando || (Date.now().toString() + Math.random().toString(36).slice(2,7)),
       rol: contenido.querySelector("#rolMision").value,
       fecha: contenido.querySelector("#fechaMision").value,
       nombre: contenido.querySelector("#nombreMision").value.trim(),
       descripcion: contenido.querySelector("#descripcionMision").value.trim(),
-      estado: "borrador"
+      estado: "borrador",
+      actualizadoEn: new Date().toISOString()
     };
 
     if(!datos.nombre || !datos.descripcion) return;
 
-    if(idEditando){
-      const indice = misionesLocales.findIndex(m => m.id === idEditando);
-      if(indice >= 0) misionesLocales[indice] = {...misionesLocales[indice],...datos};
-      mensaje.textContent = "Borrador actualizado en esta sesión.";
-    } else {
-      misionesLocales.unshift(datos);
-      mensaje.textContent = "Misión guardada como borrador en esta sesión.";
-    }
+    const botonGuardar = form.querySelector('button[type="submit"]');
+    botonGuardar.disabled = true;
+    botonGuardar.textContent = "Guardando...";
 
-    formulario.style.display = "none";
-    form.reset();
-    idEditando = null;
-    renderizarMisiones();
+    try {
+      if(idEditando){
+        await database.ref("misiones/" + idEditando).update(datos);
+        mensaje.textContent = "Borrador actualizado correctamente.";
+      } else {
+        const nuevaMision = database.ref("misiones").push();
+        await nuevaMision.set({
+          ...datos,
+          creadoEn: new Date().toISOString()
+        });
+        mensaje.textContent = "Misión guardada como borrador.";
+      }
+
+      formulario.style.display = "none";
+      form.reset();
+      idEditando = null;
+
+      const snapshot = await database.ref("misiones").once("value");
+      const registros = snapshot.val() || {};
+
+      misionesLocales = Object.entries(registros).map(function([id, m]){
+        return {...m, id};
+      }).reverse();
+
+      renderizarMisiones();
+
+    } catch(error) {
+      console.error("Error al guardar la misión:", error);
+      mensaje.textContent = "No se pudo guardar. Revisa la conexión e inténtalo nuevamente.";
+    } finally {
+      botonGuardar.disabled = false;
+      botonGuardar.textContent = "Guardar como borrador";
+    }
   });
+
 
   contenido.querySelector("#volverMisiones").addEventListener("click",function(){
     contenido.innerHTML = menuOriginal;
