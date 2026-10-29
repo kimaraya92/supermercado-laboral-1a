@@ -15042,43 +15042,166 @@ function conectarBotonInventario(){
   if(b) b.addEventListener("click",abrirInventarioMaestro);
 }
 
+
+let misionesLocales = [];
+
 function abrirMisiones(){
   contenido.innerHTML = `
     <section style="min-height:100vh;padding:24px;box-sizing:border-box;background:#fff8fc;color:#65445a;font-family:inherit;">
-
-      <button id="volverMisiones" type="button"
-        style="padding:10px 16px;border:1px solid #e8c8df;border-radius:10px;background:white;color:#65445a;cursor:pointer;">
+      <button id="volverMisiones" type="button" style="padding:10px 16px;border:1px solid #e8c8df;border-radius:10px;background:white;color:#65445a;cursor:pointer;">
         ← Volver al supermercado
       </button>
 
       <header style="display:flex;align-items:center;gap:14px;margin:24px 0 20px;">
-        <div style="width:52px;height:52px;display:grid;place-items:center;background:#ead7f5;border-radius:14px;font-size:28px;">
-          🗺️
-        </div>
+        <div style="width:52px;height:52px;display:grid;place-items:center;background:#ead7f5;border-radius:14px;font-size:28px;">🗺️</div>
         <div>
           <h1 style="margin:0 0 5px;font-size:clamp(24px,3vw,32px);">Gestión de misiones</h1>
           <p style="margin:0;color:#876d91;">Crea, organiza y publica desafíos para los estudiantes.</p>
         </div>
       </header>
 
-      <button id="crearMision" type="button"
-        style="width:100%;max-width:260px;padding:15px 20px;border:1px solid #efd5e5;border-radius:14px;background:#fff;color:#65445a;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px #dca4ca18;">
+      <button id="crearMision" type="button" style="width:100%;max-width:260px;padding:15px 20px;border:1px solid #efd5e5;border-radius:14px;background:#fff;color:#65445a;font-size:16px;font-weight:800;cursor:pointer;">
         ＋ Crear misión
       </button>
 
+      <section id="formularioMision" style="display:none;margin-top:20px;padding:22px;background:white;border:1px solid #efd5e5;border-radius:18px;box-shadow:0 3px 12px #dca4ca12;">
+        <h2 id="tituloFormularioMision" style="margin:0 0 20px;font-size:22px;">Crear misión</h2>
+
+        <form id="formMision" style="display:grid;gap:16px;">
+          <div>
+            <label for="rolMision" style="display:block;font-weight:700;margin-bottom:7px;">Rol destinatario</label>
+            <select id="rolMision" required style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #e4c8df;border-radius:10px;background:white;color:#65445a;font-size:16px;">
+              <option value="CLIENTE">Cliente</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="fechaMision" style="display:block;font-weight:700;margin-bottom:7px;">Fecha de la misión (opcional)</label>
+            <input id="fechaMision" type="date" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #e4c8df;border-radius:10px;font-size:16px;">
+          </div>
+
+          <div>
+            <label for="nombreMision" style="display:block;font-weight:700;margin-bottom:7px;">Nombre de la misión</label>
+            <input id="nombreMision" type="text" maxlength="100" required placeholder="Ej. Una once especial" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #e4c8df;border-radius:10px;font-size:16px;">
+          </div>
+
+          <div>
+            <label for="descripcionMision" style="display:block;font-weight:700;margin-bottom:7px;">Descripción de la misión</label>
+            <textarea id="descripcionMision" required rows="5" placeholder="Escribe la situación que debe resolver el estudiante..." style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #e4c8df;border-radius:10px;font:inherit;resize:vertical;"></textarea>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;">
+            <button id="cancelarMision" type="button" style="padding:12px 18px;border:1px solid #e8c8df;border-radius:10px;background:white;color:#65445a;font-weight:700;cursor:pointer;">Cancelar</button>
+            <button type="submit" style="padding:12px 18px;border:1px solid #d9c0e8;border-radius:10px;background:#ead7f5;color:#65445a;font-weight:800;cursor:pointer;">Guardar como borrador</button>
+          </div>
+        </form>
+      </section>
+
       <section style="margin-top:28px;">
         <h2 style="margin:0 0 16px;font-size:21px;">Listado de misiones</h2>
-
-        <div id="listaMisiones" style="display:grid;gap:14px;">
-          <div style="padding:28px 18px;border:1px dashed #e5c9df;border-radius:16px;background:#fff;text-align:center;">
-            <div style="font-size:32px;margin-bottom:8px;">📋</div>
-            <p style="margin:0 0 5px;font-weight:800;">Todavía no hay misiones</p>
-            <p style="margin:0;color:#876d91;font-size:14px;">Cuando crees y guardes una misión, aparecerá aquí.</p>
-          </div>
-        </div>
+        <div id="listaMisiones" style="display:grid;gap:14px;"></div>
       </section>
+      <p id="mensajeMisiones" role="status" style="color:#65445a;margin-top:12px;"></p>
     </section>
   `;
+
+  const formulario = contenido.querySelector("#formularioMision");
+  const form = contenido.querySelector("#formMision");
+  const lista = contenido.querySelector("#listaMisiones");
+  const mensaje = contenido.querySelector("#mensajeMisiones");
+  let idEditando = null;
+
+  function escaparMision(valor){
+    return String(valor ?? "").replace(/[&<>"']/g,function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  function renderizarMisiones(){
+    if(!misionesLocales.length){
+      lista.innerHTML = `
+        <div style="padding:28px 18px;border:1px dashed #e5c9df;border-radius:16px;background:white;text-align:center;">
+          <div style="font-size:32px;margin-bottom:8px;">📋</div>
+          <p style="margin:0 0 5px;font-weight:800;">Todavía no hay misiones</p>
+          <p style="margin:0;color:#876d91;font-size:14px;">Crea una misión y guárdala como borrador.</p>
+        </div>`;
+      return;
+    }
+
+    lista.innerHTML = misionesLocales.map(function(m){
+      return `
+        <article style="padding:18px;background:white;border:1px solid #efd5e5;border-radius:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:180px;">
+              <h3 style="margin:0 0 7px;font-size:18px;">${escaparMision(m.nombre)}</h3>
+              <p style="margin:0 0 10px;color:#876d91;font-size:13px;">Rol: ${escaparMision(m.rol)} · Fecha: ${m.fecha ? escaparMision(m.fecha) : "Sin fecha asignada"}</p>
+            </div>
+            <span style="padding:6px 10px;border-radius:20px;background:#eee5f5;color:#65445a;font-size:12px;font-weight:800;">Borrador</span>
+          </div>
+          <p style="margin:0 0 16px;white-space:pre-wrap;line-height:1.5;">${escaparMision(m.descripcion)}</p>
+          <button type="button" data-editar-mision="${m.id}" style="padding:9px 14px;border:1px solid #e8c8df;border-radius:9px;background:white;color:#65445a;font-weight:700;cursor:pointer;">Editar</button>
+        </article>`;
+    }).join("");
+
+    lista.querySelectorAll("[data-editar-mision]").forEach(function(b){
+      b.addEventListener("click",function(){
+        const m = misionesLocales.find(x => x.id === b.dataset.editarMision);
+        if(!m) return;
+        idEditando = m.id;
+        contenido.querySelector("#tituloFormularioMision").textContent = "Editar misión";
+        contenido.querySelector("#rolMision").value = m.rol;
+        contenido.querySelector("#fechaMision").value = m.fecha;
+        contenido.querySelector("#nombreMision").value = m.nombre;
+        contenido.querySelector("#descripcionMision").value = m.descripcion;
+        formulario.style.display = "block";
+        formulario.scrollIntoView({behavior:"smooth",block:"start"});
+      });
+    });
+  }
+
+  contenido.querySelector("#crearMision").addEventListener("click",function(){
+    idEditando = null;
+    form.reset();
+    contenido.querySelector("#tituloFormularioMision").textContent = "Crear misión";
+    formulario.style.display = "block";
+    mensaje.textContent = "";
+    formulario.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+
+  contenido.querySelector("#cancelarMision").addEventListener("click",function(){
+    formulario.style.display = "none";
+    form.reset();
+    idEditando = null;
+  });
+
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+
+    const datos = {
+      id: idEditando || (Date.now().toString() + Math.random().toString(36).slice(2,7)),
+      rol: contenido.querySelector("#rolMision").value,
+      fecha: contenido.querySelector("#fechaMision").value,
+      nombre: contenido.querySelector("#nombreMision").value.trim(),
+      descripcion: contenido.querySelector("#descripcionMision").value.trim(),
+      estado: "borrador"
+    };
+
+    if(!datos.nombre || !datos.descripcion) return;
+
+    if(idEditando){
+      const indice = misionesLocales.findIndex(m => m.id === idEditando);
+      if(indice >= 0) misionesLocales[indice] = {...misionesLocales[indice],...datos};
+      mensaje.textContent = "Borrador actualizado en esta sesión.";
+    } else {
+      misionesLocales.unshift(datos);
+      mensaje.textContent = "Misión guardada como borrador en esta sesión.";
+    }
+
+    formulario.style.display = "none";
+    form.reset();
+    idEditando = null;
+    renderizarMisiones();
+  });
 
   contenido.querySelector("#volverMisiones").addEventListener("click",function(){
     contenido.innerHTML = menuOriginal;
@@ -15087,9 +15210,7 @@ function abrirMisiones(){
     conectarBotonMisiones();
   });
 
-  contenido.querySelector("#crearMision").addEventListener("click",function(){
-    alert("En el siguiente paso agregaremos el formulario para crear y guardar misiones.");
-  });
+  renderizarMisiones();
 }
 
 function conectarBotonMisiones(){
