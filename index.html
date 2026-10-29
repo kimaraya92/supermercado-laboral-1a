@@ -6283,24 +6283,25 @@ onclick="
       oninput="renderCatalog()"
     >
 
-<div id="catalogViewControls" style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:16px 0;">
-  <span style="font-weight:800;color:#65445a;">Vista:</span>
+
+<div id="catalogViewControls" style="display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0 16px;">
+  <span style="font-weight:800;color:#65445a;font-size:14px;margin-right:3px;">Vista:</span>
 
   <button type="button" data-catalog-view="miniaturas"
     onclick="cambiarVistaCatalogo('miniaturas')"
-    style="padding:10px 14px;border:1px solid #e4c8df;border-radius:10px;background:#ead7f5;cursor:pointer;">
+    style="width:auto;min-height:0;padding:8px 13px;border:1px solid #d9b8e8;border-radius:9px;background:#ead7f5;color:#65445a;font-size:14px;font-weight:800;cursor:pointer;">
     ▦ Miniaturas
   </button>
 
   <button type="button" data-catalog-view="listado"
     onclick="cambiarVistaCatalogo('listado')"
-    style="padding:10px 14px;border:1px solid #e4c8df;border-radius:10px;background:white;cursor:pointer;">
+    style="width:auto;min-height:0;padding:8px 13px;border:1px solid #ead7e5;border-radius:9px;background:white;color:#65445a;font-size:14px;cursor:pointer;">
     ☷ Listado
   </button>
 
   <button type="button" data-catalog-view="detalles"
     onclick="cambiarVistaCatalogo('detalles')"
-    style="padding:10px 14px;border:1px solid #e4c8df;border-radius:10px;background:white;cursor:pointer;">
+    style="width:auto;min-height:0;padding:8px 13px;border:1px solid #ead7e5;border-radius:9px;background:white;color:#65445a;font-size:14px;cursor:pointer;">
     ☰ Detalles
   </button>
 </div>
