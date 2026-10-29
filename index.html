@@ -15171,13 +15171,14 @@ function conectarBotonInventario(){
 conectarBoton();
 conectarBotonInventario();
 
-  boton.addEventListener("click", function(){
-    if(!contenido.querySelector("#abrirRuletaRoles")){
-      contenido.innerHTML = menuOriginal;
-      conectarBoton();
-    }
- 
-  });
+  
+boton.addEventListener("click", function(){
+  if(!contenido.querySelector("#abrirRuletaRoles")){
+    contenido.innerHTML = menuOriginal;
+    conectarBoton();
+    conectarBotonInventario();
+  }
+});
 }
 })();
 </script>
