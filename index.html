@@ -640,12 +640,26 @@ transform:translateY(-50%);
   background-position:center center;
   background-attachment:fixed;
 }
-  .shopping-list-screen > .screen-title,
-.shopping-list-screen > .card{
-  width:100%;
+  
+.shopping-list-screen > .screen-title,
+.shopping-list-screen > .card,
+.shopping-list-screen > #tarjetaMisionCliente{
+  width:calc(100% - 32px);
   max-width:1000px;
+  box-sizing:border-box;
   margin-left:auto;
   margin-right:auto;
+}
+
+.shopping-list-screen > #tarjetaMisionCliente{
+  position:relative;
+  top:auto;
+  z-index:2;
+  margin-top:0;
+  margin-bottom:18px;
+  border:1px solid #e5c9f0;
+  box-shadow:0 4px 14px rgba(70,40,80,.10);
+}
 }
 
 .shopping-list-screen > .back{
