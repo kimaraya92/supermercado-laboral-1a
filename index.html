@@ -11520,288 +11520,119 @@ function eliminarImagenProducto(){
 ========================================= */
 
 
-function renderCatalog(){
 
-  const search =
-    document
-      .getElementById(
-        "catalogSearch"
-      )
-      .value
-      .trim()
-      .toLowerCase();
+let catalogViewMode = "miniaturas";
 
+function cambiarVistaCatalogo(vista){
+  catalogViewMode = vista;
 
-  const list =
-    document
-      .getElementById(
-        "catalogList"
-      );
+  document.querySelectorAll("[data-catalog-view]").forEach(function(b){
+    const activo = b.dataset.catalogView === vista;
+    b.style.background = activo ? "#ead7f5" : "white";
+    b.style.fontWeight = activo ? "800" : "400";
+  });
 
-
-  const entries =
-    Object
-      .entries(products)
-
-
-      .filter(function(entry){
-
-        const code =
-          entry[0];
-
-
-        const p =
-          entry[1];
-
-
-        return(
-
-          !search ||
-
-          code
-            .toLowerCase()
-            .includes(search) ||
-
-          (p.product || "")
-            .toLowerCase()
-            .includes(search) ||
-
-          (p.brand || "")
-            .toLowerCase()
-            .includes(search)
-
-        );
-
-      })
-
-
-      .sort(function(a,b){
-
-        return(
-
-          (a[1].product || "")
-            .localeCompare(
-              b[1].product || "",
-              "es"
-            )
-
-        );
-
-      });
-
-
-  if(!entries.length){
-
-    list.innerHTML =
-      '<div class="notice">No se encontraron productos.</div>';
-
-    return;
-
-  }
-
-
-  list.innerHTML =
-
-    entries
-      .map(
-        function(entry){
-
-          const code =
-            entry[0];
-
-
-          const p =
-            entry[1];
-
-
-        return `
-
-  <div
-    class="item"
-    style="
-      display:grid;
-      grid-template-columns:270px 1fr 230px;
-      gap:20px;
-      align-items:center;
-      padding:18px;
-    "
-  >
-
-    <!-- IMAGEN -->
-
-    <div
-      style="
-        width:250px;
-        height:190px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        border:1px solid #ddd;
-        border-radius:16px;
-        background:#fff;
-      "
-    >
-
-      ${
-        p.image
-          ? `
-            <img
-              src="${escapeHtml(p.image)}"
-              alt="${escapeHtml(p.product || "Producto")}"
-              style="
-                width:230px;
-                height:175px;
-                object-fit:contain;
-                border-radius:12px;
-              "
-            >
-          `
-          : `
-            <div style="font-size:60px">
-              🖼️
-            </div>
-          `
-      }
-
-    </div>
-
-
-    <!-- INFORMACIÓN -->
-
-    <div>
-
-      <div
-        class="item-title"
-        style="
-          font-size:24px;
-          margin-bottom:8px;
-        "
-      >
-        ${escapeHtml(
-          p.product
-        )}
-      </div>
-
-
-      <div
-        class="item-meta"
-        style="
-          font-size:18px;
-          margin-bottom:12px;
-        "
-      >
-
-        ${escapeHtml(
-          p.brand || ""
-        )}
-
-        ${
-          p.content
-            ? " · " +
-              escapeHtml(
-                p.content
-              )
-            : ""
-        }
-
-      </div>
-
-
-      <div
-        class="item-meta"
-        style="
-          font-size:17px;
-          margin-bottom:18px;
-        "
-      >
-
-        Código:
-        ${escapeHtml(code)}
-
-      </div>
-<div
-  class="row"
-  style="
-    display:flex;
-    gap:12px;
-    margin-top:12px;
-  "
->
-
-  <button
-    onclick="editProduct('${escapeJs(code)}')"
-    style="
-      flex:1;
-      min-height:52px;
-      white-space:nowrap;
-      font-size:17px;
-    "
-  >
-    ✏️ Modificar
-  </button>
-
-
-  <button
-    onclick="deleteProduct('${escapeJs(code)}')"
-    style="
-      flex:1;
-      min-height:52px;
-      white-space:nowrap;
-      font-size:17px;
-    "
-  >
-    🗑️ Eliminar
-  </button>
-
-
-  <button
-    onclick="verCodigoBarras('${escapeJs(code)}')"
-    style="
-      flex:1;
-      min-height:52px;
-      white-space:nowrap;
-      font-size:17px;
-    "
-  >
-    🏷️ VER CÓDIGO
-  </button>
-
-</div>
-
-    </div>
-
-
-    <!-- PRECIO -->
-
-    <div
-      class="item-price"
-      style="
-  font-size:36px;
-  font-weight:800;
-  text-align:center;
-  align-self:start;
-  margin-top:25px;
-  transform:translateX(-65px);
-"
-    >
-
-      ${money(p.price)}
-
-    </div>
-
-  </div>
-
-`;         
-
-        }
-      )
-      .join("");
-
+  renderCatalog();
 }
 
-/* =========================================
-   LISTA DE COMPRAS - BÚSQUEDA
-========================================= */
+function renderCatalog(){
+  const searchInput = document.getElementById("catalogSearch");
+  const list = document.getElementById("catalogList");
+  if(!searchInput || !list) return;
+
+  const search = searchInput.value.trim().toLowerCase();
+
+  const entries = Object.entries(products)
+    .filter(function([code,p]){
+      p = p || {};
+      return !search ||
+        code.toLowerCase().includes(search) ||
+        String(p.product || "").toLowerCase().includes(search) ||
+        String(p.brand || "").toLowerCase().includes(search);
+    })
+    .sort(function(a,b){
+      return String(a[1]?.product || "").localeCompare(
+        String(b[1]?.product || ""), "es"
+      );
+    });
+
+  document.querySelectorAll("[data-catalog-view]").forEach(function(b){
+    const activo = b.dataset.catalogView === catalogViewMode;
+    b.style.background = activo ? "#ead7f5" : "white";
+    b.style.fontWeight = activo ? "800" : "400";
+  });
+
+  if(!entries.length){
+    list.style.display = "block";
+    list.innerHTML = '<div class="notice">No se encontraron productos.</div>';
+    return;
+  }
+
+  if(catalogViewMode === "listado"){
+    list.style.display = "block";
+    list.innerHTML = `
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;background:white;">
+          <thead>
+            <tr style="text-align:left;background:#f8edf6;">
+              <th style="padding:12px;">Producto</th>
+              <th style="padding:12px;">Código</th>
+              <th style="padding:12px;">Marca</th>
+              <th style="padding:12px;">Precio</th>
+              <th style="padding:12px;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${entries.map(function([code,p]){
+              return `
+                <tr style="border-top:1px solid #eadde8;">
+                  <td style="padding:12px;font-weight:700;">${escapeHtml(p.product || "Sin nombre")}</td>
+                  <td style="padding:12px;">${escapeHtml(code)}</td>
+                  <td style="padding:12px;">${escapeHtml(p.brand || "—")}</td>
+                  <td style="padding:12px;font-weight:800;">${money(p.price)}</td>
+                  <td style="padding:12px;">
+                    <button onclick="editProduct('${escapeJs(code)}')">✏️</button>
+                    <button onclick="deleteProduct('${escapeJs(code)}')">🗑️</button>
+                    <button onclick="verCodigoBarras('${escapeJs(code)}')">🏷️</button>
+                  </td>
+                </tr>`;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>`;
+    return;
+  }
+
+  const detalles = catalogViewMode === "detalles";
+  list.style.display = "grid";
+  list.style.gridTemplateColumns = detalles
+    ? "1fr"
+    : "repeat(auto-fill,minmax(220px,1fr))";
+  list.style.gap = "14px";
+
+  list.innerHTML = entries.map(function([code,p]){
+    const imagen = p.image
+      ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.product || "Producto")}" style="width:100%;height:150px;object-fit:contain;background:white;border-radius:10px;">`
+      : `<div style="height:150px;display:grid;place-items:center;background:#f8edf6;border-radius:10px;font-size:42px;">📦</div>`;
+
+    return `
+      <article style="display:grid;grid-template-columns:${detalles ? "180px minmax(0,1fr)" : "1fr"};gap:14px;padding:14px;background:white;border:1px solid #ead7e5;border-radius:14px;min-width:0;">
+        ${imagen}
+        <div style="min-width:0;overflow-wrap:anywhere;">
+          <h3 style="margin:5px 0 8px;">${escapeHtml(p.product || "Sin nombre")}</h3>
+          <p style="margin:5px 0;">${escapeHtml(p.brand || "")}</p>
+          ${p.content ? `<p style="margin:5px 0;">${escapeHtml(p.content)}</p>` : ""}
+          ${detalles ? `<p style="margin:5px 0;">Código: ${escapeHtml(code)}</p>` : ""}
+          <div style="font-size:25px;font-weight:900;margin:12px 0;">${money(p.price)}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:7px;">
+            <button onclick="editProduct('${escapeJs(code)}')">✏️ Modificar</button>
+            <button onclick="deleteProduct('${escapeJs(code)}')">🗑️ Eliminar</button>
+            <button onclick="verCodigoBarras('${escapeJs(code)}')">🏷️ Ver código</button>
+          </div>
+        </div>
+      </article>`;
+  }).join("");
+}
 
 /* =========================================
    LISTA DE COMPRAS - BÚSQUEDA POR VOZ
