@@ -15696,6 +15696,7 @@ function abrirMisiones(){
 
  
   lista.innerHTML = "<p style='color:#876d91;'>Cargando misiones guardadas...</p>";
+  cargarSolicitudesRevision();
 
   database.ref("misiones").once("value")
     .then(function(snapshot){
