@@ -8895,7 +8895,39 @@ function irAlConsejoPago(numero){
     reproducirConsejoPagoActual();
   }
 }
-  function finalizarCompraCliente(){
+  
+function finalizarCompraCliente(){
+
+  const modal = document.getElementById("modalFinalizarMisionCliente");
+
+  // Si existe una misión activa, primero pedir confirmación.
+  if(misionClienteActualId && modal){
+    modal.style.display = "flex";
+    return;
+  }
+
+  // Si no hay misión activa, finalizar la compra normalmente.
+  completarCierreCompraCliente();
+}
+
+function responderFinalizacionMision(confirmada){
+
+  const modal = document.getElementById("modalFinalizarMisionCliente");
+
+  if(modal){
+    modal.style.display = "none";
+  }
+
+  if(confirmada){
+    // En el siguiente paso conectaremos aquí el registro
+    // de la solicitud de revisión para la profesora.
+    console.log("El estudiante confirmó que terminó su misión.");
+  }
+
+  completarCierreCompraCliente();
+}
+
+function completarCierreCompraCliente(){
 
   if("speechSynthesis" in window){
     speechSynthesis.cancel();
@@ -8947,11 +8979,11 @@ function irAlConsejoPago(numero){
   hideAllScreens();
 
   document
-  .getElementById("clientHomeScreen")
-  .classList
-  .remove("hidden");
-
+    .getElementById("clientHomeScreen")
+    .classList
+    .remove("hidden");
 }
+
  function enviarListaAlPaso3(){
 
   if(!shoppingList.length){
