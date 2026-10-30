@@ -15695,8 +15695,8 @@ function abrirMisiones(){
   });
 
  
+  
   lista.innerHTML = "<p style='color:#876d91;'>Cargando misiones guardadas...</p>";
-  cargarSolicitudesRevision();
 
   database.ref("misiones").once("value")
     .then(function(snapshot){
@@ -15707,7 +15707,15 @@ function abrirMisiones(){
       }).reverse();
 
       renderizarMisiones();
+
+      // Cargar solicitudes cuando ya conocemos las misiones.
+      cargarSolicitudesRevision();
     })
+    .catch(function(error){
+      console.error("Error al cargar las misiones:", error);
+      lista.innerHTML = "<p>No se pudieron cargar las misiones. Revisa la conexión.</p>";
+    });
+
     .catch(function(error){
       console.error("Error al cargar las misiones:", error);
       lista.innerHTML = "<p>No se pudieron cargar las misiones. Revisa la conexión.</p>";
