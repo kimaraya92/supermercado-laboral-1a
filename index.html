@@ -8910,7 +8910,8 @@ function finalizarCompraCliente(){
   completarCierreCompraCliente();
 }
 
-function responderFinalizacionMision(confirmada){
+
+async function responderFinalizacionMision(confirmada){
 
   const modal = document.getElementById("modalFinalizarMisionCliente");
 
@@ -8919,9 +8920,55 @@ function responderFinalizacionMision(confirmada){
   }
 
   if(confirmada){
-    // En el siguiente paso conectaremos aquí el registro
-    // de la solicitud de revisión para la profesora.
-    console.log("El estudiante confirmó que terminó su misión.");
+
+    if(!misionClienteActualId){
+      alert("No encontramos una misión activa para registrar.");
+      return;
+    }
+
+    if(!estudianteActual){
+      alert("No pudimos identificar al estudiante. Avisa a tu profesora.");
+      return;
+    }
+
+    try{
+
+      const solicitudRef = database
+        .ref("solicitudesRevisionMisiones/" + misionClienteActualId + "/" + normalizarRut(rutEstudianteActual));
+
+      const existente = await solicitudRef.once("value");
+
+      if(existente.exists()){
+        alert("Tu misión ya fue enviada para revisión.");
+        misionClienteActualId = "";
+        completarCierreCompraCliente();
+        return;
+      }
+
+      await solicitudRef.set({
+        misionId: misionClienteActualId,
+        estudiante: estudianteActual,
+        rut: normalizarRut(rutEstudianteActual),
+        estado: "pendiente_revision",
+        solicitadaEn: new Date().toISOString()
+      });
+
+      alert("¡Muy bien! Tu misión fue enviada a la profesora para su revisión.");
+
+      misionClienteActualId = "";
+
+      const tarjeta = document.getElementById("tarjetaMisionCliente");
+      if(tarjeta){
+        tarjeta.style.display = "none";
+      }
+
+    }catch(error){
+
+      console.error("Error al enviar la misión:", error);
+      alert("No se pudo enviar la misión. Inténtalo nuevamente.");
+
+      return;
+    }
   }
 
   completarCierreCompraCliente();
