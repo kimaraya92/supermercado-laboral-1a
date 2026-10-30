@@ -7411,6 +7411,7 @@ let currentWorker = {
 
 let estudianteActual = "";
 let rutEstudianteActual = "";
+let misionClienteActualId = "";
   
 function normalizarRut(rut){
   return String(rut || "")
@@ -8599,6 +8600,7 @@ function cargarMisionCliente(){
       }
 
       const m = publicadas[0];
+      misionClienteActualId = m.id;
 
       function escaparTexto(texto){
         return String(texto ?? "").replace(/[&<>"']/g,function(c){
