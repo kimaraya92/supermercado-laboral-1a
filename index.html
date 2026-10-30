@@ -15377,6 +15377,118 @@ function abrirMisiones(){
     });
   }
 
+  async function cargarSolicitudesRevision(){
+
+    const contenedor = contenido.querySelector("#solicitudesRevisionMisiones");
+
+    if(!contenedor) return;
+
+    try{
+
+      const snapshot = await database
+        .ref("solicitudesRevisionMisiones")
+        .once("value");
+
+      const registros = snapshot.val() || {};
+      const pendientes = [];
+
+      Object.entries(registros).forEach(function([misionId, estudiantes]){
+
+        Object.entries(estudiantes || {}).forEach(function([rut, solicitud]){
+
+          if(solicitud.estado === "pendiente_revision"){
+            pendientes.push({
+              ...solicitud,
+              misionId,
+              rut
+            });
+          }
+
+        });
+
+      });
+
+      if(!pendientes.length){
+        contenedor.innerHTML = `
+          <p style="margin:0;color:#876d91;">
+            No hay misiones pendientes de revisión.
+          </p>`;
+        return;
+      }
+
+      contenedor.innerHTML = pendientes.map(function(s){
+
+        const mision = misionesLocales.find(function(m){
+          return m.id === s.misionId;
+        });
+
+        return `
+          <article style="padding:16px;border:1px solid #e5c9f0;border-radius:14px;background:#fffaff;">
+            <strong style="font-size:16px;color:#65445a;">
+              ${escaparMision(s.estudiante)}
+            </strong>
+
+            <p style="margin:7px 0;color:#65445a;">
+              Misión: ${escaparMision(mision ? mision.nombre : "Misión")}
+            </p>
+
+            <p style="margin:0 0 12px;color:#876d91;font-size:12px;">
+              Solicitud: ${escaparMision(s.solicitadaEn || "")}
+            </p>
+
+            <button type="button"
+              data-confirmar-solicitud="${escaparMision(s.misionId)}"
+              data-rut-solicitud="${escaparMision(s.rut)}"
+              style="padding:10px 16px;border:0;border-radius:10px;background:#dff2e4;color:#28613a;font-weight:800;cursor:pointer;">
+              ✓ Confirmar como realizada
+            </button>
+          </article>`;
+      }).join("");
+
+      contenedor.querySelectorAll("[data-confirmar-solicitud]").forEach(function(b){
+
+        b.addEventListener("click",async function(){
+
+          if(!confirm("¿Confirmas que este estudiante realizó la misión?")) return;
+
+          b.disabled = true;
+          b.textContent = "Guardando...";
+
+          try{
+
+            const ruta = "solicitudesRevisionMisiones/"
+              + b.dataset.confirmarSolicitud + "/"
+              + b.dataset.rutSolicitud;
+
+            await database.ref(ruta).update({
+              estado: "realizada",
+              confirmadaEn: new Date().toISOString()
+            });
+
+            await cargarSolicitudesRevision();
+
+          }catch(error){
+
+            console.error("Error al confirmar la misión:",error);
+            alert("No se pudo confirmar. Inténtalo nuevamente.");
+
+            b.disabled = false;
+            b.textContent = "✓ Confirmar como realizada";
+          }
+
+        });
+
+      });
+
+    }catch(error){
+
+      console.error("Error al cargar solicitudes:",error);
+
+      contenedor.innerHTML =
+        "<p>No se pudieron cargar las solicitudes.</p>";
+    }
+  }
+
   
   function renderizarMisiones(){
     if(!misionesLocales.length){
