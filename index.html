@@ -8598,13 +8598,16 @@ function leerMisionCliente(){
 }
 
 
-function cargarMisionCliente(){
+
+async function cargarMisionCliente(){
+
   const tarjeta = document.getElementById("tarjetaMisionCliente");
   const contenidoMision = document.getElementById("contenidoMisionCliente");
   const botonContraer = document.getElementById("alternarMisionCliente");
 
   if(!tarjeta || !contenidoMision) return;
 
+  tarjeta.style.display = "block";
   contenidoMision.innerHTML = "<p style='margin:0;color:#876d91;'>Buscando tu misión...</p>";
 
   if(botonContraer){
@@ -8615,46 +8618,79 @@ function cargarMisionCliente(){
     };
   }
 
-  database.ref("misiones").once("value")
-    .then(function(snapshot){
-      const registros = snapshot.val() || {};
+  try{
 
-      const publicadas = Object.entries(registros)
-        .map(function([id, m]){ return {...m, id}; })
-        .filter(function(m){
-          return m.rol === "CLIENTE" && m.estado === "enviada";
-        })
-        .sort(function(a,b){
-          return String(b.enviadaEn || b.creadoEn || "")
-            .localeCompare(String(a.enviadaEn || a.creadoEn || ""));
-        });
+    const rut = normalizarRut(rutEstudianteActual);
 
-      if(!publicadas.length){
-        contenidoMision.innerHTML =
-          "<p style='margin:0;color:#876d91;'>Por ahora no tienes una misión asignada. Espera las indicaciones de tu profesora.</p>";
-        return;
-      }
-
-      const m = publicadas[0];
-      misionClienteActualId = m.id;
-
-      function escaparTexto(texto){
-        return String(texto ?? "").replace(/[&<>"']/g,function(c){
-          return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
-        });
-      }
-
-      contenidoMision.innerHTML = `
-        <h3 style="margin:0 0 8px;color:#65445a;font-size:19px;">${escaparTexto(m.nombre)}</h3>
-        <p style="margin:0;color:#382d3b;line-height:1.5;white-space:pre-wrap;">${escaparTexto(m.descripcion)}</p>
-        ${m.fecha ? `<p style="margin:8px 0 0;color:#876d91;font-size:12px;">Fecha: ${escaparTexto(m.fecha)}</p>` : ""}
-      `;
-    })
-    .catch(function(error){
-      console.error("Error al cargar la misión del cliente:", error);
+    if(!rut){
+      misionClienteActualId = "";
       contenidoMision.innerHTML =
-        "<p style='margin:0;color:#a33;'>No se pudo cargar la misión. Avisa a tu profesora.</p>";
-    });
+        "<p style='margin:0;color:#a33;'>No pudimos identificar al estudiante.</p>";
+      return;
+    }
+
+    const resultados = await Promise.all([
+      database.ref("misiones").once("value"),
+      database.ref("solicitudesRevisionMisiones").once("value")
+    ]);
+
+    const registros = resultados[0].val() || {};
+    const solicitudes = resultados[1].val() || {};
+
+    const publicadas = Object.entries(registros)
+      .map(function([id,m]){ return {...m,id}; })
+      .filter(function(m){
+        return m.rol === "CLIENTE" && m.estado === "enviada";
+      })
+      .sort(function(a,b){
+        return String(b.enviadaEn || b.creadoEn || "")
+          .localeCompare(String(a.enviadaEn || a.creadoEn || ""));
+      });
+
+    if(!publicadas.length){
+      misionClienteActualId = "";
+      contenidoMision.innerHTML =
+        "<p style='margin:0;color:#876d91;'>Por ahora no tienes una misión asignada. Espera las indicaciones de tu profesora.</p>";
+      return;
+    }
+
+    const m = publicadas[0];
+
+    const solicitud = solicitudes[m.id]
+      ? solicitudes[m.id][rut]
+      : null;
+
+    if(solicitud && (
+      solicitud.estado === "pendiente_revision" ||
+      solicitud.estado === "realizada"
+    )){
+      misionClienteActualId = "";
+      contenidoMision.innerHTML =
+        "<p style='margin:0;color:#876d91;'>¡Muy bien! Ya terminaste esta misión. Espera que tu profesora te asigne una nueva.</p>";
+      return;
+    }
+
+    misionClienteActualId = m.id;
+
+    function escaparTexto(texto){
+      return String(texto ?? "").replace(/[&<>"']/g,function(c){
+        return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+      });
+    }
+
+    contenidoMision.innerHTML = `
+      <h3 style="margin:0 0 8px;color:#65445a;font-size:19px;">${escaparTexto(m.nombre)}</h3>
+      <p style="margin:0;color:#382d3b;line-height:1.5;white-space:pre-wrap;">${escaparTexto(m.descripcion)}</p>
+      ${m.fecha ? `<p style="margin:8px 0 0;color:#876d91;font-size:12px;">Fecha: ${escaparTexto(m.fecha)}</p>` : ""}
+    `;
+
+  }catch(error){
+
+    console.error("Error al cargar la misión del cliente:",error);
+
+    contenidoMision.innerHTML =
+      "<p style='margin:0;color:#a33;'>No se pudo cargar la misión. Avisa a tu profesora.</p>";
+  }
 }
 
 function abrirListaCompras(){
