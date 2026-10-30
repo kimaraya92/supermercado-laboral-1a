@@ -15698,6 +15698,7 @@ function abrirMisiones(){
   
   lista.innerHTML = "<p style='color:#876d91;'>Cargando misiones guardadas...</p>";
 
+  
   database.ref("misiones").once("value")
     .then(function(snapshot){
       const registros = snapshot.val() || {};
@@ -15716,10 +15717,6 @@ function abrirMisiones(){
       lista.innerHTML = "<p>No se pudieron cargar las misiones. Revisa la conexión.</p>";
     });
 
-    .catch(function(error){
-      console.error("Error al cargar las misiones:", error);
-      lista.innerHTML = "<p>No se pudieron cargar las misiones. Revisa la conexión.</p>";
-    });
 
 }
 
