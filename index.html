@@ -7619,86 +7619,80 @@ function cargarActividadesPublicadasEstudiante(){
 
   if(!pendientes || !realizadas) return;
 
-  pendientes.textContent = "Cargando actividades publicadas...";
-
   if(typeof database === "undefined"){
     pendientes.textContent = "No se pudo conectar con las actividades.";
     return;
   }
 
   if(actividadesPublicadasEstudianteListener) return;
+
+  const rut = normalizarRut(rutEstudianteActual);
+
+  if(!rut){
+    pendientes.textContent = "No se pudo identificar al estudiante.";
+    return;
+  }
+
+  pendientes.textContent = "Cargando actividades...";
+  realizadas.textContent = "Cargando historial...";
+
   actividadesPublicadasEstudianteListener = true;
 
-  database.ref("actividades/publicadas").on("value", function(snapshot){
+  let actividadesCargadas = false;
+  let entregasCargadas = false;
+  let actividades = [];
+  let entregas = {};
+
+  function normalizarNombre(nombre){
+    return String(nombre || "")
+      .trim()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+  }
+
+  function obtenerGrupo(contenedor, mapa, area){
+
+    if(mapa.has(area)){
+      return mapa.get(area);
+    }
+
+    const desplegable = document.createElement("details");
+    desplegable.className = "digital-notebook-subject";
+
+    if(mapa.size === 0){
+      desplegable.open = true;
+    }
+
+    const encabezado = document.createElement("summary");
+    encabezado.textContent = area;
+    desplegable.appendChild(encabezado);
+
+    const lista = document.createElement("div");
+    lista.className = "digital-notebook-list digital-notebook-subject-list";
+
+    desplegable.appendChild(lista);
+    contenedor.appendChild(desplegable);
+
+    mapa.set(area, lista);
+
+    return lista;
+  }
+
+  function dibujarCuaderno(){
+
+    if(!actividadesCargadas || !entregasCargadas) return;
 
     pendientes.replaceChildren();
     realizadas.replaceChildren();
 
-    const actividadesOrdenadas = [];
-
-    snapshot.forEach(function(docenteSnapshot){
-      docenteSnapshot.forEach(function(actividadSnapshot){
-        const actividad = actividadSnapshot.val();
-
-        if(actividad && typeof actividad === "object"){
-          actividadesOrdenadas.push({
-            id: actividadSnapshot.key,
-            data: actividad
-          });
-        }
-      });
-    });
-
-    // Orden cronológico: más antigua primero.
-    actividadesOrdenadas.sort(function(a, b){
-      const fechaA = Number(a.data.publicadoEn || a.data.creadoEn || 0);
-      const fechaB = Number(b.data.publicadoEn || b.data.creadoEn || 0);
-      return fechaA - fechaB;
-    });
-
-    function normalizarNombreEstudiante(nombre){
-      return String(nombre || "")
-        .trim()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-    }
-
-    const nombreActual = normalizarNombreEstudiante(estudianteActual);
     const gruposPendientes = new Map();
     const gruposRealizadas = new Map();
 
-    function obtenerGrupo(contenedor, mapa, area){
+    let cantidadPendientes = 0;
+    let cantidadRealizadas = 0;
 
-      if(mapa.has(area)){
-        return mapa.get(area);
-      }
-
-      const desplegable = document.createElement("details");
-      desplegable.className = "digital-notebook-subject";
-
-      // El primer grupo queda abierto.
-      if(mapa.size === 0){
-        desplegable.open = true;
-      }
-
-      const encabezado = document.createElement("summary");
-      encabezado.textContent = area;
-      desplegable.appendChild(encabezado);
-
-      const lista = document.createElement("div");
-      lista.className = "digital-notebook-list digital-notebook-subject-list";
-      desplegable.appendChild(lista);
-
-      contenedor.appendChild(desplegable);
-
-      mapa.set(area, lista);
-      return lista;
-    }
-
-    let cantidad = 0;
-
-    actividadesOrdenadas.forEach(function(item){
+    actividades.forEach(function(item){
 
       const actividad = item.data;
 
@@ -7706,20 +7700,27 @@ function cargarActividadesPublicadasEstudiante(){
         ? actividad.estudiantes
         : [];
 
+      const nombreActual = normalizarNombre(estudianteActual);
+
       if(
         destinatarios.length > 0 &&
         !destinatarios.some(function(nombre){
-          return normalizarNombreEstudiante(nombre) === nombreActual;
+          return normalizarNombre(nombre) === nombreActual;
         })
       ){
         return;
       }
 
-      cantidad++;
-
       const area = String(
         actividad.area || "Otras actividades"
       ).trim() || "Otras actividades";
+
+      const entrega = entregas[item.id] || null;
+      const estado = entrega ? entrega.estado : "";
+
+      const estaRealizada =
+        estado === "pendiente_revision" ||
+        estado === "revisada";
 
       const tarjeta = document.createElement("article");
       tarjeta.className = "digital-notebook-card";
@@ -7768,108 +7769,193 @@ function cargarActividadesPublicadasEstudiante(){
         info.appendChild(enlace);
       }
 
+      if(estado === "pendiente_revision"){
+        const mensaje = document.createElement("p");
+        mensaje.textContent = "✓ Actividad enviada para revisión.";
+        mensaje.style.color = "#237A45";
+        mensaje.style.fontWeight = "bold";
+        info.appendChild(mensaje);
+      }
+
+      if(estado === "revisada"){
+        const mensaje = document.createElement("p");
+        mensaje.textContent = "✓ Actividad revisada por la profesora.";
+        mensaje.style.color = "#237A45";
+        mensaje.style.fontWeight = "bold";
+        info.appendChild(mensaje);
+      }
+
+      if(estado === "devuelta" && entrega.comentario){
+        const comentario = document.createElement("p");
+        comentario.textContent =
+          "💬 Comentario de la profesora: " + entrega.comentario;
+        comentario.style.color = "#a34b36";
+        comentario.style.fontWeight = "bold";
+        info.appendChild(comentario);
+      }
+
       tarjeta.appendChild(info);
 
-      const botonFinalizar = document.createElement("button");
-      botonFinalizar.type = "button";
-      botonFinalizar.className = "digital-notebook-action";
-      botonFinalizar.textContent = "Marcar como finalizada";
+      if(!estaRealizada){
 
-      botonFinalizar.addEventListener("click", async function(){
+        const botonFinalizar = document.createElement("button");
+        botonFinalizar.type = "button";
+        botonFinalizar.className = "digital-notebook-action";
+        botonFinalizar.textContent = estado === "devuelta"
+          ? "Volver a enviar"
+          : "Marcar como finalizada";
 
-        if(botonFinalizar.disabled) return;
+        botonFinalizar.addEventListener("click", async function(){
 
-        const nombreEstudiante = String(estudianteActual || "").trim();
-        const rut = String(rutEstudianteActual || "").trim();
+          if(botonFinalizar.disabled) return;
 
-        if(!nombreEstudiante || !rut){
-          alert("No se pudo identificar al estudiante.");
-          return;
+          const nombreEstudiante = String(estudianteActual || "").trim();
+
+          if(!nombreEstudiante || !rut){
+            alert("No se pudo identificar al estudiante.");
+            return;
+          }
+
+          const registro = {
+            actividadId: item.id,
+            tituloActividad: actividad.titulo || "Actividad sin título",
+            nombreEstudiante: nombreEstudiante,
+            rutEstudiante: rut,
+            estado: "pendiente_revision",
+            finalizadaEn: firebase.database.ServerValue.TIMESTAMP,
+            comentario: "",
+            evaluacion: ""
+          };
+
+          botonFinalizar.disabled = true;
+          botonFinalizar.textContent = "Guardando...";
+
+          try{
+
+            await database
+              .ref("actividadesFinalizadas/" + rut + "/" + item.id)
+              .set(registro);
+
+            alert("¡Actividad enviada para revisión!");
+
+          }catch(error){
+
+            console.error("Error al guardar la actividad:", error);
+
+            alert(
+              "No se pudo guardar la actividad. " +
+              "Revisa la conexión e inténtalo nuevamente."
+            );
+
+            botonFinalizar.disabled = false;
+            botonFinalizar.textContent = estado === "devuelta"
+              ? "Volver a enviar"
+              : "Marcar como finalizada";
+
+          }
+
+        });
+
+        tarjeta.appendChild(botonFinalizar);
+
+        const grupo = obtenerGrupo(
+          pendientes,
+          gruposPendientes,
+          area
+        );
+
+        grupo.appendChild(tarjeta);
+        cantidadPendientes++;
+
+      }else{
+
+        const grupo = obtenerGrupo(
+          realizadas,
+          gruposRealizadas,
+          area
+        );
+
+        grupo.appendChild(tarjeta);
+        cantidadRealizadas++;
+
+      }
+
+    });
+
+    if(cantidadPendientes === 0){
+      pendientes.textContent = "¡No tienes actividades pendientes!";
+    }
+
+    if(cantidadRealizadas === 0){
+      realizadas.textContent = "Aún no hay actividades realizadas.";
+    }
+
+  }
+
+  // Escuchar actividades publicadas.
+  database.ref("actividades/publicadas").on("value", function(snapshot){
+
+    actividades = [];
+
+    snapshot.forEach(function(docenteSnapshot){
+      docenteSnapshot.forEach(function(actividadSnapshot){
+
+        const actividad = actividadSnapshot.val();
+
+        if(actividad && typeof actividad === "object"){
+          actividades.push({
+            id: actividadSnapshot.key,
+            data: actividad
+          });
         }
 
-        const claveEstudiante = normalizarRut(rut);
+      });
+    });
 
-        const registro = {
-          actividadId: item.id,
-          tituloActividad: actividad.titulo || "Actividad sin título",
-          nombreEstudiante: nombreEstudiante,
-          rutEstudiante: rut,
-          estado: "pendiente_revision",
-          finalizadaEn: firebase.database.ServerValue.TIMESTAMP,
-          comentario: "",
-          evaluacion: ""
-        };
+    actividades.sort(function(a, b){
+      const fechaA = Number(a.data.publicadoEn || a.data.creadoEn || 0);
+      const fechaB = Number(b.data.publicadoEn || b.data.creadoEn || 0);
+      return fechaA - fechaB;
+    });
 
-        botonFinalizar.disabled = true;
-        botonFinalizar.textContent = "Guardando...";
+    actividadesCargadas = true;
+    dibujarCuaderno();
 
-        try{
+  }, function(error){
 
-          await database
-            .ref("actividadesFinalizadas/" + claveEstudiante + "/" + item.id)
-            .set(registro);
+    console.error("Error al cargar actividades:", error);
+    pendientes.textContent = "No se pudieron cargar las actividades.";
 
-          botonFinalizar.remove();
+  });
 
-          const fechaEntrega = document.createElement("p");
-          fechaEntrega.textContent = "Enviada para revisión.";
-          fechaEntrega.style.color = "#237A45";
-          info.appendChild(fechaEntrega);
+  // Escuchar el historial individual del estudiante.
+  database
+    .ref("actividadesFinalizadas/" + rut)
+    .on("value", function(snapshot){
 
-          const grupoRealizado = obtenerGrupo(
-            realizadas,
-            gruposRealizadas,
-            area
-          );
+      entregas = {};
 
-          grupoRealizado.appendChild(tarjeta);
+      snapshot.forEach(function(entregaSnapshot){
 
-          alert("¡Actividad enviada para revisión!");
+        const entrega = entregaSnapshot.val();
 
-        }catch(error){
-
-          console.error("Error al guardar la actividad:", error);
-
-          alert(
-            "No se pudo guardar la actividad. " +
-            "Revisa la conexión y los permisos de Firebase."
-          );
-
-          botonFinalizar.disabled = false;
-          botonFinalizar.textContent = "Marcar como finalizada";
-
+        if(entrega && typeof entrega === "object"){
+          entregas[entregaSnapshot.key] = entrega;
         }
 
       });
 
-      tarjeta.appendChild(botonFinalizar);
+      entregasCargadas = true;
+      dibujarCuaderno();
 
-      const grupoPendiente = obtenerGrupo(
-        pendientes,
-        gruposPendientes,
-        area
-      );
+    }, function(error){
 
-      grupoPendiente.appendChild(tarjeta);
+      console.error("Error al cargar el historial:", error);
+      realizadas.textContent = "No se pudo cargar el historial de actividades.";
 
     });
 
-    if(cantidad === 0){
-      pendientes.textContent = "Todavía no hay actividades publicadas.";
-    }
-
-    realizadas.textContent = "Aún no hay actividades realizadas.";
-
-  }, function(error){
-
-    console.error("Error al cargar las actividades publicadas:", error);
-
-    pendientes.textContent =
-      "No se pudieron cargar las actividades. Revisa la conexión y los permisos.";
-
-  });
-}
-function abrirSupermercadoEstudiante(){
+}function abrirSupermercadoEstudiante(){
 
   hideAllScreens();
 
