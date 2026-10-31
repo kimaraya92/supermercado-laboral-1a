@@ -2460,6 +2460,45 @@ body.printing-shopping-list #receiptPrintArea{
   gap:14px;
 }
 
+/* ASIGNATURAS DESPLEGABLES DEL CUADERNO */
+.digital-notebook-subject{
+  background:#f8faf9;
+  border:1px solid #dfe8e5;
+  border-radius:15px;
+  margin-bottom:14px;
+  overflow:hidden;
+}
+
+.digital-notebook-subject summary{
+  padding:17px 20px;
+  cursor:pointer;
+  font-family:"Trebuchet MS", sans-serif;
+  font-size:18px;
+  font-weight:bold;
+  color:#405c59;
+  background:#edf4f1;
+  list-style:none;
+}
+
+.digital-notebook-subject summary::-webkit-details-marker{
+  display:none;
+}
+
+.digital-notebook-subject summary::after{
+  content:"+";
+  float:right;
+  font-size:22px;
+  line-height:18px;
+}
+
+.digital-notebook-subject[open] summary::after{
+  content:"−";
+}
+
+.digital-notebook-subject-list{
+  padding:16px;
+}
+
 /* ACTIVIDAD */
 .digital-notebook-card{
   display:flex;
@@ -7570,6 +7609,7 @@ function abrirActividadesEstudiante(){
 /* CARGAR ACTIVIDADES PUBLICADAS EN EL CUADERNO DEL ESTUDIANTE */
 let actividadesPublicadasEstudianteListener = false;
 
+
 function cargarActividadesPublicadasEstudiante(){
 
   const pendientes = document.getElementById("digitalNotebookPending");
@@ -7584,14 +7624,14 @@ function cargarActividadesPublicadasEstudiante(){
     return;
   }
 
-  // Evita registrar el mismo listener varias veces.
   if(actividadesPublicadasEstudianteListener) return;
   actividadesPublicadasEstudianteListener = true;
 
   database.ref("actividades/publicadas").on("value", function(snapshot){
 
     pendientes.replaceChildren();
-    
+    realizadas.replaceChildren();
+
     const actividadesOrdenadas = [];
 
     snapshot.forEach(function(docenteSnapshot){
@@ -7607,21 +7647,12 @@ function cargarActividadesPublicadasEstudiante(){
       });
     });
 
-    const todasTienenOrden = actividadesOrdenadas.every(function(item){
-      return item.data.orden !== undefined &&
-        item.data.orden !== null &&
-        Number.isFinite(Number(item.data.orden));
-    });
-
+    // Orden cronológico: más antigua primero.
     actividadesOrdenadas.sort(function(a, b){
-      if(todasTienenOrden){
-        return Number(a.data.orden) - Number(b.data.orden);
-      }
-      return Number(a.data.publicadoEn || a.data.creadoEn || 0) -
-        Number(b.data.publicadoEn || b.data.creadoEn || 0);
+      const fechaA = Number(a.data.publicadoEn || a.data.creadoEn || 0);
+      const fechaB = Number(b.data.publicadoEn || b.data.creadoEn || 0);
+      return fechaA - fechaB;
     });
-
-    let cantidad = 0;
 
     function normalizarNombreEstudiante(nombre){
       return String(nombre || "")
@@ -7632,9 +7663,43 @@ function cargarActividadesPublicadasEstudiante(){
     }
 
     const nombreActual = normalizarNombreEstudiante(estudianteActual);
+    const gruposPendientes = new Map();
+    const gruposRealizadas = new Map();
+
+    function obtenerGrupo(contenedor, mapa, area){
+
+      if(mapa.has(area)){
+        return mapa.get(area);
+      }
+
+      const desplegable = document.createElement("details");
+      desplegable.className = "digital-notebook-subject";
+
+      // El primer grupo queda abierto.
+      if(mapa.size === 0){
+        desplegable.open = true;
+      }
+
+      const encabezado = document.createElement("summary");
+      encabezado.textContent = area;
+      desplegable.appendChild(encabezado);
+
+      const lista = document.createElement("div");
+      lista.className = "digital-notebook-list digital-notebook-subject-list";
+      desplegable.appendChild(lista);
+
+      contenedor.appendChild(desplegable);
+
+      mapa.set(area, lista);
+      return lista;
+    }
+
+    let cantidad = 0;
 
     actividadesOrdenadas.forEach(function(item){
+
       const actividad = item.data;
+
       const destinatarios = Array.isArray(actividad.estudiantes)
         ? actividad.estudiantes
         : [];
@@ -7650,7 +7715,10 @@ function cargarActividadesPublicadasEstudiante(){
 
       cantidad++;
 
-            
+      const area = String(
+        actividad.area || "Otras actividades"
+      ).trim() || "Otras actividades";
+
       const tarjeta = document.createElement("article");
       tarjeta.className = "digital-notebook-card";
 
@@ -7700,7 +7768,6 @@ function cargarActividadesPublicadasEstudiante(){
 
       tarjeta.appendChild(info);
 
-      
       const botonFinalizar = document.createElement("button");
       botonFinalizar.type = "button";
       botonFinalizar.className = "digital-notebook-action";
@@ -7742,20 +7809,18 @@ function cargarActividadesPublicadasEstudiante(){
 
           botonFinalizar.remove();
 
-          if(
-            realizadas.textContent.includes(
-              "El registro de actividades realizadas"
-            )
-          ){
-            realizadas.replaceChildren();
-          }
-
           const fechaEntrega = document.createElement("p");
           fechaEntrega.textContent = "Enviada para revisión.";
           fechaEntrega.style.color = "#237A45";
           info.appendChild(fechaEntrega);
 
-          realizadas.appendChild(tarjeta);
+          const grupoRealizado = obtenerGrupo(
+            realizadas,
+            gruposRealizadas,
+            area
+          );
+
+          grupoRealizado.appendChild(tarjeta);
 
           alert("¡Actividad enviada para revisión!");
 
@@ -7776,7 +7841,14 @@ function cargarActividadesPublicadasEstudiante(){
       });
 
       tarjeta.appendChild(botonFinalizar);
-      pendientes.appendChild(tarjeta);
+
+      const grupoPendiente = obtenerGrupo(
+        pendientes,
+        gruposPendientes,
+        area
+      );
+
+      grupoPendiente.appendChild(tarjeta);
 
     });
 
@@ -7784,8 +7856,9 @@ function cargarActividadesPublicadasEstudiante(){
       pendientes.textContent = "Todavía no hay actividades publicadas.";
     }
 
-    realizadas.textContent =
-      "El registro de actividades realizadas se habilitará en una próxima etapa.";  }, function(error){
+    realizadas.textContent = "Aún no hay actividades realizadas.";
+
+  }, function(error){
 
     console.error("Error al cargar las actividades publicadas:", error);
 
