@@ -452,7 +452,23 @@ transform:translateY(-50%);
   background-position:center center;
   background-repeat:no-repeat;
 }
+/* DESPLAZAMIENTO EN TABLETS */
+@media (pointer:coarse){
+  .inventory-map-screen{
+    height:100vh;
+    height:100dvh;
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+  }
 
+  .inventory-map{
+    height:120vh;
+    min-height:120vh;
+    height:120dvh;
+    min-height:120dvh;
+  }
+}
   
 .inventory-map-button{
   position:absolute;
