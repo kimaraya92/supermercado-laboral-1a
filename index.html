@@ -8510,12 +8510,16 @@ function leerFuncionesInventario(){
   }
 
   const imagenFunciones =
-    document.querySelector("#roleScreen img");
+  document.querySelector("#roleScreen img");
 
-  if (imagenFunciones) {
-    imagenFunciones.src = "pantalla-cajero-funciones.png";
-    imagenFunciones.alt = "Funciones del rol seleccionado";
-  }
+if (imagenFunciones) {
+  imagenFunciones.src =
+    rol === "Reponedor/a"
+      ? "pantalla-reponedor-funciones.png"
+      : "pantalla-cajero-funciones.png";
+
+  imagenFunciones.alt = "Funciones del rol seleccionado";
+}
   if(rol === "Cliente"){
 
   abrirCliente();
