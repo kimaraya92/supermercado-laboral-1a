@@ -7270,15 +7270,44 @@ onclick="
         necesitan reposición.
       </p>
 
-      <div id="inventarioReponedor" style="
-        flex:1;min-height:120px;padding:15px;
-        background:#f4f8ff;border:1px solid #d8e7f7;
-        border-radius:14px;
-      ">
-        <p style="margin:0;text-align:center;color:#64748b;">
-          Los productos aparecerán aquí.
-        </p>
-      </div>
+      <div style="
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  min-height:0;
+  flex:1;
+">
+
+  <input
+    id="buscarInventarioReponedor"
+    type="search"
+    placeholder="🔎 Buscar producto, marca o código..."
+    style="
+      width:100%;
+      box-sizing:border-box;
+      padding:13px 15px;
+      border:1px solid #c9dcef;
+      border-radius:12px;
+      font-size:15px;
+      outline:none;
+    "
+  >
+
+  <p id="contadorInventarioReponedor"
+     style="margin:0;color:#64748b;font-size:14px;">
+    Cargando productos...
+  </p>
+
+  <div id="listaInventarioReponedor" style="
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+    gap:12px;
+    align-content:start;
+  ">
+    <p style="color:#64748b;">Cargando inventario...</p>
+  </div>
+
+</div>
 
     </section>
 
