@@ -16212,13 +16212,17 @@ function abrirMisiones(){
       <section id="formularioMision" style="display:none;margin-top:20px;padding:22px;background:white;border:1px solid #efd5e5;border-radius:18px;box-shadow:0 3px 12px #dca4ca12;">
         <h2 id="tituloFormularioMision" style="margin:0 0 20px;font-size:22px;">Crear misión</h2>
 
-        <form id="formMision" style="display:grid;gap:16px;">
-          <div>
-            <label for="rolMision" style="display:block;font-weight:700;margin-bottom:7px;">Rol destinatario</label>
-            <select id="rolMision" required style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #e4c8df;border-radius:10px;background:white;color:#65445a;font-size:16px;">
-              <option value="CLIENTE">Cliente</option>
-            </select>
-          </div>
+        <div>
+  <label for="estudianteMision" style="display:block;font-weight:700;margin-bottom:7px;">Estudiante destinatario</label>
+  <select id="estudianteMision" required style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #e4c8df;border-radius:10px;background:white;color:#65445a;font-size:16px;">
+    <option value="">Selecciona un estudiante</option>
+    <option value="Esteban">Esteban</option>
+    <option value="Almendra">Almendra</option>
+    <option value="Renata">Renata</option>
+    <option value="Gerardo">Gerardo</option>
+    <option value="Mauricio">Mauricio</option>
+  </select>
+</div>
 
           <div>
             <label for="fechaMision" style="display:block;font-weight:700;margin-bottom:7px;">Fecha de la misión (opcional)</label>
@@ -16444,7 +16448,7 @@ function abrirMisiones(){
 
         idEditando = m.id;
         contenido.querySelector("#tituloFormularioMision").textContent = "Editar misión";
-        contenido.querySelector("#rolMision").value = m.rol;
+        contenido.querySelector("#estudianteMision").value = m.destinatarioNombre || "";
         contenido.querySelector("#fechaMision").value = m.fecha || "";
         contenido.querySelector("#nombreMision").value = m.nombre;
         contenido.querySelector("#descripcionMision").value = m.descripcion;
