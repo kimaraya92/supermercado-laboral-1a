@@ -8740,9 +8740,20 @@ function continuarRol(){
     return;
   }
 
+  if(rol === "Reponedor/a"){
+    hideAllScreens();
+
+    document
+      .getElementById("reponedorWorkScreen")
+      .classList
+      .remove("hidden");
+
+    registrarPantalla("reponedorWorkScreen");
+    return;
+  }
+
   alert("Esta función será habilitada en el siguiente paso.");
-}
-  function volverSeleccionRoles(){
+}  function volverSeleccionRoles(){
   hideAllScreens();
 
   document
