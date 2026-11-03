@@ -7158,6 +7158,7 @@ onclick="
 ============================== -->
 
 
+
 <!-- =====================================
      PANTALLA DE TRABAJO DEL REPONEDOR
 ===================================== -->
@@ -7199,6 +7200,7 @@ onclick="
     <h2 style="margin:0 0 7px;font-size:19px;color:#51318b;">
       📋 MIS MISIONES DEL DÍA
     </h2>
+
     <div id="misionesReponedor">
       <p style="margin:0;color:#65758b;">
         Aún no tienes misiones asignadas.
@@ -7221,8 +7223,68 @@ onclick="
       padding:14px;background:white;
       border:2px solid #b9dafa;border-radius:18px;
     ">
-      <h2 style="margin:0
-  
+
+      <h2 style="margin:0;text-align:center;font-size:21px;">
+        📷 ESCÁNER DE PRODUCTOS
+      </h2>
+
+      <div style="
+        width:110px;height:110px;border-radius:22px;
+        display:flex;align-items:center;justify-content:center;
+        background:#eaf4ff;font-size:65px;
+      ">📦</div>
+
+      <p style="margin:0;text-align:center;color:#64748b;">
+        Escanea el código de barras para identificar un producto.
+      </p>
+
+      <button type="button" class="primary large"
+        onclick="openScanner(
+          '📷 Escanear producto',
+          'Coloca el código de barras dentro del recuadro.'
+        )"
+        style="width:100%;max-width:260px;">
+        📷 ESCANEAR PRODUCTO
+      </button>
+
+      <p style="margin:0;font-size:13px;color:#64748b;text-align:center;">
+        Utiliza el lector compartido del supermercado.
+      </p>
+    </section>
+
+    <!-- INVENTARIO Y PRODUCTOS -->
+    <section style="
+      min-width:0;min-height:0;display:flex;
+      flex-direction:column;gap:12px;
+      padding:16px;background:white;
+      border:2px solid #b9dafa;border-radius:18px;
+      overflow-y:auto;
+    ">
+
+      <h2 style="margin:0;font-size:21px;">
+        📦 INVENTARIO DEL SUPERMERCADO
+      </h2>
+
+      <p style="margin:0;color:#64748b;">
+        Aquí podrás consultar los productos y revisar cuáles
+        necesitan reposición.
+      </p>
+
+      <div id="inventarioReponedor" style="
+        flex:1;min-height:120px;padding:15px;
+        background:#f4f8ff;border:1px solid #d8e7f7;
+        border-radius:14px;
+      ">
+        <p style="margin:0;text-align:center;color:#64748b;">
+          Los productos aparecerán aquí.
+        </p>
+      </div>
+
+    </section>
+
+  </div>
+
+</section>
 <div
   id="scannerModal"
   class="hidden"
