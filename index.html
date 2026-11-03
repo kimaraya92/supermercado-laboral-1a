@@ -8252,23 +8252,34 @@ function leerRol(texto){
 }
 function leerFuncionesInventario(){
 
-  const funciones = [
-    "Ingresar productos.",
-    "Actualizar precios.",
-    "Agregar productos.",
-    "Buscar productos.",
-    "Editar información.",
-    "Revisar el inventario."
-  ];
+  const boton = document.getElementById("btnEscucharInventario");
 
   const texto =
-    "Tus funciones de hoy son: " +
-    funciones.join(" ") ;
+    "Tus funciones de hoy son: registrar productos, contar productos, actualizar el inventario, avisar cuando falten productos y revisar que la información coincida con los productos reales.";
 
-  leerRol(texto);
+  const mensaje = new SpeechSynthesisUtterance(texto);
 
-}
-  function leerFunciones(){
+  mensaje.lang = "es-CL";
+  mensaje.rate = 0.85;
+  mensaje.pitch = 1;
+
+  mensaje.onend = () => {
+    if (boton) {
+      boton.innerHTML = "🔊";
+      boton.style.background = "#0755b8";
+    }
+  };
+
+  mensaje.onerror = () => {
+    if (boton) {
+      boton.innerHTML = "🔊";
+      boton.style.background = "#0755b8";
+    }
+  };
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(mensaje);
+}  function leerFunciones(){
 
   const rol =
     window.rolSeleccionado;
