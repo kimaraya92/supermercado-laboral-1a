@@ -7158,6 +7158,71 @@ onclick="
 ============================== -->
 
 
+<!-- =====================================
+     PANTALLA DE TRABAJO DEL REPONEDOR
+===================================== -->
+<section id="reponedorWorkScreen" class="hidden" style="
+  position:fixed;inset:0;width:100vw;height:100dvh;
+  overflow:hidden;box-sizing:border-box;
+  padding:12px;background:#eaf4ff;color:#12356b;
+  display:flex;flex-direction:column;gap:10px;
+  font-family:inherit;
+">
+
+  <!-- ENCABEZADO -->
+  <header style="
+    flex:0 0 auto;display:flex;align-items:center;
+    justify-content:space-between;gap:12px;
+    padding:10px 16px;background:#0755b8;
+    color:white;border-radius:16px;
+  ">
+    <button onclick="volverSeleccionRoles()" style="
+      width:auto;padding:9px 15px;border:2px solid white;
+      border-radius:12px;background:#fff;color:#0755b8;
+      font-weight:800;font-size:15px;
+    ">← VOLVER</button>
+
+    <h1 style="margin:0;font-size:clamp(19px,2.5vw,30px);">
+      🛒 REPONEDOR · MI JORNADA
+    </h1>
+
+    <span style="font-size:24px;">📦</span>
+  </header>
+
+  <!-- MISIONES DEL DÍA -->
+  <section style="
+    flex:0 0 auto;min-height:90px;max-height:22%;
+    overflow-y:auto;padding:12px 18px;
+    background:white;border:2px solid #c9b8f5;
+    border-radius:16px;box-shadow:0 3px 9px #0001;
+  ">
+    <h2 style="margin:0 0 7px;font-size:19px;color:#51318b;">
+      📋 MIS MISIONES DEL DÍA
+    </h2>
+    <div id="misionesReponedor">
+      <p style="margin:0;color:#65758b;">
+        Aún no tienes misiones asignadas.
+      </p>
+    </div>
+  </section>
+
+  <!-- ZONA DE TRABAJO -->
+  <div style="
+    flex:1;min-height:0;display:grid;
+    grid-template-columns:minmax(230px,31%) minmax(0,69%);
+    gap:12px;
+  ">
+
+    <!-- ESCÁNER -->
+    <section style="
+      min-width:0;min-height:0;display:flex;
+      flex-direction:column;align-items:center;
+      justify-content:center;gap:14px;
+      padding:14px;background:white;
+      border:2px solid #b9dafa;border-radius:18px;
+    ">
+      <h2 style="margin:0
+  
 <div
   id="scannerModal"
   class="hidden"
