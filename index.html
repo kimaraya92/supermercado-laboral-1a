@@ -8898,7 +8898,120 @@ function cargarInventarioReponedor(){
   });
 
 }
+/* =====================================
+   DETALLE DE PRODUCTO DEL REPONEDOR
+===================================== */
 
+function mostrarDetalleProductoReponedor(codigo){
+
+  const producto = productosInventarioReponedor[codigo];
+
+  const modal = document.getElementById(
+    "detalleProductoReponedorModal"
+  );
+
+  const imagen = document.getElementById(
+    "detalleProductoRepImagen"
+  );
+
+  if(!producto){
+
+    document.getElementById("detalleProductoRepNombre")
+      .textContent = "Producto no registrado";
+
+    document.getElementById("detalleProductoRepMarca")
+      .textContent = "Código: " + codigo;
+
+    document.getElementById("detalleProductoRepPrecio")
+      .textContent = "";
+
+    document.getElementById("detalleProductoRepCodigo")
+      .textContent = "Este producto no está en el inventario maestro.";
+
+    imagen.style.display = "none";
+    imagen.removeAttribute("src");
+
+  }else{
+
+    document.getElementById("detalleProductoRepNombre")
+      .textContent = producto.product || "Sin nombre";
+
+    document.getElementById("detalleProductoRepMarca")
+      .textContent = [
+        producto.brand,
+        producto.content
+      ].filter(Boolean).join(" · ");
+
+    document.getElementById("detalleProductoRepPrecio")
+      .textContent =
+        "$" + Number(producto.price || 0).toLocaleString("es-CL");
+
+    document.getElementById("detalleProductoRepCodigo")
+      .textContent = "Código de barras: " + codigo;
+
+    if(producto.image){
+
+      imagen.src = producto.image;
+      imagen.style.display = "block";
+
+    }else{
+
+      imagen.removeAttribute("src");
+      imagen.style.display = "none";
+
+    }
+
+  }
+
+  modal.classList.remove("hidden");
+
+  document.getElementById("detalleProductoRepAceptar").focus();
+
+  document.addEventListener(
+    "keydown",
+    manejarTeclaDetalleProductoReponedor
+  );
+
+}
+
+function manejarTeclaDetalleProductoReponedor(event){
+
+  const modal = document.getElementById(
+    "detalleProductoReponedorModal"
+  );
+
+  if(
+    !modal ||
+    modal.classList.contains("hidden")
+  ){
+    return;
+  }
+
+  if(event.key === "Enter" || event.key === "Escape"){
+
+    event.preventDefault();
+    cerrarDetalleProductoReponedor();
+
+  }
+
+}
+
+function cerrarDetalleProductoReponedor(){
+
+  const modal = document.getElementById(
+    "detalleProductoReponedorModal"
+  );
+
+  if(modal){
+    modal.classList.add("hidden");
+  }
+
+  document.removeEventListener(
+    "keydown",
+    manejarTeclaDetalleProductoReponedor
+  );
+
+}
 function pintarInventarioReponedor(){
 
   const lista = document.getElementById("listaInventarioReponedor");
