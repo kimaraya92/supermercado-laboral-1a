@@ -9489,11 +9489,18 @@ async function cargarMisionCliente(){
     const registros = resultados[0].val() || {};
     const solicitudes = resultados[1].val() || {};
 
-    const publicadas = Object.entries(registros)
+        const publicadas = Object.entries(registros)
       .map(function([id,m]){ return {...m,id}; })
       .filter(function(m){
-        return m.rol === "CLIENTE" && m.estado === "enviada";
+        return m.rol === "CLIENTE" &&
+          m.estado === "enviada" &&
+          normalizarNombreEstudiante(m.destinatarioNombre) ===
+          normalizarNombreEstudiante(estudianteActual);
       })
+      .sort(function(a,b){
+        return String(b.enviadaEn || b.creadoEn || "")
+          .localeCompare(String(a.enviadaEn || a.creadoEn || ""));
+      });
       .sort(function(a,b){
         return String(b.enviadaEn || b.creadoEn || "")
           .localeCompare(String(a.enviadaEn || a.creadoEn || ""));
@@ -16534,8 +16541,9 @@ function abrirMisiones(){
   form.addEventListener("submit", async function(e){
     e.preventDefault();
 
-    const datos = {
-      rol: contenido.querySelector("#rolMision").value,
+        const datos = {
+      rol: "CLIENTE",
+      destinatarioNombre: contenido.querySelector("#estudianteMision").value,
       fecha: contenido.querySelector("#fechaMision").value,
       nombre: contenido.querySelector("#nombreMision").value.trim(),
       descripcion: contenido.querySelector("#descripcionMision").value.trim(),
@@ -16543,7 +16551,10 @@ function abrirMisiones(){
       actualizadoEn: new Date().toISOString()
     };
 
-    if(!datos.nombre || !datos.descripcion) return;
+        if(!datos.destinatarioNombre || !datos.nombre || !datos.descripcion){
+      alert("Selecciona un estudiante y completa el nombre y la descripción de la misión.");
+      return;
+    }
 
     const botonGuardar = form.querySelector('button[type="submit"]');
     botonGuardar.disabled = true;
