@@ -432,44 +432,43 @@ transform:translateY(-50%);
    ========================================================= */
 
 
-.inventory-map-screen{
-  position:fixed;
-  inset:0;
-  width:100vw;
-  height:100vh;
-  overflow-x:hidden;
-  overflow-y:auto;
-  background:#fff;
+.inventory-map-screen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #fff;
 }
 
-.inventory-map{
-  position:relative;
-  width:100%;
-  height:100%;
-  min-height:0;
-  background-image:url('pantalla-inventario-supermercado.png');
-  background-size:100% 100%;
-  background-position:center center;
-  background-repeat:no-repeat;
+.inventory-map {
+  position: relative;
+  width: min(88vw, 156.4dvh);
+  aspect-ratio: 1672 / 940;
+  height: auto;
+  min-height: 0;
+  background-image: url('pantalla-inventario-supermercado.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
-/* DESPLAZAMIENTO EN TABLETS */
-@media (pointer:coarse){
-  .inventory-map-screen{
-    height:100vh;
-    height:100dvh;
-    overflow-y:auto;
-    overflow-x:hidden;
-    -webkit-overflow-scrolling:touch;
+
+@media (pointer: coarse) {
+  .inventory-map-screen {
+    height: 100dvh;
+    overflow: hidden;
   }
 
-  .inventory-map{
-    height:120vh;
-    min-height:120vh;
-    height:120dvh;
-    min-height:120dvh;
+  .inventory-map {
+    width: min(88vw, 156.4dvh);
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1672 / 940;
   }
-}
-  
+}  
 .inventory-map-button{
   position:absolute;
   background:transparent;
