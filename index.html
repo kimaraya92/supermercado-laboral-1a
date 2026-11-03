@@ -7394,6 +7394,7 @@ onclick="
     </div>
 
     <button type="button"
+      id="detalleProductoRepAceptar"
       onclick="cerrarDetalleProductoReponedor()"
       style="
         width:100%;
@@ -11011,11 +11012,19 @@ if(imageSearchScanMode){
   }
 
 
+    if(window.rolSeleccionado === "Reponedor/a"){
+
+    closeScanner();
+
+    mostrarDetalleProductoReponedor(normalized);
+
+    return;
+
+  }
+
   closeScanner();
 
-
   processCode(normalized);
-
 }
 
 
