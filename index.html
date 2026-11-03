@@ -16537,15 +16537,18 @@ function abrirMisiones(){
   form.addEventListener("submit", async function(e){
     e.preventDefault();
 
-        const datos = {
-      rol: "CLIENTE",
-      destinatarioNombre: contenido.querySelector("#estudianteMision").value,
-      fecha: contenido.querySelector("#fechaMision").value,
-      nombre: contenido.querySelector("#nombreMision").value.trim(),
-      descripcion: contenido.querySelector("#descripcionMision").value.trim(),
-      estado: "borrador",
-      actualizadoEn: new Date().toISOString()
-    };
+        const estudianteSeleccionado = contenido.querySelector("#estudianteMision").value;
+
+const datos = {
+  rol: "CLIENTE",
+  destinatarioNombre: estudianteSeleccionado,
+  destinatarios: estudianteSeleccionado ? [estudianteSeleccionado] : [],
+  fecha: contenido.querySelector("#fechaMision").value,
+  nombre: contenido.querySelector("#nombreMision").value.trim(),
+  descripcion: contenido.querySelector("#descripcionMision").value.trim(),
+  estado: "borrador",
+  actualizadoEn: new Date().toISOString()
+};
 
         if(!datos.destinatarioNombre || !datos.nombre || !datos.descripcion){
       alert("Selecciona un estudiante y completa el nombre y la descripción de la misión.");
