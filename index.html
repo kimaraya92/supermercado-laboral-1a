@@ -67,6 +67,62 @@ body:has(#adminHomeScreen:not(.hidden)) > main{
 .hidden{
   display:none !important;
 }
+  /* =====================================
+   ADAPTACIÓN DE PANTALLA REPONEDOR
+   TABLETS Y PANTALLAS MEDIANAS
+===================================== */
+
+@media screen and (max-width: 1100px){
+
+  #reponedorWorkScreen{
+    position:relative !important;
+    width:100% !important;
+    height:auto !important;
+    min-height:100dvh !important;
+    overflow:visible !important;
+    padding:12px !important;
+  }
+
+  #reponedorWorkScreen > header{
+    flex-wrap:wrap;
+    justify-content:center !important;
+    text-align:center;
+  }
+
+  #reponedorWorkScreen > header h1{
+    font-size:clamp(17px,3vw,24px) !important;
+  }
+
+  #reponedorWorkScreen > section{
+    max-height:none !important;
+    min-height:0 !important;
+  }
+
+  #reponedorWorkScreen > div{
+    display:flex !important;
+    flex-direction:column !important;
+    flex:initial !important;
+    gap:14px !important;
+  }
+
+  #reponedorWorkScreen > div > section:first-child{
+    min-height:280px !important;
+    padding:18px !important;
+  }
+
+  #reponedorWorkScreen > div > section:last-child{
+    min-height:450px !important;
+    overflow:visible !important;
+  }
+
+  #listaInventarioReponedor{
+    grid-template-columns:repeat(
+      auto-fit,
+      minmax(150px,1fr)
+    ) !important;
+  }
+
+}
 
 
 .card{
