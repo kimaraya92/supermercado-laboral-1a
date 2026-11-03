@@ -8749,7 +8749,188 @@ if(rol === "Encargado/a de inventario"){
 
 }
 
+/* =====================================
+   INVENTARIO DEL REPONEDOR
+===================================== */
 
+let productosInventarioReponedor = {};
+let busquedaInventarioReponedor = "";
+let listenerInventarioReponedor = false;
+
+function cargarInventarioReponedor(){
+
+  const lista = document.getElementById("listaInventarioReponedor");
+  const buscador = document.getElementById("buscarInventarioReponedor");
+  const contador = document.getElementById("contadorInventarioReponedor");
+
+  if(!lista || !buscador || !contador) return;
+
+  buscador.value = busquedaInventarioReponedor;
+
+  buscador.oninput = function(){
+    busquedaInventarioReponedor = this.value;
+    pintarInventarioReponedor();
+  };
+
+  if(listenerInventarioReponedor){
+    pintarInventarioReponedor();
+    return;
+  }
+
+  listenerInventarioReponedor = true;
+
+  database.ref("productos").on("value",function(snapshot){
+
+    productosInventarioReponedor = snapshot.val() || {};
+    pintarInventarioReponedor();
+
+  },function(error){
+
+    console.error("Error al cargar inventario del reponedor:",error);
+
+    lista.innerHTML =
+      "<p>No se pudo cargar el inventario. Revisa la conexión.</p>";
+
+    contador.textContent = "Error de conexión";
+
+  });
+
+}
+
+function pintarInventarioReponedor(){
+
+  const lista = document.getElementById("listaInventarioReponedor");
+  const contador = document.getElementById("contadorInventarioReponedor");
+
+  if(!lista || !contador) return;
+
+  const filtro = busquedaInventarioReponedor
+    .trim()
+    .toLocaleLowerCase("es");
+
+  const entradas = Object.entries(productosInventarioReponedor)
+    .filter(function([codigo,p]){
+
+      p = p || {};
+
+      const texto = [
+        codigo,
+        p.product,
+        p.brand,
+        p.content
+      ].join(" ").toLocaleLowerCase("es");
+
+      return texto.includes(filtro);
+
+    })
+    .sort(function(a,b){
+
+      return String(a[1]?.product || "")
+        .localeCompare(String(b[1]?.product || ""),"es");
+
+    });
+
+  contador.textContent =
+    entradas.length +
+    (entradas.length === 1 ? " producto" : " productos");
+
+  if(!entradas.length){
+
+    lista.innerHTML = `
+      <p style="color:#64748b;text-align:center;grid-column:1/-1;">
+        No se encontraron productos.
+      </p>
+    `;
+
+    return;
+  }
+
+  lista.innerHTML = entradas.map(function([codigo,p]){
+
+    p = p || {};
+
+    const escapar = function(valor){
+      return String(valor ?? "").replace(/[&<>"']/g,function(c){
+        return {
+          "&":"&amp;",
+          "<":"&lt;",
+          ">":"&gt;",
+          '"':"&quot;",
+          "'":"&#39;"
+        }[c];
+      });
+    };
+
+    const imagen = p.image
+      ? `
+        <img
+          src="${escapar(p.image)}"
+          alt=""
+          style="
+            width:100%;
+            height:125px;
+            object-fit:contain;
+            background:white;
+            border-radius:10px;
+          "
+        >
+      `
+      : `
+        <div style="
+          height:125px;
+          display:grid;
+          place-items:center;
+          background:#eaf4ff;
+          border-radius:10px;
+          font-size:45px;
+        ">📦</div>
+      `;
+
+    return `
+      <article style="
+        display:flex;
+        flex-direction:column;
+        gap:7px;
+        padding:12px;
+        min-width:0;
+        background:white;
+        border:1px solid #d8e7f7;
+        border-radius:14px;
+        box-shadow:0 2px 6px #00000008;
+      ">
+
+        ${imagen}
+
+        <strong style="font-size:15px;color:#12356b;">
+          ${escapar(p.product || "Sin nombre")}
+        </strong>
+
+        <span style="font-size:13px;color:#64748b;">
+          ${escapar(p.brand || "Sin marca")}
+        </span>
+
+        <span style="font-size:13px;color:#64748b;">
+          ${escapar(p.content || "Sin formato")}
+        </span>
+
+        <strong style="font-size:19px;color:#0755b8;">
+          $${Number(p.price || 0).toLocaleString("es-CL")}
+        </strong>
+
+        <span style="
+          font-size:11px;
+          color:#64748b;
+          overflow-wrap:anywhere;
+        ">
+          Código: ${escapar(codigo)}
+        </span>
+
+      </article>
+    `;
+
+  }).join("");
+
+}
 
 function continuarRol(){
   const rol = window.rolSeleccionado;
