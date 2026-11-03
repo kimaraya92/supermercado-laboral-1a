@@ -9489,7 +9489,7 @@ async function cargarMisionCliente(){
     const registros = resultados[0].val() || {};
     const solicitudes = resultados[1].val() || {};
 
-        const publicadas = Object.entries(registros)
+            const publicadas = Object.entries(registros)
       .map(function([id,m]){ return {...m,id}; })
       .filter(function(m){
         return m.rol === "CLIENTE" &&
@@ -9501,11 +9501,6 @@ async function cargarMisionCliente(){
         return String(b.enviadaEn || b.creadoEn || "")
           .localeCompare(String(a.enviadaEn || a.creadoEn || ""));
       });
-      .sort(function(a,b){
-        return String(b.enviadaEn || b.creadoEn || "")
-          .localeCompare(String(a.enviadaEn || a.creadoEn || ""));
-      });
-
     if(!publicadas.length){
       misionClienteActualId = "";
       contenidoMision.innerHTML =
@@ -16426,7 +16421,7 @@ function abrirMisiones(){
           <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
             <div style="flex:1;min-width:180px;">
               <h3 style="margin:0 0 7px;font-size:18px;">${escaparMision(m.nombre)}</h3>
-              <p style="margin:0 0 10px;color:#876d91;font-size:13px;">Rol: ${escaparMision(m.rol)} · Fecha: ${m.fecha ? escaparMision(m.fecha) : "Sin fecha asignada"}</p>
+                            <p style="margin:0 0 10px;color:#876d91;font-size:13px;">Estudiante: ${escaparMision(m.destinatarioNombre || "Sin asignar")} · Fecha: ${m.fecha ? escaparMision(m.fecha) : "Sin fecha asignada"}</p>
             </div>
             <span style="padding:6px 10px;border-radius:20px;font-size:12px;font-weight:800;${estilosEstado[estado] || estilosEstado.borrador}">${nombreEstado[estado] || "Borrador"}</span>
           </div>
