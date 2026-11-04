@@ -9576,18 +9576,21 @@ async function cargarMisionCliente(){
       }
 
       contenidoMision.innerHTML = `
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
+        
+        <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin:4px 0 18px;">
+
           <button type="button" id="anteriorMisionCliente"
-            style="border:0;border-radius:50%;width:36px;height:36px;background:#f1e4f0;color:#65445a;font-size:20px;cursor:pointer;"
+            style="border:0;border-radius:50%;width:34px;height:34px;background:#f1e4f0;color:#65445a;font-size:23px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:${indice === 0 ? "0.35" : "1"};"
             ${indice === 0 ? "disabled" : ""}>‹</button>
 
-          <span style="color:#876d91;font-size:12px;font-weight:600;">
+          <span style="color:#876d91;font-size:13px;font-weight:700;letter-spacing:0.3px;">
             MISIÓN ${indice + 1} DE ${misionesClienteActuales.length}
           </span>
 
           <button type="button" id="siguienteMisionCliente"
-            style="border:0;border-radius:50%;width:36px;height:36px;background:#f1e4f0;color:#65445a;font-size:20px;cursor:pointer;"
+            style="border:0;border-radius:50%;width:34px;height:34px;background:#f1e4f0;color:#65445a;font-size:23px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:${indice === misionesClienteActuales.length - 1 ? "0.35" : "1"};"
             ${indice === misionesClienteActuales.length - 1 ? "disabled" : ""}>›</button>
+
         </div>
 
         <h3 style="margin:0 0 8px;color:#65445a;font-size:19px;">
