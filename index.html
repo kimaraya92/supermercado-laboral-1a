@@ -16216,15 +16216,19 @@ function abrirMisiones(){
 
      <form id="formMision">
         <div>
-  <label for="estudianteMision" style="display:block;font-weight:700;margin-bottom:7px;">Estudiante destinatario</label>
-  <select id="estudianteMision" required style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #e4c8df;border-radius:10px;background:white;color:#65445a;font-size:16px;">
-    <option value="">Selecciona un estudiante</option>
-    <option value="Esteban">Esteban</option>
-    <option value="Almendra">Almendra</option>
-    <option value="Renata">Renata</option>
-    <option value="Gerardo">Gerardo</option>
-    <option value="Mauricio">Mauricio</option>
-  </select>
+  <label style="display:block;font-weight:700;margin-bottom:7px;">
+  Estudiantes destinatarios
+</label>
+
+<div id="estudiantesMision" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;padding:12px;background:#fffafd;border:1px solid #e4c8df;border-radius:10px;">
+
+  <label><input type="checkbox" value="Esteban"> Esteban</label>
+  <label><input type="checkbox" value="Almendra"> Almendra</label>
+  <label><input type="checkbox" value="Renata"> Renata</label>
+  <label><input type="checkbox" value="Gerardo"> Gerardo</label>
+  <label><input type="checkbox" value="Mauricio"> Mauricio</label>
+
+</div>
 </div>
 
           <div>
