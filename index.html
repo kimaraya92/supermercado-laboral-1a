@@ -16455,7 +16455,13 @@ function abrirMisiones(){
 
         idEditando = m.id;
         contenido.querySelector("#tituloFormularioMision").textContent = "Editar misión";
-        contenido.querySelector("#estudianteMision").value = m.destinatarioNombre || "";
+        const destinatarios = Array.isArray(m.destinatarios) && m.destinatarios.length
+  ? m.destinatarios
+  : (m.destinatarioNombre ? [m.destinatarioNombre] : []);
+
+contenido.querySelectorAll("#estudiantesMision input[type='checkbox']").forEach(function(input){
+  input.checked = destinatarios.includes(input.value);
+});
         contenido.querySelector("#fechaMision").value = m.fecha || "";
         contenido.querySelector("#nombreMision").value = m.nombre;
         contenido.querySelector("#descripcionMision").value = m.descripcion;
