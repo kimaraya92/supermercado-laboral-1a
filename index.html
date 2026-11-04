@@ -9934,6 +9934,17 @@ async function responderFinalizacionMision(confirmada){
         estado: "pendiente_revision",
         solicitadaEn: new Date().toISOString()
       });
+      
+      const claveEstudiante = normalizarNombreEstudiante(estudianteActual);
+
+      await database
+        .ref("misiones/" + misionClienteActualId + "/asignaciones/" + claveEstudiante)
+        .update({
+          estudianteNombre: estudianteActual,
+          estado: "pendiente_revision",
+          enviadaRevisionEn: new Date().toISOString()
+        });
+
 
       alert("¡Muy bien! Tu misión fue enviada a la profesora para su revisión.");
 
