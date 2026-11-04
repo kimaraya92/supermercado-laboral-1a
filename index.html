@@ -16475,15 +16475,39 @@ contenido.querySelectorAll("#estudiantesMision input[type='checkbox']").forEach(
         const m = misionesLocales.find(x => x.id === b.dataset.enviarMision);
         if(!m || (m.estado && m.estado !== "borrador")) return;
 
-        if(!confirm('¿Quieres enviar la misión "' + m.nombre + '"?')) return;
+                const destinatarios = Array.isArray(m.destinatarios) && m.destinatarios.length
+          ? m.destinatarios
+          : (m.destinatarioNombre ? [m.destinatarioNombre] : []);
+
+        if(!destinatarios.length){
+          alert("Esta misión no tiene estudiantes destinatarios.");
+          return;
+        }
+
+        if(!confirm('¿Enviar la misión "' + m.nombre + '" a ' + destinatarios.join(", ") + '?')) return;
 
         b.disabled = true;
         b.textContent = "Enviando...";
 
         try {
+          const fechaEnvio = new Date().toISOString();
+          const asignaciones = {};
+
+          destinatarios.forEach(function(nombre){
+            const clave = normalizarNombreEstudiante(nombre);
+
+            asignaciones[clave] = {
+              estudianteNombre: nombre,
+              estado: "pendiente",
+              asignadaEn: fechaEnvio
+            };
+          });
+
           await database.ref("misiones/" + m.id).update({
             estado: "enviada",
-            enviadaEn: new Date().toISOString()
+            destinatarios: destinatarios,
+            asignaciones: asignaciones,
+            enviadaEn: fechaEnvio
           });
 
           const snapshot = await database.ref("misiones").once("value");
