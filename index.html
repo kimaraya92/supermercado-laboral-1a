@@ -16541,24 +16541,25 @@ function abrirMisiones(){
   form.addEventListener("submit", async function(e){
     e.preventDefault();
 
-        const estudianteSeleccionado = contenido.querySelector("#estudianteMision").value;
+            const estudiantesSeleccionados = Array.from(
+      contenido.querySelectorAll("#estudiantesMision input[type='checkbox']:checked")
+    ).map(input => input.value);
 
-const datos = {
-  rol: "CLIENTE",
-  destinatarioNombre: estudianteSeleccionado,
-  destinatarios: estudianteSeleccionado ? [estudianteSeleccionado] : [],
-  fecha: contenido.querySelector("#fechaMision").value,
-  nombre: contenido.querySelector("#nombreMision").value.trim(),
-  descripcion: contenido.querySelector("#descripcionMision").value.trim(),
-  estado: "borrador",
-  actualizadoEn: new Date().toISOString()
-};
+    const datos = {
+      rol: "CLIENTE",
+      destinatarioNombre: estudiantesSeleccionados[0] || "",
+      destinatarios: estudiantesSeleccionados,
+      fecha: contenido.querySelector("#fechaMision").value,
+      nombre: contenido.querySelector("#nombreMision").value.trim(),
+      descripcion: contenido.querySelector("#descripcionMision").value.trim(),
+      estado: "borrador",
+      actualizadoEn: new Date().toISOString()
+    };
 
-        if(!datos.destinatarioNombre || !datos.nombre || !datos.descripcion){
-      alert("Selecciona un estudiante y completa el nombre y la descripción de la misión.");
+    if(!datos.destinatarios.length || !datos.nombre || !datos.descripcion){
+      alert("Selecciona al menos un estudiante y completa el nombre y la descripción de la misión.");
       return;
     }
-
     const botonGuardar = form.querySelector('button[type="submit"]');
     botonGuardar.disabled = true;
     botonGuardar.textContent = "Guardando...";
