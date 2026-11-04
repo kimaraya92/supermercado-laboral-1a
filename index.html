@@ -9515,10 +9515,7 @@ async function cargarMisionCliente(){
         return String(b.enviadaEn || b.creadoEn || "")
           .localeCompare(String(a.enviadaEn || a.creadoEn || ""));
       });
-      .sort(function(a,b){
-        return String(b.enviadaEn || b.creadoEn || "")
-          .localeCompare(String(a.enviadaEn || a.creadoEn || ""));
-      });
+      
     if(!publicadas.length){
       misionClienteActualId = "";
       contenidoMision.innerHTML =
