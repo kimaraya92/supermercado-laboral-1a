@@ -9489,14 +9489,32 @@ async function cargarMisionCliente(){
     const registros = resultados[0].val() || {};
     const solicitudes = resultados[1].val() || {};
 
-            const publicadas = Object.entries(registros)
+                const nombreActual = normalizarNombreEstudiante(estudianteActual);
+
+    const publicadas = Object.entries(registros)
       .map(function([id,m]){ return {...m,id}; })
       .filter(function(m){
+        const destinatarios = Array.isArray(m.destinatarios) && m.destinatarios.length
+          ? m.destinatarios
+          : (m.destinatarioNombre ? [m.destinatarioNombre] : []);
+
+        const asignado = destinatarios.some(function(nombre){
+          return normalizarNombreEstudiante(nombre) === nombreActual;
+        });
+
+        const asignacion = m.asignaciones
+          ? m.asignaciones[nombreActual]
+          : null;
+
         return m.rol === "CLIENTE" &&
           m.estado === "enviada" &&
-          normalizarNombreEstudiante(m.destinatarioNombre) ===
-          normalizarNombreEstudiante(estudianteActual);
+          asignado &&
+          (!asignacion || asignacion.estado !== "retirada");
       })
+      .sort(function(a,b){
+        return String(b.enviadaEn || b.creadoEn || "")
+          .localeCompare(String(a.enviadaEn || a.creadoEn || ""));
+      });
       .sort(function(a,b){
         return String(b.enviadaEn || b.creadoEn || "")
           .localeCompare(String(a.enviadaEn || a.creadoEn || ""));
