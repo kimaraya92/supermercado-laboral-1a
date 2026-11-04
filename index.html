@@ -9453,6 +9453,7 @@ function leerMisionCliente(){
 
 
 
+
 async function cargarMisionCliente(){
 
   const tarjeta = document.getElementById("tarjetaMisionCliente");
@@ -9462,7 +9463,7 @@ async function cargarMisionCliente(){
   if(!tarjeta || !contenidoMision) return;
 
   tarjeta.style.display = "block";
-  contenidoMision.innerHTML = "<p style='margin:0;color:#876d91;'>Buscando tu misión...</p>";
+  contenidoMision.innerHTML = "<p style='margin:0;color:#876d91;'>Buscando tus misiones...</p>";
 
   if(botonContraer){
     botonContraer.onclick = function(){
@@ -9490,12 +9491,12 @@ async function cargarMisionCliente(){
 
     const registros = resultados[0].val() || {};
     const solicitudes = resultados[1].val() || {};
-
-                const nombreActual = normalizarNombreEstudiante(estudianteActual);
+    const nombreActual = normalizarNombreEstudiante(estudianteActual);
 
     const publicadas = Object.entries(registros)
       .map(function([id,m]){ return {...m,id}; })
       .filter(function(m){
+
         const destinatarios = Array.isArray(m.destinatarios) && m.destinatarios.length
           ? m.destinatarios
           : (m.destinatarioNombre ? [m.destinatarioNombre] : []);
@@ -9516,32 +9517,31 @@ async function cargarMisionCliente(){
       .sort(function(a,b){
         return String(b.enviadaEn || b.creadoEn || "")
           .localeCompare(String(a.enviadaEn || a.creadoEn || ""));
+      })
+      .map(function(m){
+        const solicitud = solicitudes[m.id]
+          ? solicitudes[m.id][rut]
+          : null;
+
+        return {
+          ...m,
+          solicitud: solicitud || null
+        };
       });
-      
+
+    misionesClienteActuales = publicadas;
+
     if(!publicadas.length){
       misionClienteActualId = "";
+      indiceMisionClienteActual = 0;
       contenidoMision.innerHTML =
         "<p style='margin:0;color:#876d91;'>Por ahora no tienes una misión asignada. Espera las indicaciones de tu profesora.</p>";
       return;
     }
 
-    const m = publicadas[0];
-
-    const solicitud = solicitudes[m.id]
-      ? solicitudes[m.id][rut]
-      : null;
-
-    if(solicitud && (
-      solicitud.estado === "pendiente_revision" ||
-      solicitud.estado === "realizada"
-    )){
-      misionClienteActualId = "";
-      contenidoMision.innerHTML =
-        "<p style='margin:0;color:#876d91;'>¡Muy bien! Ya terminaste esta misión. Espera que tu profesora te asigne una nueva.</p>";
-      return;
+    if(indiceMisionClienteActual >= publicadas.length){
+      indiceMisionClienteActual = 0;
     }
-
-    misionClienteActualId = m.id;
 
     function escaparTexto(texto){
       return String(texto ?? "").replace(/[&<>"']/g,function(c){
@@ -9549,18 +9549,90 @@ async function cargarMisionCliente(){
       });
     }
 
-    contenidoMision.innerHTML = `
-      <h3 style="margin:0 0 8px;color:#65445a;font-size:19px;">${escaparTexto(m.nombre)}</h3>
-      <p style="margin:0;color:#382d3b;line-height:1.5;white-space:pre-wrap;">${escaparTexto(m.descripcion)}</p>
-      ${m.fecha ? `<p style="margin:8px 0 0;color:#876d91;font-size:12px;">Fecha: ${escaparTexto(m.fecha)}</p>` : ""}
-    `;
+    function mostrarMisionActual(){
+
+      const indice = indiceMisionClienteActual;
+      const m = misionesClienteActuales[indice];
+      const solicitud = m.solicitud;
+      const pendienteRevision = solicitud &&
+        solicitud.estado === "pendiente_revision";
+      const realizada = solicitud &&
+        solicitud.estado === "realizada";
+
+      misionClienteActualId = (!pendienteRevision && !realizada) ? m.id : "";
+
+      let estadoHTML = "";
+
+      if(pendienteRevision){
+        estadoHTML = `
+          <p style="margin:12px 0 0;padding:9px;background:#fff4d8;border-radius:9px;color:#8a641b;font-size:13px;">
+            ⏳ Misión enviada. Está esperando la revisión de tu profesora.
+          </p>`;
+      }else if(realizada){
+        estadoHTML = `
+          <p style="margin:12px 0 0;padding:9px;background:#e8f7ed;border-radius:9px;color:#287345;font-size:13px;">
+            ✓ ¡Misión realizada y revisada!
+          </p>`;
+      }
+
+      contenidoMision.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
+          <button type="button" id="anteriorMisionCliente"
+            style="border:0;border-radius:50%;width:36px;height:36px;background:#f1e4f0;color:#65445a;font-size:20px;cursor:pointer;"
+            ${indice === 0 ? "disabled" : ""}>‹</button>
+
+          <span style="color:#876d91;font-size:12px;font-weight:600;">
+            MISIÓN ${indice + 1} DE ${misionesClienteActuales.length}
+          </span>
+
+          <button type="button" id="siguienteMisionCliente"
+            style="border:0;border-radius:50%;width:36px;height:36px;background:#f1e4f0;color:#65445a;font-size:20px;cursor:pointer;"
+            ${indice === misionesClienteActuales.length - 1 ? "disabled" : ""}>›</button>
+        </div>
+
+        <h3 style="margin:0 0 8px;color:#65445a;font-size:19px;">
+          ${escaparTexto(m.nombre)}
+        </h3>
+
+        <p style="margin:0;color:#382d3b;line-height:1.5;white-space:pre-wrap;">
+          ${escaparTexto(m.descripcion)}
+        </p>
+
+        ${m.fecha ? `<p style="margin:8px 0 0;color:#876d91;font-size:12px;">Fecha: ${escaparTexto(m.fecha)}</p>` : ""}
+
+        ${estadoHTML}
+      `;
+
+      const anterior = contenidoMision.querySelector("#anteriorMisionCliente");
+      const siguiente = contenidoMision.querySelector("#siguienteMisionCliente");
+
+      if(anterior){
+        anterior.onclick = function(){
+          if(indiceMisionClienteActual > 0){
+            indiceMisionClienteActual--;
+            mostrarMisionActual();
+          }
+        };
+      }
+
+      if(siguiente){
+        siguiente.onclick = function(){
+          if(indiceMisionClienteActual < misionesClienteActuales.length - 1){
+            indiceMisionClienteActual++;
+            mostrarMisionActual();
+          }
+        };
+      }
+    }
+
+    mostrarMisionActual();
 
   }catch(error){
 
-    console.error("Error al cargar la misión del cliente:",error);
+    console.error("Error al cargar las misiones del cliente:",error);
 
     contenidoMision.innerHTML =
-      "<p style='margin:0;color:#a33;'>No se pudo cargar la misión. Avisa a tu profesora.</p>";
+      "<p style='margin:0;color:#a33;'>No se pudieron cargar las misiones. Avisa a tu profesora.</p>";
   }
 }
 
