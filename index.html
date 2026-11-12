@@ -16482,10 +16482,19 @@ function abrirMisiones(){
               + b.dataset.confirmarSolicitud + "/"
               + b.dataset.rutSolicitud;
 
-            await database.ref(ruta).update({
-              estado: "realizada",
-              confirmadaEn: new Date().toISOString()
+            
+            const fechaConfirmacion = new Date().toISOString();
+            const claveEstudiante = normalizarNombreEstudiante(
+              b.closest("article").querySelector("strong").textContent
+            );
+
+            await database.ref().update({
+              [ruta + "/estado"]: "realizada",
+              [ruta + "/confirmadaEn"]: fechaConfirmacion,
+              ["misiones/" + b.dataset.confirmarSolicitud + "/asignaciones/" + claveEstudiante + "/estado"]: "realizada",
+              ["misiones/" + b.dataset.confirmarSolicitud + "/asignaciones/" + claveEstudiante + "/realizadaEn"]: fechaConfirmacion
             });
+
 
             await cargarSolicitudesRevision();
 
