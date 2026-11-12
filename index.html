@@ -4781,7 +4781,28 @@ aspect-ratio:auto;
     <p>Cuando se publiquen actividades para este estudiante, aparecerán aquí.</p>
   </div>
 </section>
+<!-- Ventana emergente: historial de misiones realizadas -->
+<div id="teacherMissionsHistoryModal" class="teacher-activity-modal hidden">
+  <div class="teacher-activity-modal-content">
+    <button
+      type="button"
+      id="teacherMissionsHistoryClose"
+      aria-label="Cerrar ventana"
+      style="position:absolute;top:12px;right:16px;width:42px;padding:6px;font-size:24px;background:transparent;border:0;color:#9b4b83;"
+    >×</button>
 
+    <h2>🏅 Misiones realizadas</h2>
+    <p id="teacherMissionsHistoryStudent"></p>
+
+    <div id="teacherMissionsHistoryList" class="teacher-activity-list"></div>
+
+    <div id="teacherMissionsHistoryEmpty" class="teacher-empty-state hidden">
+      <span>🌷</span>
+      <h3>Aún no hay misiones realizadas</h3>
+      <p>Cuando el estudiante complete sus misiones y sean confirmadas, aparecerán aquí.</p>
+    </div>
+  </div>
+</div>
       <!-- Ventana emergente para revisar una actividad -->
 <div id="teacherReviewModal" class="teacher-activity-modal hidden">
   <div class="teacher-activity-modal-content">
