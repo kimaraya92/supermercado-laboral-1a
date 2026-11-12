@@ -17321,7 +17321,131 @@ if(!lista || !mensajeVacio || !pendientesTexto || !revisadasTexto || !devueltasT
   });
 })();
 </script>
+<script>
+(function(){
+  const boton = document.getElementById("teacherViewMissionsButton");
+  const contador = document.getElementById("teacherDetailMissionsCount");
+  const modal = document.getElementById("teacherMissionsHistoryModal");
+  const cerrar = document.getElementById("teacherMissionsHistoryClose");
+  const nombreModal = document.getElementById("teacherMissionsHistoryStudent");
+  const lista = document.getElementById("teacherMissionsHistoryList");
+  const mensajeVacio = document.getElementById("teacherMissionsHistoryEmpty");
 
+  if(!boton || !contador || !modal || !cerrar || !lista) return;
+
+  let estudianteSeleccionado = "";
+
+  function normalizar(nombre){
+    return String(nombre || "")
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function mostrarFecha(valor){
+    if(!valor) return "Fecha no disponible";
+
+    const fecha = new Date(valor);
+    if(Number.isNaN(fecha.getTime())) return "Fecha no disponible";
+
+    return fecha.toLocaleDateString("es-CL", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric"
+    });
+  }
+
+  async function cargarHistorial(){
+    lista.replaceChildren();
+    mensajeVacio.classList.add("hidden");
+    lista.textContent = "Cargando misiones...";
+
+    try{
+      const snapshot = await database.ref("misiones").once("value");
+      const registros = snapshot.val() || {};
+      const claveEstudiante = normalizar(estudianteSeleccionado);
+
+      const realizadas = Object.entries(registros).filter(function([id, mision]){
+        if(!mision || !mision.asignaciones) return false;
+
+        const asignacion = mision.asignaciones[claveEstudiante];
+
+        return asignacion && asignacion.estado === "realizada";
+      }).map(function([id, mision]){
+        return {
+          nombre: mision.nombre || "Misión sin título",
+          descripcion: mision.descripcion || "",
+          fecha: mision.asignaciones[claveEstudiante].realizadaEn || ""
+        };
+      }).sort(function(a,b){
+        return new Date(b.fecha || 0) - new Date(a.fecha || 0);
+      });
+
+      lista.replaceChildren();
+      contador.textContent = realizadas.length;
+
+      if(!realizadas.length){
+        mensajeVacio.classList.remove("hidden");
+        return;
+      }
+
+      realizadas.forEach(function(mision){
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "teacher-student-card";
+
+        const titulo = document.createElement("h3");
+        titulo.className = "teacher-student-name";
+        titulo.textContent = "🏅 " + mision.nombre;
+
+        const descripcion = document.createElement("p");
+        descripcion.className = "teacher-student-stats";
+        descripcion.textContent = mision.descripcion;
+
+        const fecha = document.createElement("p");
+        fecha.className = "teacher-student-stats";
+        fecha.textContent = "✅ Realizada el: " + mostrarFecha(mision.fecha);
+
+        tarjeta.append(titulo, descripcion, fecha);
+        lista.appendChild(tarjeta);
+      });
+
+    }catch(error){
+      console.error("Error al cargar el historial de misiones:", error);
+      lista.textContent = "No se pudo cargar el historial. Intenta nuevamente.";
+    }
+  }
+
+  boton.addEventListener("click", async function(){
+    if(!estudianteSeleccionado) return;
+
+    nombreModal.textContent = "Estudiante: " + estudianteSeleccionado;
+    modal.classList.remove("hidden");
+    await cargarHistorial();
+  });
+
+  cerrar.addEventListener("click", function(){
+    modal.classList.add("hidden");
+  });
+
+  modal.addEventListener("click", function(event){
+    if(event.target === modal){
+      modal.classList.add("hidden");
+    }
+  });
+
+  document.addEventListener("teacherOpenStudentDetail", function(event){
+    estudianteSeleccionado = event.detail && event.detail.nombre
+      ? event.detail.nombre
+      : "";
+
+    contador.textContent = "0";
+    if(estudianteSeleccionado){
+      cargarHistorial();
+    }
+  });
+})();
+</script>
 </body>
 
 </html>
